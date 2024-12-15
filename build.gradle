@@ -1,0 +1,49 @@
+buildscript {
+    apply from: "gradle/versions.gradle"
+    apply from: gradle.extended.files.modules
+
+    dependencies {
+        classpath additionals.nexus.gradlePlugin
+        classpath additionals.sonarqube.gradlePlugin
+        classpath additionals.license.gradlePlugin
+    }
+}
+
+plugins {
+    alias(additionals.plugins.versions) apply true
+    alias(additionals.plugins.android.library) apply false
+    alias(libs.plugins.android.appdistribution) apply false
+    alias(libs.plugins.android.google.services) apply false
+    alias(additionals.plugins.kotlin.multiplatform) apply false
+    alias(additionals.plugins.kotlin.cocoapods) apply false
+    alias(additionals.plugins.kotlin.jvm) apply false
+    alias(additionals.plugins.multiplatform.buildkonfig) apply false
+    alias(additionals.plugins.jetbrains.compose) apply false
+    alias(libs.plugins.libraries.report) apply true
+    alias(additionals.plugins.compose.compiler) apply false
+}
+
+allprojects {
+    repositories {
+        google()
+        maven { url = "https://maven.pkg.jetbrains.space/public/p/compose/dev" }
+        maven { url = "https://androidx.dev/storage/compose-compiler/repository/" }
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        mavenLocal()
+    }
+}
+
+group = ext.groupId
+version = ext.version
+
+subprojects {
+    group = rootProject.ext.groupId
+    version = rootProject.ext.version
+
+    task allDeps(type: DependencyReportTask) {}
+
+    if (isSourcesModule(it)) {
+        apply from: gradle.extended.files.moduleSetup
+    }
+}

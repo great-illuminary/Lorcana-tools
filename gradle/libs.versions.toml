@@ -1,0 +1,69 @@
+[versions]
+kotlinx-coroutines = "1.7.3"
+kotlin-compiler-extension-version = "1.5.2"
+
+android-google-services = "4.4.0"
+android-appdistribution = "4.0.0"
+androidx-ui-tooling = "1.5.1"
+
+kotlinx = "1.6.3"
+
+skiko = "0.8.18"
+
+jetbrains-compose = "1.5.10-beta02"
+
+voyager = "1.0.0-rc04"
+
+moko-viewmodel = "0.16.1"
+moko-resources = "0.23.0"
+
+insetx = "0.1.0-alpha08"
+
+koalaplot = "0.6.3"
+ui-android = "1.6.8"
+
+# License reporting
+libraries-report = "10.9.0-b02"
+
+bignum = "0.3.10"
+
+[libraries]
+
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidx-ui-tooling" }
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-ui-tooling" }
+
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx" }
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+
+moko-viewmodel = { module = "dev.icerock.moko:mvvm-core", version.ref = "moko-viewmodel" }
+moko-viewmodel-compose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "moko-viewmodel" }
+
+insetx = { module = "com.moriatsushi.insetsx:insetsx", version.ref = "insetx" }
+
+skiko = { module = "org.jetbrains.skiko:skiko", version.ref = "skiko" }
+skiko-js = { module = "org.jetbrains.skiko:skiko-js-wasm-runtime", version.ref = "skiko" }
+
+androidx-window = { group = "androidx.window", name = "window", version = "1.1.0" }
+
+koalaplot = { module = "io.github.koalaplot:koalaplot-core", version.ref = "koalaplot" }
+
+file-picker = "com.darkrockstudios:mpfilepicker:3.1.0"
+androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "ui-android" }
+
+# License reporting
+libraries-report = { group = "com.mikepenz", name = "aboutlibraries-core", version.ref = "libraries-report" }
+
+bignum = { group = "com.ionspin.kotlin", name = "bignum", version.ref = "bignum" }
+
+[plugins]
+android-google-services = { id = "com.google.gms.google-services", version.ref = "android-google-services" }
+android-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "android-appdistribution" }
+
+# License reporting
+libraries-report = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "libraries-report" }

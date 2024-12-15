@@ -1,0 +1,30 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
+ext.GRADLE_EXTENDED_VERSION_USED = "fea148e108b8f9854439c62f0cf71d1c922f21d5"
+
+apply from: "https://raw.githubusercontent.com/the-inkwell/gradle-tools/${ext.GRADLE_EXTENDED_VERSION_USED}/extended.gradle"
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        mavenLocal()
+    }
+    versionCatalogs {
+        additionals {
+            from(files(gradle.extended.files.catalog))
+        }
+    }
+}
+
+include(":shared")
+include(":androidApp")
+include(":jsApp")
+include(":jvmApp")
+includeBuild "gradle/extended/${ext.GRADLE_EXTENDED_VERSION_USED}/kt-plugins"

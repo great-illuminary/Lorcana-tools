@@ -1,0 +1,62 @@
+/* * * * * * * * * * * * * * * * *
+ * Default project info
+ * * * * * * * * * * * * * * * * */
+
+def parentDir = file(buildscript.sourceFile).getParentFile().getAbsolutePath()
+def versionProps = new Properties()
+new File(parentDir, "../version.properties").withInputStream { versionProps.load(it) }
+
+def defaultVersion = versionProps.getProperty("version")
+
+def propSuffix = { prefix, suffixKeyName ->
+    return rootProject.properties.containsKey(suffixKeyName)
+            ? "${prefix}-${rootProject.properties[suffixKeyName]}" : prefix
+}
+
+ext {
+    minSdkVersion = 26
+    javaVersion = "17"
+    prop = { name, defValue ->
+        return rootProject.properties.containsKey(name)
+                ? rootProject.properties[name] : defValue
+    }
+
+    MacOSbundleID = prop("MacOS.bundleID", null)
+    MacOSSigningSign = "true" == prop("MacOS.signing.sign", null)
+    MacOSSigningIdentity = prop("MacOS.signing.identity", null)
+    MacOSSigningKeychain = prop("MacOS.signing.keychain", null)
+    MacOSAppStore = "true" == prop("MacOS.appStore", null)
+    MacOSNotarizationAppleID = prop("MacOS.notarization.appleID", null)
+    MacOSNotarizationPassword = prop("MacOS.notarization.password", null)
+    MacOSNotarizationTeamID = prop("MacOS.notarization.teamID", null)
+
+    pomDescription = "Blipya"
+    pomInceptionYear = "${new Date().format("YYYY")}"
+    pomUrl = "https://github.com/great-illuminary/"
+    pomLicenseName = 'Blipya'
+    pomLicenseUrl = 'https://github.com/great-illuminary'
+
+    pomDeveloperId = 'kleperf'
+    pomDeveloperName = 'Kevin Le Perf'
+    pomDeveloperEmail = 'codlabtech@gmail.com'
+
+    pomScmConnection = 'scm:git:github.com/great-illuminary.git'
+    pomScmDeveloperConnection = 'scm:git:ssh://github.com/great-illuminary.git'
+    pomScmUrl = 'https://github.com/great-illuminary/tree'
+
+    sonarUrl = prop("sonarUrl", null)
+    sonarToken = prop("sonarToken", null)
+
+    signingKeyId = prop("signing.keyId", null)
+
+    groupId = prop("GROUP_ID", "eu.codlab.blipya")
+    originalVersion = defaultVersion
+    version = propSuffix(defaultVersion, "SUFFIX")
+
+    projectVersionCode = 1
+
+    ndkVersion = "25.1.8937393"
+
+    // taken from https://androidx.dev/storage/compose-compiler/repository
+    kotlinCompilerExtensionVersion = "${libs.versions.kotlin.compiler.extension.version.get()}".toString()
+}
