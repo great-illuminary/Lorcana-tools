@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import eu.codlab.compose.widgets.StatusBarAndNavigation
 import eu.codlab.lorcana.blipya.deck.DeckConfiguration
+import eu.codlab.lorcana.blipya.deck.edit.EditScenario
 import eu.codlab.lorcana.blipya.decks.DecksScreen
 import eu.codlab.lorcana.blipya.decks.PromptForNewDeck
 import eu.codlab.lorcana.blipya.init.InitializeScreen
@@ -117,6 +118,24 @@ fun AppContent() {
                 )
             }
 
+            "/deck/{uuid}/scenario/{scenario}" -> {
+                println("LOADING DECK TITLE")
+                val deckId = entry.pathMap["uuid"] ?: return@LaunchedEffect
+                val scenarioId = entry.pathMap["scenario"] ?: return@LaunchedEffect
+                val deck = model.states.value.decks
+                    .firstOrNull { it.id == deckId }
+                    ?: return@LaunchedEffect
+
+                val scenario = deck.scenarii.firstOrNull { it.id == scenarioId }
+                    ?: return@LaunchedEffect
+
+                model.setAppBarState(
+                    AppBarState(
+                        title = scenario.name
+                    )
+                )
+            }
+
             "/deck/{uuid}" -> {
                 println("LOADING DECK TITLE")
                 val deckId = entry.pathMap["uuid"] ?: return@LaunchedEffect
@@ -128,6 +147,15 @@ fun AppContent() {
                     AppBarState(
                         title = deck.name
                     )
+                )
+
+                model.setFloatingActionButton(
+                    FloatingActionButtonState(
+                        icon = Icons.Filled.Add,
+                        contentDescription = "Add a new scenario"
+                    ) {
+                        model.addScenario(deck)
+                    }
                 )
             }
         }
@@ -252,6 +280,40 @@ fun AppContent() {
                                                     Modifier.fillMaxSize(),
                                                     appModel
                                                 ) { appModel.show(it) }
+                                            }
+                                        }
+
+                                        scene(
+                                            route = "/deck/{uuid}/scenario/{scenario}",
+                                            navTransition = NavTransition(),
+                                            swipeProperties = SwipeProperties(
+                                                //spaceToSwipe = 50.dp
+                                            )
+                                        ) { backStackEntry ->
+                                            val appModel: AppModel = LocalApp.current
+                                            val deckId =
+                                                backStackEntry.pathMap["uuid"] ?: return@scene
+                                            val scenarioId =
+                                                backStackEntry.pathMap["scenario"] ?: return@scene
+                                            val deck = appModel.states.value.decks
+                                                .firstOrNull { it.id == deckId }
+                                                ?: return@scene
+                                            val scenario =
+                                                deck.scenarii.firstOrNull { it.id == scenarioId }
+                                                    ?: return@scene
+
+                                            println("SHOW SCENE /deck/{uuid}")
+
+                                            Column(
+                                                modifier = Modifier.fillMaxSize()
+                                                    .defaultBackground()
+                                            ) {
+                                                EditScenario(
+                                                    modifier = Modifier.fillMaxSize(),
+                                                    appModel,
+                                                    deck = deck,
+                                                    scenario = scenario
+                                                )
                                             }
                                         }
 

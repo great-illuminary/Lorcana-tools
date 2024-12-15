@@ -2,6 +2,7 @@ package eu.codlab.lorcana.blipya.home
 
 import androidx.compose.material.ScaffoldState
 import eu.codlab.files.VirtualFile
+import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
 import eu.codlab.lorcana.blipya.save.ConfigurationLoader
 import eu.codlab.lorcana.blipya.utils.RootPath
 import eu.codlab.lorcana.blipya.utils.toDeck
@@ -9,6 +10,7 @@ import eu.codlab.lorcana.blipya.utils.toDeckModel
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
 import eu.codlab.lorcana.math.Deck
+import eu.codlab.lorcana.math.Scenario
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
 import korlibs.io.util.UUID
@@ -34,6 +36,7 @@ data class AppModel(
     var onBackPressed: AppBackPressProvider = AppBackPressProvider()
 
     private val configurationLoader = ConfigurationLoader(VirtualFile(RootPath, "Blipya"))
+    private var activeDeck: DeckConfigurationModel? = null
 
     var navigator: Navigator? = null
     var scaffoldState: ScaffoldState? = null
@@ -123,6 +126,30 @@ data class AppModel(
         }
     }
 
+    fun show(deck: Deck, scenario: Scenario) {
+        val route = "/deck/${deck.id}/scenario/${scenario.id}"
+
+        navigator?.navigate(
+            route = route,
+            options = NavOptions(
+                launchSingleTop = false,
+                popUpTo = PopUpTo.None
+            )
+        )
+
+        launch {
+            scaffoldState?.drawerState?.close()
+        }
+
+        updateState {
+            copy(
+                currentRoute = route,
+                appBarState = AppBarState(),
+                floatingActionButtonState = null
+            )
+        }
+    }
+
     fun floatingActionButton(): FloatingActionButtonState? {
         return states.value.floatingActionButtonState
     }
@@ -133,5 +160,14 @@ data class AppModel(
 
     private suspend fun saveDecks(decks: List<Deck>) {
         configurationLoader.save(decks.map { it.toDeckModel() })
+    }
+
+    fun addScenario(deck: Deck) {
+        val id = UUID.randomUUID().toString()
+        activeDeck?.add(id) { show(deck, it) }
+    }
+
+    fun setActiveDeck(model: DeckConfigurationModel) {
+        activeDeck = model
     }
 }

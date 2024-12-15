@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.ionspin.kotlin.bignum.integer.Quadruple
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
-import eu.codlab.lorcana.blipya.deck.scenario.ShowScenarioModel
+import eu.codlab.lorcana.blipya.deck.edit.EditScenarioModel
 import eu.codlab.lorcana.blipya.deck.scenario.rememberInputSize
 import eu.codlab.lorcana.blipya.utils.asLongOrNull
 import eu.codlab.lorcana.math.Deck
@@ -32,7 +32,7 @@ import eu.codlab.viewmodel.rememberViewModel
 @Composable
 fun ShowCard(
     modifier: Modifier,
-    model: ShowScenarioModel,
+    model: EditScenarioModel,
     deck: Deck,
     holder: ExpectedCard
 ) {

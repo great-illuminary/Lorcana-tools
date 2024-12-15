@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
@@ -30,7 +31,9 @@ import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.scenario.ShowScenario
 import eu.codlab.lorcana.blipya.home.AppModel
+import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
+import eu.codlab.lorcana.blipya.utils.WindowType
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.MinusAdd
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
@@ -50,18 +53,28 @@ fun DeckConfiguration(
 
     LaunchedEffect(deck) {
         model.changeDeck(deck)
+
+        app.setActiveDeck(model)
     }
 
     val color = defaultCardBackground()
     val maxWidth = 100.dp
 
+    val columns = when (LocalWindow.current) {
+        WindowType.SMARTPHONE_TINY -> 2
+        WindowType.SMARTPHONE -> 2
+        WindowType.PHABLET -> 3
+        WindowType.TABLET -> 3
+    }
+
     LazyVerticalGrid(
         modifier = modifier.imePadding(),
         contentPadding = PaddingValues(16.dp),
-        columns = GridCells.Fixed(1),
+        columns = GridCells.Fixed(columns),
         verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        item {
+        item(span = { GridItemSpan(columns) }) {
             DefaultCard(
                 modifier = Modifier.fillMaxWidth(),
                 backgroundColor = color
@@ -133,27 +146,6 @@ fun DeckConfiguration(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     ShowScenario(Modifier.fillMaxWidth(), app, model, state.deck, holder)
-                }
-            }
-        }
-
-        item {
-            DefaultCard(
-                modifier = Modifier.fillMaxWidth(),
-                backgroundColor = color
-            ) {
-                Column(
-                    Modifier.padding(16.dp).background(color),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    MinusAdd(
-                        onMinus = {
-                            model.removeLast()
-                        },
-                        onPlus = {
-                            model.add(UUID.randomUUID().toString())
-                        }
-                    )
                 }
             }
         }

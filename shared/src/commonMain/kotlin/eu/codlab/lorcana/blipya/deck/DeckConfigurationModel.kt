@@ -44,16 +44,22 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: Deck) :
         }
     }
 
-    fun add(id: String) = launch {
-        states.value.deck.let {
-            it.addScenario(
-                Scenario(id, "", it) { _, _, _ ->
-                    launch {
-                        updateState { copy(updatedAt = DateTime.now()) }
-                    }
-                }
-            )
+    fun add(id: String, added: (Scenario) -> Unit) = launch {
+        val scenario = Scenario(id, "", states.value.deck) { _, _, _ ->
+            launch {
+                updateState { copy(updatedAt = DateTime.now()) }
+            }
         }
+
+        states.value.deck.addScenario(scenario)
+
+        updateCards()
+
+        added(scenario)
+    }
+
+    fun delete(scenario: Scenario) {
+        states.value.deck.removeScenario(scenario)
 
         updateCards()
     }
