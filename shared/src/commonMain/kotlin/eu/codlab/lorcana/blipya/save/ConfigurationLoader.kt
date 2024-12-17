@@ -31,7 +31,7 @@ class ConfigurationLoader(
         println(configuration)
     }
 
-    suspend fun save(decks: List<DeckModel>) {
+    suspend fun save(decks: List<SavedDeckModel>) {
         configuration = configuration.copy(decks = decks)
         val string = json.encodeToString(ConfigurationModel.serializer(), configuration)
         println("model -> ${configurationFolder.absolutePath} -> $string")

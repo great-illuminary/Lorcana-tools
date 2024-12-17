@@ -1,14 +1,22 @@
 package eu.codlab.lorcana.blipya.save
 
+import eu.codlab.lorcana.blipya.dreamborn.Deck
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DeckModel(
+data class SavedDeckModel(
     val id: String,
     val name: String,
     val size: Long,
     val hand: Long,
-    val scenarii: List<ScenarioModel> = emptyList()
+    val scenarii: List<ScenarioModel> = emptyList(),
+    val dreamborn: Dreamborn? = null
+)
+
+@Serializable
+data class Dreamborn(
+    val url: String,
+    val data: Deck? = null
 )
 
 @Serializable

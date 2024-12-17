@@ -1,4 +1,4 @@
-package eu.codlab.lorcana.blipya.decks
+package eu.codlab.lorcana.blipya.deck.dreamborn
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
@@ -7,17 +7,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import eu.codlab.lorcana.blipya.home.AppModel
-import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
 import eu.codlab.lorcana.blipya.widgets.PromptDialog
 
 @Composable
-fun PromptForNewDeck(
-    appModel: AppModel,
+fun PromptForDreambornUrl(
     showPrompt: Boolean,
     onDismiss: () -> Unit,
-    onDeckSelected: (DeckModel) -> Unit,
+    onConfirm: (String) -> Unit
 ) {
     var prompt by remember { mutableStateOf(showPrompt) }
 
@@ -30,18 +27,15 @@ fun PromptForNewDeck(
     }
 
     PromptDialog(
-        title = "Deck Name",
+        title = "Dreamborn URL Or Id",
         onDismiss = {
             println("dismiss")
             prompt = false
             onDismiss()
         },
-        onConfirm = { deckName ->
-            appModel.addDeck(deckName) { deck ->
-                prompt = true
-                appModel.showAddDeck(false)
-                onDeckSelected(deck)
-            }
+        onConfirm = {
+            prompt = false
+            onConfirm(it)
         }
     )
 }
@@ -50,10 +44,9 @@ fun PromptForNewDeck(
 @Composable
 private fun PromptForNewDeckPreview() {
     PreviewDarkLightColumn { _, _ ->
-        PromptForNewDeck(
-            AppModel.fake(),
+        PromptForDreambornUrl(
             true,
-            onDeckSelected = { /** nothing */ },
+            onConfirm = { /** nothing */ },
             onDismiss = { /** nothing */ }
         )
     }

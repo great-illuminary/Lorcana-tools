@@ -1,6 +1,7 @@
 package eu.codlab.lorcana.blipya.deck.scenario
 
 import eu.codlab.lorcana.blipya.home.AppModel
+import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
 import eu.codlab.lorcana.math.Scenario
@@ -11,7 +12,7 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 
 data class ShowScenarioModelState(
-    val deck: Deck,
+    val deck: DeckModel,
     val name: String,
     val scenario: Scenario,
     val expectedCards: List<ExpectedCard>,
@@ -22,7 +23,7 @@ data class ShowScenarioModelState(
 @Suppress("TooManyFunctions")
 class ShowScenarioModel(
     private val appModel: AppModel,
-    deck: Deck,
+    deck: DeckModel,
     scenario: Scenario
 ) :
     StateViewModel<ShowScenarioModelState>(
@@ -42,7 +43,7 @@ class ShowScenarioModel(
 
             return ShowScenarioModel(
                 AppModel.fake(),
-                deck,
+                DeckModel(deck),
                 scenario
             )
         }

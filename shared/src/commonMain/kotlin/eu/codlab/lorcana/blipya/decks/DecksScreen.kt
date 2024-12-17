@@ -16,38 +16,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.home.AppModel
+import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
 import eu.codlab.lorcana.blipya.utils.rememberColumns
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
-import eu.codlab.lorcana.blipya.widgets.PromptDialog
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
-import eu.codlab.lorcana.math.Deck
 
 @Composable
 fun DecksScreen(
     modifier: Modifier = Modifier,
     appModel: AppModel,
-    onDeckSelected: (Deck) -> Unit
+    onDeckSelected: (DeckModel) -> Unit
 ) {
     val state by appModel.states.collectAsState()
     val decks = state.decks
 
     val columns = rememberColumns()
     val color = defaultCardBackground()
-
-    println("DecksScreen prompt ? ${state.showPromptNewDeck}")
-
-    if (state.showPromptNewDeck) {
-        PromptDialog(
-            onDismiss = { appModel.showAddDeck(false) },
-            onConfirm = { deckName ->
-                appModel.addDeck(deckName) { deck ->
-                    appModel.showAddDeck(false)
-                    onDeckSelected(deck)
-                }
-            }
-        )
-    }
 
     if (decks.isEmpty()) {
         Column(

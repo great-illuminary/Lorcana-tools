@@ -24,12 +24,11 @@ import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
 import eu.codlab.lorcana.blipya.home.AppModel
+import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.WindowType
 import eu.codlab.lorcana.blipya.widgets.PopupConfirm
-import eu.codlab.lorcana.blipya.widgets.PromptDialog
-import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.Scenario
 import eu.codlab.viewmodel.rememberViewModel
 
@@ -38,7 +37,7 @@ fun ShowScenario(
     modifier: Modifier,
     app: AppModel,
     parentModel: DeckConfigurationModel,
-    deck: Deck,
+    deck: DeckModel,
     scenario: Scenario
 ) {
     val model = rememberViewModel { ShowScenarioModel(app, deck, scenario) }

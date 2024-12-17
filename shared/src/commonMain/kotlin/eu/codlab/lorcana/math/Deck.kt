@@ -6,7 +6,6 @@ class Deck(
     deckSize: Long,
     defaultHand: Long
 ) {
-
     var size: Long = deckSize
         set(value) {
             val changed = field != value

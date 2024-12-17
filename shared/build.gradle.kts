@@ -59,6 +59,7 @@ kotlin {
                 api(libs.koalaplot)
 
                 api(libs.bignum)
+                api(libs.lorcana)
             }
         }
         commonTest {

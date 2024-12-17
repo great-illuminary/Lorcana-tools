@@ -1,13 +1,13 @@
 package eu.codlab.lorcana.blipya.deck.card
 
+import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.math.CardValidator
-import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
 
 data class ShowCardModelState(
-    val deck: Deck,
+    val deck: DeckModel,
     val card: ExpectedCard,
     val amountValid: Boolean = true,
     val minValid: Boolean = true,
@@ -18,7 +18,7 @@ private val validator = CardValidator()
 
 @Suppress("TooManyFunctions")
 class ShowCardModel(
-    deck: Deck,
+    deck: DeckModel,
     card: ExpectedCard,
 ) : StateViewModel<ShowCardModelState>(
     ShowCardModelState(

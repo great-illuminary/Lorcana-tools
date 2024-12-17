@@ -15,7 +15,6 @@ jetbrains-compose = "1.5.10-beta02"
 voyager = "1.0.0-rc04"
 
 moko-viewmodel = "0.16.1"
-moko-resources = "0.23.0"
 
 insetx = "0.1.0-alpha08"
 
@@ -26,6 +25,8 @@ ui-android = "1.6.8"
 libraries-report = "10.9.0-b02"
 
 bignum = "0.3.10"
+
+lorcana = "0.15.0"
 
 [libraries]
 
@@ -60,6 +61,7 @@ androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", vers
 libraries-report = { group = "com.mikepenz", name = "aboutlibraries-core", version.ref = "libraries-report" }
 
 bignum = { group = "com.ionspin.kotlin", name = "bignum", version.ref = "bignum" }
+lorcana = { group = "eu.codlab", name = "lorcana-data", version.ref = "lorcana" }
 
 [plugins]
 android-google-services = { id = "com.google.gms.google-services", version.ref = "android-google-services" }

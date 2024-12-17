@@ -32,6 +32,7 @@ import eu.codlab.lorcana.blipya.theme.AppColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PromptDialog(
+    title: String,
     onDismiss: () -> Unit,
     onConfirm: (String) -> Unit
 ) {
@@ -81,7 +82,7 @@ fun PromptDialog(
                     label = {
                         TextNormal(
                             color = textColor,
-                            text = "Deck Name"
+                            text = title
                         )
                     }
                 )

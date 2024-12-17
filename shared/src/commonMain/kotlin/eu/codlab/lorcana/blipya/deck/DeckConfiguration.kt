@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -29,8 +30,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
+import eu.codlab.lorcana.blipya.deck.dreamborn.ShowDreambornInformation
 import eu.codlab.lorcana.blipya.deck.scenario.ShowScenario
 import eu.codlab.lorcana.blipya.home.AppModel
+import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
 import eu.codlab.lorcana.blipya.utils.WindowType
@@ -44,7 +47,7 @@ import korlibs.io.util.UUID
 @Composable
 fun DeckConfiguration(
     app: AppModel,
-    deck: Deck,
+    deck: DeckModel,
     modifier: Modifier
 ) {
     val model = rememberViewModel { DeckConfigurationModel(app, deck) }
@@ -74,7 +77,7 @@ fun DeckConfiguration(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        item(span = { GridItemSpan(columns) }) {
+        item(span = { GridItemSpan(columns -1) }) {
             DefaultCard(
                 modifier = Modifier.fillMaxWidth(),
                 backgroundColor = color
@@ -134,6 +137,13 @@ fun DeckConfiguration(
             }
         }
 
+        item {
+            ShowDreambornInformation(
+                Modifier.fillMaxSize(),
+                model
+            )
+        }
+
         items(state.scenarii.size) { index ->
             val holder = state.scenarii[index]
 
@@ -158,7 +168,9 @@ private fun PreviewDeckConfiguration() {
     PreviewDarkLightColumn { modifier, _ ->
         DeckConfiguration(
             AppModel.fake(),
-            Deck(UUID.randomUUID().toString(), "deck", 0, 0),
+            DeckModel(
+                Deck(UUID.randomUUID().toString(), "deck", 0, 0)
+            ),
             modifier
         )
     }

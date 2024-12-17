@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ConfigurationModel(
-    val decks: List<DeckModel> = listOf()
+    val decks: List<SavedDeckModel> = listOf()
 )

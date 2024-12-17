@@ -2,6 +2,7 @@ package eu.codlab.lorcana.blipya.deck.edit
 
 import eu.codlab.lorcana.blipya.deck.scenario.ShowScenarioModel
 import eu.codlab.lorcana.blipya.home.AppModel
+import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.math.CardValidator
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
@@ -12,7 +13,7 @@ import korlibs.io.util.UUID
 import korlibs.time.DateTime
 
 data class EditScenarioModelState(
-    val deck: Deck,
+    val deck: DeckModel,
     val name: String,
     val scenario: Scenario,
     val expectedCards: List<ExpectedCard>,
@@ -23,7 +24,7 @@ data class EditScenarioModelState(
 @Suppress("TooManyFunctions")
 class EditScenarioModel(
     private val appModel: AppModel,
-    deck: Deck,
+    deck: DeckModel,
     scenario: Scenario
 ) :
     StateViewModel<EditScenarioModelState>(
@@ -46,7 +47,7 @@ class EditScenarioModel(
         states.value.scenario.addCallback(onProbability)
     }
 
-    fun changeDeck(deck: Deck, scenario: Scenario) = launch {
+    fun changeDeck(deck: DeckModel, scenario: Scenario) = launch {
         states.value.scenario.removeCallback(onProbability)
         scenario.addCallback(onProbability)
 
@@ -122,7 +123,7 @@ class EditScenarioModel(
 
             return ShowScenarioModel(
                 AppModel.fake(),
-                deck,
+                DeckModel(deck),
                 scenario
             )
         }

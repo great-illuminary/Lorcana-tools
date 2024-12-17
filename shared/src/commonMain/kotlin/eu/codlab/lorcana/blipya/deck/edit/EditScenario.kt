@@ -24,6 +24,7 @@ import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.card.ShowCard
 import eu.codlab.lorcana.blipya.deck.scenario.round
 import eu.codlab.lorcana.blipya.home.AppModel
+import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.MinusAdd
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
@@ -36,7 +37,7 @@ import korlibs.io.util.UUID
 fun EditScenario(
     modifier: Modifier,
     app: AppModel,
-    deck: Deck,
+    deck: DeckModel,
     scenario: Scenario
 ) {
     val model = rememberViewModel { EditScenarioModel(app, deck, scenario) }

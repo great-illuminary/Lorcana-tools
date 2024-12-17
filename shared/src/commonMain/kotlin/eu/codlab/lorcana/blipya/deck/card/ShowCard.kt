@@ -24,8 +24,8 @@ import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.edit.EditScenarioModel
 import eu.codlab.lorcana.blipya.deck.scenario.rememberInputSize
+import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.utils.asLongOrNull
-import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
 import eu.codlab.viewmodel.rememberViewModel
 
@@ -33,7 +33,7 @@ import eu.codlab.viewmodel.rememberViewModel
 fun ShowCard(
     modifier: Modifier,
     model: EditScenarioModel,
-    deck: Deck,
+    deck: DeckModel,
     holder: ExpectedCard
 ) {
     var name by remember { mutableStateOf(TextFieldValue(holder.name)) }

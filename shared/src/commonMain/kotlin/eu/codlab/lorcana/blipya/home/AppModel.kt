@@ -2,11 +2,13 @@ package eu.codlab.lorcana.blipya.home
 
 import androidx.compose.material.ScaffoldState
 import eu.codlab.files.VirtualFile
+import eu.codlab.lorcana.Lorcana
+import eu.codlab.lorcana.LorcanaLoaded
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
+import eu.codlab.lorcana.blipya.model.DeckModel
+import eu.codlab.lorcana.blipya.model.toDeck
 import eu.codlab.lorcana.blipya.save.ConfigurationLoader
 import eu.codlab.lorcana.blipya.utils.RootPath
-import eu.codlab.lorcana.blipya.utils.toDeck
-import eu.codlab.lorcana.blipya.utils.toDeckModel
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
 import eu.codlab.lorcana.math.Deck
@@ -24,8 +26,9 @@ data class AppModelState(
     var loading: Boolean = false,
     val appBarState: AppBarState = AppBarState(),
     val floatingActionButtonState: FloatingActionButtonState? = null,
-    val decks: List<Deck> = listOf(),
-    val showPromptNewDeck: Boolean = false
+    val decks: List<DeckModel> = listOf(),
+    val showPromptNewDeck: Boolean = false,
+    val lorcana: LorcanaLoaded? = null,
 )
 
 @Suppress("TooManyFunctions")
@@ -55,10 +58,18 @@ data class AppModel(
 
         val decks = configurationLoader.configuration.decks.map { it.toDeck() }
 
+        val lorcana = try {
+            Lorcana().loadFromResources()
+        } catch(err: Throwable) {
+            err.printStackTrace()
+            null
+        }
+
         updateState {
             copy(
                 initialized = true,
-                decks = decks
+                decks = decks,
+                lorcana = lorcana
             )
         }
     }
@@ -79,12 +90,14 @@ data class AppModel(
         updateState { copy(showPromptNewDeck = showPromptNewDeck) }
     }
 
-    fun addDeck(deckName: String, onDeck: (Deck) -> Unit) = launch {
-        val newDeck = Deck(
-            id = UUID.randomUUID().toString(),
-            name = deckName,
-            deckSize = 0,
-            defaultHand = 0
+    fun addDeck(deckName: String, onDeck: (DeckModel) -> Unit) = launch {
+        val newDeck = DeckModel(
+            Deck(
+                id = UUID.randomUUID().toString(),
+                name = deckName,
+                deckSize = 0,
+                defaultHand = 0
+            )
         )
         val decks = states.value.decks + newDeck
         saveDecks(decks)
@@ -100,7 +113,7 @@ data class AppModel(
         navigator?.popBackStack()
     }
 
-    fun show(deck: Deck) {
+    fun show(deck: DeckModel) {
         val route = "/deck/${deck.id}"
 
         popBackStack()
@@ -126,7 +139,7 @@ data class AppModel(
         }
     }
 
-    fun show(deck: Deck, scenario: Scenario) {
+    fun show(deck: DeckModel, scenario: Scenario) {
         val route = "/deck/${deck.id}/scenario/${scenario.id}"
 
         navigator?.navigate(
@@ -158,11 +171,11 @@ data class AppModel(
         saveDecks(states.value.decks)
     }
 
-    private suspend fun saveDecks(decks: List<Deck>) {
+    private suspend fun saveDecks(decks: List<DeckModel>) {
         configurationLoader.save(decks.map { it.toDeckModel() })
     }
 
-    fun addScenario(deck: Deck) {
+    fun addScenario(deck: DeckModel) {
         val id = UUID.randomUUID().toString()
         activeDeck?.add(id) { show(deck, it) }
     }
