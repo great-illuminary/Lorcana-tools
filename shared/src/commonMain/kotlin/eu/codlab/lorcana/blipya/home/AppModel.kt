@@ -4,10 +4,13 @@ import androidx.compose.material.ScaffoldState
 import eu.codlab.files.VirtualFile
 import eu.codlab.lorcana.Lorcana
 import eu.codlab.lorcana.LorcanaLoaded
+import eu.codlab.lorcana.blipya.account.Account
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.model.toDeck
 import eu.codlab.lorcana.blipya.save.ConfigurationLoader
+import eu.codlab.lorcana.blipya.save.SavedAuthentication
+import eu.codlab.lorcana.blipya.utils.AuthentInit
 import eu.codlab.lorcana.blipya.utils.RootPath
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
@@ -16,6 +19,7 @@ import eu.codlab.lorcana.math.Scenario
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
 import korlibs.io.util.UUID
+import korlibs.time.DateTime
 import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.PopUpTo
@@ -29,6 +33,7 @@ data class AppModelState(
     val decks: List<DeckModel> = listOf(),
     val showPromptNewDeck: Boolean = false,
     val lorcana: LorcanaLoaded? = null,
+    val authentication: SavedAuthentication? = null
 )
 
 @Suppress("TooManyFunctions")
@@ -38,6 +43,7 @@ data class AppModel(
 ) : StateViewModel<AppModelState>(AppModelState("/main")) {
     var onBackPressed: AppBackPressProvider = AppBackPressProvider()
 
+    private val accountClient = Account()
     private val configurationLoader = ConfigurationLoader(VirtualFile(RootPath, "Blipya"))
     private var activeDeck: DeckConfigurationModel? = null
 
@@ -56,20 +62,29 @@ data class AppModel(
     fun initialize() = launch {
         configurationLoader.init()
 
-        val decks = configurationLoader.configuration.decks.map { it.toDeck() }
+        AuthentInit.initialize()
+
+        val (decks, authentication) = configurationLoader.configuration.let { conf ->
+            conf.decks.map { it.toDeck() } to conf.authentication
+        }
 
         val lorcana = try {
             Lorcana().loadFromResources()
-        } catch(err: Throwable) {
+        } catch (err: Throwable) {
             err.printStackTrace()
             null
         }
+
+        val validAuthent = authentication?.let {
+            accountClient.checkAccount(it.token)
+        } ?: false
 
         updateState {
             copy(
                 initialized = true,
                 decks = decks,
-                lorcana = lorcana
+                lorcana = lorcana,
+                authentication = if (validAuthent) authentication else null
             )
         }
     }
@@ -182,5 +197,19 @@ data class AppModel(
 
     fun setActiveDeck(model: DeckConfigurationModel) {
         activeDeck = model
+    }
+
+    fun login(token: String) = launch {
+        try {
+            val account = accountClient.login(token)
+
+            val now = DateTime.now().add(0, account.expiresIn * 1000.0)
+            val authentication = configurationLoader.save(account.token, now.unixMillisLong)
+
+            updateState { copy(authentication = authentication) }
+        } catch (err: Throwable) {
+            //TODO manage network issue
+            err.printStackTrace()
+        }
     }
 }

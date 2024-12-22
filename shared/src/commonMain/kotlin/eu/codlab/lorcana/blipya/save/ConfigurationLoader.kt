@@ -33,8 +33,21 @@ class ConfigurationLoader(
 
     suspend fun save(decks: List<SavedDeckModel>) {
         configuration = configuration.copy(decks = decks)
+        save()
+    }
+
+    suspend fun save(
+        authenticationToken: String,
+        expiresAtMilliSeconds: Long
+    ) = SavedAuthentication(authenticationToken, expiresAtMilliSeconds).also { obj ->
+        configuration = configuration.copy(
+            authentication = obj
+        )
+        save()
+    }
+
+    suspend fun save() {
         val string = json.encodeToString(ConfigurationModel.serializer(), configuration)
-        println("model -> ${configurationFolder.absolutePath} -> $string")
         configurationFolder.write(string)
     }
 }

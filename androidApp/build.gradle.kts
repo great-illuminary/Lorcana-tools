@@ -5,6 +5,7 @@ plugins {
     alias(additionals.plugins.jetbrains.compose)
     alias(additionals.plugins.compose.compiler)
     id("jvmCompat")
+    alias(libs.plugins.android.google.services)
 }
 
 
@@ -42,6 +43,9 @@ android {
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles.add(getDefaultProguardFile("proguard-android.txt"))
+        }
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }

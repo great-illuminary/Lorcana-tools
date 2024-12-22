@@ -1,3 +1,5 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec
+
 plugins {
     alias(additionals.plugins.kotlin.multiplatform)
     alias(additionals.plugins.android.library)
@@ -6,6 +8,7 @@ plugins {
     alias(additionals.plugins.compose.compiler)
     alias(additionals.plugins.kotlin.serialization)
     alias(libs.plugins.libraries.report)
+    alias(additionals.plugins.multiplatform.buildkonfig)
     id("jvmCompat")
     id("iosSimulatorConfiguration")
 }
@@ -60,6 +63,10 @@ kotlin {
 
                 api(libs.bignum)
                 api(libs.lorcana)
+
+                api(libs.kmp.auth.google)
+                api(libs.kmp.auth.firebase)
+                api(libs.kmp.auth.uihelper)
             }
         }
         commonTest {
@@ -116,6 +123,18 @@ dependencies {
 aboutLibraries {
     registerAndroidTasks = false
     prettyPrint = true
+}
+
+buildkonfig {
+    packageName = "eu.codlab.blipya.buildconfig"
+
+    defaultConfigs {
+        buildConfigField(
+            FieldSpec.Type.STRING,
+            "googleAuthServerId",
+            rootProject.extra["GOOGLE_AUTH_SERVER_ID"] as String
+        )
+    }
 }
 
 val licenseCopy by tasks.registering(Copy::class) {

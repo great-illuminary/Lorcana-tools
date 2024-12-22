@@ -28,6 +28,8 @@ bignum = "0.3.10"
 
 lorcana = "0.15.0"
 
+kmp-auth = "2.3.0-beta01" #2.2.1
+
 [libraries]
 
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidx-ui-tooling" }
@@ -62,6 +64,11 @@ libraries-report = { group = "com.mikepenz", name = "aboutlibraries-core", versi
 
 bignum = { group = "com.ionspin.kotlin", name = "bignum", version.ref = "bignum" }
 lorcana = { group = "eu.codlab", name = "lorcana-data", version.ref = "lorcana" }
+
+kmp-auth-google = { group = "io.github.mirzemehdi", name = "kmpauth-google", version.ref = "kmp-auth" }
+kmp-auth-firebase = { group = "io.github.mirzemehdi", name = "kmpauth-firebase", version.ref = "kmp-auth" }
+kmp-auth-uihelper = { group = "io.github.mirzemehdi", name = "kmpauth-uihelper", version.ref = "kmp-auth" }
+
 
 [plugins]
 android-google-services = { id = "com.google.gms.google-services", version.ref = "android-google-services" }

@@ -29,6 +29,7 @@ node_modules/
 *.js
 
 *.jks
+google-services.json
 
 *.ipa
 *.dSYM.zip

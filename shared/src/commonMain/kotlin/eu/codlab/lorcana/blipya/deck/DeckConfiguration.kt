@@ -38,7 +38,6 @@ import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
 import eu.codlab.lorcana.blipya.utils.WindowType
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
-import eu.codlab.lorcana.blipya.widgets.MinusAdd
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.viewmodel.rememberViewModel

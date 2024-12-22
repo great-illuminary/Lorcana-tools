@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -11,6 +12,7 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.ManageAccounts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -30,12 +32,14 @@ import eu.codlab.lorcana.blipya.deck.edit.EditScenario
 import eu.codlab.lorcana.blipya.decks.DecksScreen
 import eu.codlab.lorcana.blipya.decks.PromptForNewDeck
 import eu.codlab.lorcana.blipya.init.InitializeScreen
+import eu.codlab.lorcana.blipya.login.LoginScreen
 import eu.codlab.lorcana.blipya.utils.LocalFrameProvider
 import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.WindowType
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.BottomSpacer
 import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
+import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.TopAppBarExtended
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
 import eu.codlab.lorcana.blipya.widgets.rememberSizeAwareScaffoldState
@@ -99,12 +103,22 @@ fun AppContent() {
     LaunchedEffect(currentEntry) {
         val entry = currentEntry ?: return@LaunchedEffect
 
+        val actions = listOf(
+            MenuItem.MenuItemOverflowMenu(
+                imageVector = Icons.Outlined.ManageAccounts,
+                contentDescription = "Login"
+            ) {
+                LoginScreen(Modifier.widthIn(100.dp, 200.dp), model)
+            }
+        )
+
         when (entry.route.route) {
             "/main" -> {
                 println("LOADING MAIN TITLE")
                 model.setAppBarState(
                     AppBarState(
-                        title = "Decks"
+                        title = "Decks",
+                        actions
                     )
                 )
 
@@ -131,7 +145,8 @@ fun AppContent() {
 
                 model.setAppBarState(
                     AppBarState(
-                        title = scenario.name
+                        title = scenario.name,
+                        actions
                     )
                 )
             }
@@ -145,7 +160,8 @@ fun AppContent() {
 
                 model.setAppBarState(
                     AppBarState(
-                        title = deck.name
+                        title = deck.name,
+                        actions
                     )
                 )
 

@@ -10,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.intl.Locale
 import eu.codlab.lorcana.blipya.theme.ApplicationTheme
 import eu.codlab.lorcana.blipya.theme.FontSizes
 import eu.codlab.lorcana.blipya.theme.createFontSizes
@@ -19,7 +18,6 @@ import eu.codlab.lorcana.blipya.widgets.defaultBackground
 import eu.codlab.lorcana.blipya.widgets.popup.PopupConfirmCompose
 import eu.codlab.lorcana.blipya.widgets.popup.PopupLocalModel
 import eu.codlab.viewmodel.effects.LifecycleEffect
-import eu.codlab.viewmodel.rememberViewModel
 
 val staticModel = AppModel(
     "",

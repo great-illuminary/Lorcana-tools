@@ -2,7 +2,6 @@ package eu.codlab.lorcana.blipya.dreamborn
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
 data class Deck(

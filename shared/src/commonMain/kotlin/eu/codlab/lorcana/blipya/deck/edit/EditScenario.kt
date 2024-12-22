@@ -2,7 +2,6 @@ package eu.codlab.lorcana.blipya.deck.edit
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,7 +27,6 @@ import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.MinusAdd
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
-import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.Scenario
 import eu.codlab.viewmodel.rememberViewModel
 import korlibs.io.util.UUID
