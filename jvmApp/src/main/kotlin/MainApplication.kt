@@ -1,3 +1,4 @@
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -20,7 +21,7 @@ fun main() = application {
     ) {
         window.minimumSize = Dimension(700, 500)
         PreComposeApp {
-            App(isDarkTheme = false)
+            App(isDarkTheme = isSystemInDarkTheme())
         }
     }
 }

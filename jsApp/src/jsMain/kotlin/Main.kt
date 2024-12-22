@@ -1,3 +1,4 @@
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
@@ -13,7 +14,7 @@ fun main() {
             title = "Blipya's Lorcana Tool"
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
-                App(false)
+                App(isSystemInDarkTheme())
             }
         }
     }
