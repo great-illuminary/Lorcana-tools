@@ -30,9 +30,11 @@ node_modules/
 
 *.jks
 google-services.json
+GoogleService-Info.plist
 
 *.ipa
 *.dSYM.zip
 .env
+Pods/
 
 **/vendor/bundle

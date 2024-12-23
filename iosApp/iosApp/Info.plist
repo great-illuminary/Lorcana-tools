@@ -55,5 +55,20 @@
 	</array>
 	<key>CFBundleDisplayName</key>
 	<string>Blip's</string>
+    
+    <key>GIDServerClientID</key>
+    <string>393180423504-5tmv179gndj3441fdjjbhcpdda05nl2m.apps.googleusercontent.com</string>
+
+    <key>GIDClientID</key>
+    <string>393180423504-5tmv179gndj3441fdjjbhcpdda05nl2m.apps.googleusercontent.com</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.393180423504-5tmv179gndj3441fdjjbhcpdda05nl2m</string>
+        </array>
+      </dict>
+    </array>
 </dict>
 </plist>

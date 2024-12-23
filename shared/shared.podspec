@@ -1,15 +1,17 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'shared'
-    spec.version                  = '0.0.20'
-    spec.homepage                 = ''
+    spec.version                  = '1.0'
+    spec.homepage                 = 'todo'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
-    spec.summary                  = ''
+    spec.summary                  = 'Shared implementation'
     spec.vendored_frameworks      = 'build/cocoapods/framework/shared.framework'
     spec.libraries                = 'c++'
-                
-                
+    spec.ios.deployment_target    = '16.0'
+    spec.dependency 'FirebaseAuth'
+    spec.dependency 'FirebaseCore'
+    spec.dependency 'GoogleSignIn'
                 
     if !Dir.exist?('build/cocoapods/framework/shared.framework') || Dir.empty?('build/cocoapods/framework/shared.framework')
         raise "

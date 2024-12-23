@@ -24,9 +24,31 @@ kotlin {
         browser()
     }
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64(),
+    ).forEach {
+        it.binaries.framework {
+            baseName = "shared"
+            isStatic = true
+        }
+    }
+
+    cocoapods {
+        summary = "Shared implementation"
+        homepage = "todo"
+        version = "1.0"
+        ios.deploymentTarget = "16.0"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
+            baseName = "shared"
+            isStatic = true
+        }
+        pod("GoogleSignIn") // { linkOnly = true}
+        pod("FirebaseCore") // { linkOnly = true }
+        pod("FirebaseAuth") // { linkOnly = true }
+    }
 
     sourceSets {
         commonMain {
