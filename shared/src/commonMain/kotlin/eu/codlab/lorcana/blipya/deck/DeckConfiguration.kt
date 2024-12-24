@@ -28,6 +28,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.deck_configuration_deck_name
+import eu.codlab.blipya.res.deck_configuration_deck_size
+import eu.codlab.blipya.res.deck_configuration_hand_size
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.dreamborn.ShowDreambornInformation
@@ -37,11 +41,14 @@ import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
 import eu.codlab.lorcana.blipya.utils.WindowType
+import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.viewmodel.rememberViewModel
 import korlibs.io.util.UUID
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun DeckConfiguration(
@@ -62,11 +69,13 @@ fun DeckConfiguration(
     val color = defaultCardBackground()
     val maxWidth = 100.dp
 
-    val columns = when (LocalWindow.current) {
-        WindowType.SMARTPHONE_TINY -> 2
-        WindowType.SMARTPHONE -> 2
-        WindowType.PHABLET -> 3
-        WindowType.TABLET -> 3
+    // extract the required number of columns and the specific case where we will have 2 in a row
+    // represents the expected number of columns AND the "span" of the first one
+    val (columns, firstSpanColumns) = when (LocalWindow.current) {
+        WindowType.SMARTPHONE_TINY -> 2 to 2
+        WindowType.SMARTPHONE -> 2 to 2
+        WindowType.PHABLET -> 3 to 2
+        WindowType.TABLET -> 3 to 2
     }
 
     LazyVerticalGrid(
@@ -76,7 +85,7 @@ fun DeckConfiguration(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        item(span = { GridItemSpan(columns -1) }) {
+        item(span = { GridItemSpan(firstSpanColumns) }) {
             DefaultCard(
                 modifier = Modifier.fillMaxWidth(),
                 backgroundColor = color
@@ -93,7 +102,7 @@ fun DeckConfiguration(
                             model.updateDeck(name.text)
                         },
                         label = {
-                            TextNormal("Deck Name")
+                            TextNormal(Res.string.deck_configuration_deck_name.localized())
                         }
                     )
 
@@ -113,7 +122,7 @@ fun DeckConfiguration(
                                 model.updateDeckSize(it)
                             },
                             label = {
-                                TextNormal("Deck Size")
+                                TextNormal(Res.string.deck_configuration_deck_size.localized())
                             }
                         )
 
@@ -128,7 +137,7 @@ fun DeckConfiguration(
                                 model.updateHandSize(it)
                             },
                             label = {
-                                TextNormal("Hand Size")
+                                TextNormal(Res.string.deck_configuration_hand_size.localized())
                             }
                         )
                     }

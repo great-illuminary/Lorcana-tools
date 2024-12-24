@@ -20,12 +20,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.ionspin.kotlin.bignum.integer.Quadruple
+import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.card_show_amount
+import eu.codlab.blipya.res.card_show_card_name
+import eu.codlab.blipya.res.card_show_max
+import eu.codlab.blipya.res.card_show_min
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.edit.EditScenarioModel
 import eu.codlab.lorcana.blipya.deck.scenario.rememberInputSize
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.utils.asLongOrNull
+import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.math.ExpectedCard
 import eu.codlab.viewmodel.rememberViewModel
 
@@ -49,7 +55,7 @@ fun ShowCard(
     val items: List<Quadruple<TextFieldValue, String, Boolean, (TextFieldValue) -> Unit>> = listOf(
         Quadruple(
             amount,
-            "Amount",
+            Res.string.card_show_amount.localized(),
             validationState.amountValid
         ) {
             validationModel.update(
@@ -67,7 +73,7 @@ fun ShowCard(
         },
         Quadruple(
             min,
-            "Min",
+            Res.string.card_show_min.localized(),
             validationState.minValid
         ) {
             validationModel.update(
@@ -85,7 +91,7 @@ fun ShowCard(
         },
         Quadruple(
             max,
-            "Max",
+            Res.string.card_show_max.localized(),
             validationState.maxValid
         ) {
             validationModel.update(
@@ -112,7 +118,7 @@ fun ShowCard(
                 model.updateScenario(holder.id, name.text)
             },
             label = {
-                TextNormal("Card Name")
+                TextNormal(Res.string.card_show_card_name.localized())
             }
         )
 

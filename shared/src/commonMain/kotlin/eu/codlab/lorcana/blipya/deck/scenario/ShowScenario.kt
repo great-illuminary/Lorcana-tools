@@ -17,17 +17,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
+import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.delete
+import eu.codlab.blipya.res.edit
+import eu.codlab.blipya.res.invalid
+import eu.codlab.blipya.res.result
 import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
+import eu.codlab.lorcana.blipya.deck.edit.DisplayStatisticalResult
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.WindowType
+import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.PopupConfirm
 import eu.codlab.lorcana.math.Scenario
 import eu.codlab.viewmodel.rememberViewModel
@@ -74,43 +82,33 @@ fun ShowScenario(
 
         Spacer(Modifier.height(8.dp))
 
-        Row {
-            if (state.probability < 0) {
-                TextNormal("Result : invalid")
-            } else {
-                TextNormal("Result : ${state.probability.round(2)}%")
-            }
-        }
+        DisplayStatisticalResult(probability = state.probability)
 
         Row {
-            IconButton(
-                onClick = {
-                    app.show(state.deck, state.scenario)
+            // show the actions to edit & delete the current scenario
+            listOf(
+                Triple(
+                    Res.string.edit.localized(),
+                    Icons.Default.Edit
+                ) { app.show(state.deck, state.scenario) },
+                Triple(
+                    "${Res.string.delete.localized()} ${state.name}",
+                    Icons.Default.Delete
+                ) { promptDelete = true },
+            ).forEach { (contentDescription, imageVector, onClick) ->
+                IconButton(onClick) {
+                    Icon(
+                        imageVector,
+                        contentDescription,
+                        tint = tintColor
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit ${state.name}",
-                    tint = tintColor
-                )
-            }
-
-            IconButton(
-                onClick = {
-                    promptDelete = true
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete ${state.name}",
-                    tint = tintColor
-                )
             }
         }
     }
 }
 
-@Composable
+@Composable                          
 fun rememberInputSize(min: Dp = 90.dp) = when (LocalWindow.current) {
     WindowType.SMARTPHONE_TINY -> min
     WindowType.SMARTPHONE -> min

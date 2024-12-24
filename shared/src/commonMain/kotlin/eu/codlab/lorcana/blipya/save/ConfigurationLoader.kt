@@ -27,8 +27,6 @@ class ConfigurationLoader(
         configuration = configurationFolder.readStringIfExists()?.let {
             json.decodeFromString(it)
         } ?: ConfigurationModel()
-
-        println(configuration)
     }
 
     suspend fun save(decks: List<SavedDeckModel>) {

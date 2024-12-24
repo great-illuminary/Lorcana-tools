@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
 <!-- non automatically generated -->
+    <string name="deck_configuration_deck_name">Deck Name</string>
+    <string name="deck_configuration_deck_size">Deck Size</string>
+    <string name="deck_configuration_hand_size">Hand Size</string>
+
+    <string name="card_show_card_name">Card Name</string>
+    <string name="card_show_amount">Amount</string>
+    <string name="card_show_min">Min</string>
+    <string name="card_show_max">Max</string>
+
+    <string name="dreamborn_url_or_id">Dreamborn's URL or ID</string>
+
+    <string name="scenario_name">Scenario Name</string>
+
+    <string name="result">Result</string>
+    <string name="invalid">Invalid</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="ok">Ok</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

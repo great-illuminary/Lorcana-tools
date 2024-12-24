@@ -50,7 +50,6 @@ fun calculate(
     miscAmount: Long,
     objects: List<ExpectedCard>
 ): Double {
-    println("start... $miscAmount $handSize")
     if (miscAmount == 0L && deckSize == handSize) {
         return 100.0
     }
@@ -77,7 +76,7 @@ private fun recursiveCombination(
     depth: Int
 ): Long {
     fun log(text: String) {
-        println("${spaces(depth)} $text")
+        // unused for now but keeping for reintegration println("${spaces(depth)} $text")
     }
     log("  --> recursiveCombination($handSize, $miscAmount, ${currentHand.size}, $currentHandSize, ${objects.size}, $depth)")
 
@@ -101,11 +100,8 @@ private fun recursiveCombination(
     if (objects.isEmpty()) {
         log("objects.isEmpty")
         // calculate the probability to have at least "k" cards in amount of said cards
-        return (currentHand.map {
-            val chosen = choose(it.first, it.second)
-            println("${it.first} -> ${it.second} = $chosen * ")
-            chosen
-        }.reduceOrNull { acc, l -> acc * l } ?: 0)
+        return (currentHand.map { choose(it.first, it.second) }
+            .reduceOrNull { acc, l -> acc * l } ?: 0)
             .let { result ->
                 // and now calculate how much cards remaining we can have to complete the hand
                 if (currentHandSize < handSize) {

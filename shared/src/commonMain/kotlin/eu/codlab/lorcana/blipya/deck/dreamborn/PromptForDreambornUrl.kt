@@ -7,7 +7,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.dreamborn_url_or_id
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
+import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.PromptDialog
 
 @Composable
@@ -27,9 +30,8 @@ fun PromptForDreambornUrl(
     }
 
     PromptDialog(
-        title = "Dreamborn URL Or Id",
+        title = Res.string.dreamborn_url_or_id.localized(),
         onDismiss = {
-            println("dismiss")
             prompt = false
             onDismiss()
         },

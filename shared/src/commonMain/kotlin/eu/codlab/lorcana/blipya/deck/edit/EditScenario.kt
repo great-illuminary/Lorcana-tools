@@ -18,12 +18,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.invalid
+import eu.codlab.blipya.res.result
+import eu.codlab.blipya.res.scenario_name
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.card.ShowCard
 import eu.codlab.lorcana.blipya.deck.scenario.round
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
+import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.MinusAdd
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
@@ -46,7 +51,7 @@ fun EditScenario(
     val color = defaultCardBackground()
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = modifier.fillMaxSize().padding(16.dp)
     ) {
         DefaultCard(
             modifier = Modifier.fillMaxWidth(),
@@ -63,7 +68,7 @@ fun EditScenario(
                         model.updateScenario(name.text)
                     },
                     label = {
-                        TextNormal("Scenario Name")
+                        TextNormal(Res.string.scenario_name.localized())
                     }
                 )
 
@@ -78,11 +83,7 @@ fun EditScenario(
                     }
                 )
 
-                if (state.probability < 0) {
-                    TextNormal("Result : invalid")
-                } else {
-                    TextNormal("Result : ${state.probability.round(2)}%")
-                }
+                DisplayStatisticalResult(probability = state.probability)
 
                 Spacer(Modifier.height(16.dp))
 
