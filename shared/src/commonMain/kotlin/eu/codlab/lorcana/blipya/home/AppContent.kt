@@ -26,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.decks_title
 import eu.codlab.compose.widgets.StatusBarAndNavigation
 import eu.codlab.lorcana.blipya.deck.DeckConfiguration
 import eu.codlab.lorcana.blipya.deck.edit.EditScenario
@@ -36,6 +38,7 @@ import eu.codlab.lorcana.blipya.login.LoginScreen
 import eu.codlab.lorcana.blipya.utils.LocalFrameProvider
 import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.WindowType
+import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.BottomSpacer
 import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
@@ -79,8 +82,6 @@ fun AppContent() {
 
     val currentState by model.states.collectAsState()
 
-    println("currentState $currentState")
-
     val isScreenExpanded = when (LocalWindow.current) {
         WindowType.SMARTPHONE_TINY -> false
         WindowType.SMARTPHONE -> false
@@ -100,6 +101,8 @@ fun AppContent() {
         return
     }
 
+    val decksTitle = Res.string.decks_title.localized()
+
     LaunchedEffect(currentEntry) {
         val entry = currentEntry ?: return@LaunchedEffect
 
@@ -117,7 +120,7 @@ fun AppContent() {
                 println("LOADING MAIN TITLE")
                 model.setAppBarState(
                     AppBarState(
-                        title = "Decks",
+                        title = decksTitle,
                         actions
                     )
                 )
@@ -217,10 +220,8 @@ fun AppContent() {
                                 scope.launch {
                                     scaffoldState?.drawerState?.let {
                                         if (it.isOpen) {
-                                            println("open")
                                             it.close()
                                         } else {
-                                            println("close")
                                             it.open()
                                         }
                                     }

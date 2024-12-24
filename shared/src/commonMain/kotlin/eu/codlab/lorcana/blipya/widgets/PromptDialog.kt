@@ -25,9 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.cancel
+import eu.codlab.blipya.res.validate
 import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.theme.AppColor
+import eu.codlab.lorcana.blipya.utils.localized
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -101,7 +105,7 @@ fun PromptDialog(
                     ) {
                         TextNormal(
                             color = reverseTextColor,
-                            text = "Cancel"
+                            text = Res.string.cancel.localized()
                         )
                     }
 
@@ -115,7 +119,7 @@ fun PromptDialog(
                     ) {
                         TextNormal(
                             color = reverseTextColor,
-                            text = "Validate"
+                            text = Res.string.validate.localized()
                         )
                     }
                 }

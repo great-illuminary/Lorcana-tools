@@ -1,4 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-<!-- non automatically generated -->
+    <!-- non automatically generated -->
+    <string name="deck_configuration_deck_name">Nom Du Deck</string>
+    <string name="deck_configuration_deck_size">Nombre De Cartes</string>
+    <string name="deck_configuration_hand_size">Cartes En Main</string>
+
+    <string name="card_show_card_name">Nom De(s) La Carte</string>
+    <string name="card_show_amount">Quantité</string>
+    <string name="card_show_min">Min</string>
+    <string name="card_show_max">Max</string>
+
+    <string name="show_scenario_delete_title">Effacer le scénario</string>
+    <string name="show_scenario_delete_text">Etes-vous sûr d'effacer le scénario ?</string>
+
+    <string name="decks_title">Decks</string>
+    <string name="decks_no_decks">Pas de decks actuellement</string>
+    <string name="decks_cards">cartes</string>
+
+    <string name="dreamborn_url_or_id">URL ou ID Dreamborn</string>
+
+    <string name="scenario_name">Nom Du Scenario</string>
+
+    <string name="result">Résultat</string>
+    <string name="invalid">Invalide</string>
+    <string name="cancel">Annuler</string>
+    <string name="confirm">Confirmer</string>
+    <string name="ok">Ok</string>
+    <string name="edit">Editer</string>
+    <string name="delete">Effacr</string>
+    <string name="validate">Valider</string>
 </resources>

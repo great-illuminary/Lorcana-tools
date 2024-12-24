@@ -17,7 +17,7 @@ import eu.codlab.blipya.res.cancel
 import eu.codlab.blipya.res.confirm
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.compose.widgets.TextTitle
-import org.jetbrains.compose.resources.stringResource
+import eu.codlab.lorcana.blipya.utils.localized
 
 @Suppress("LongMethod")
 @Composable
@@ -71,7 +71,7 @@ fun PopupConfirm(
                     ) {
                         TextNormal(
                             color = Color.Black,
-                            text = stringResource(Res.string.cancel)
+                            text = Res.string.cancel.localized()
                         )
                     }
                 }
@@ -87,7 +87,7 @@ fun PopupConfirm(
                 ) {
                     TextNormal(
                         color = Color.Black,
-                        text = stringResource(Res.string.confirm)
+                        text = Res.string.confirm.localized()
                     )
                 }
             }

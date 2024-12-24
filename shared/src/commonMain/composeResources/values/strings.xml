@@ -10,6 +10,13 @@
     <string name="card_show_min">Min</string>
     <string name="card_show_max">Max</string>
 
+    <string name="show_scenario_delete_title">Delete the scenario</string>
+    <string name="show_scenario_delete_text">Are you sure to delete this scenario ?</string>
+
+    <string name="decks_title">Decks</string>
+    <string name="decks_no_decks">No decks for now</string>
+    <string name="decks_cards">cards</string>
+
     <string name="dreamborn_url_or_id">Dreamborn's URL or ID</string>
 
     <string name="scenario_name">Scenario Name</string>
@@ -21,4 +28,5 @@
     <string name="ok">Ok</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="validate">Validate</string>
 </resources>

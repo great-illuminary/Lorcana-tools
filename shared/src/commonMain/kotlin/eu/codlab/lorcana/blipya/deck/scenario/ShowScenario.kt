@@ -26,6 +26,8 @@ import eu.codlab.blipya.res.delete
 import eu.codlab.blipya.res.edit
 import eu.codlab.blipya.res.invalid
 import eu.codlab.blipya.res.result
+import eu.codlab.blipya.res.show_scenario_delete_text
+import eu.codlab.blipya.res.show_scenario_delete_title
 import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
@@ -62,8 +64,8 @@ fun ShowScenario(
     if (promptDelete) {
         PopupConfirm(
             show = true,
-            title = "Delete the Scenario",
-            text = "Are you sure to delete this scenario ?",
+            title = Res.string.show_scenario_delete_title.localized(),
+            text = Res.string.show_scenario_delete_text.localized(),
             onDismiss = { promptDelete = false },
             onConfirm = {
                 promptDelete = false

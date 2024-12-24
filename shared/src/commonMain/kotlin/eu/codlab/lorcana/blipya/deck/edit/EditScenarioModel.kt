@@ -102,11 +102,7 @@ class EditScenarioModel(
     fun updateScenario(name: String) {
         states.value.scenario.name = name
 
-        println("scenario name to -> $name")
-
         saveDeck()
-
-        println("scenario name to -> ${states.value.scenario.name}")
     }
 
     fun updateScenario(id: String, name: String) {
@@ -130,7 +126,6 @@ class EditScenarioModel(
     }
 
     private fun triggerProbability() {
-        println("triggerProbability ${states.value.scenario.calculate()}")
         updateState {
             copy(probability = states.value.scenario.calculate())
         }

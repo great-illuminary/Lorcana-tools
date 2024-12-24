@@ -14,10 +14,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.decks_cards
+import eu.codlab.blipya.res.decks_no_decks
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
+import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.utils.rememberColumns
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
@@ -40,7 +44,7 @@ fun DecksScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextNormal("No decks for now")
+            TextNormal(Res.string.decks_no_decks.localized())
         }
         return
     }
@@ -61,10 +65,10 @@ fun DecksScreen(
                 onClick = { onDeckSelected(deck) }
             ) {
                 TextNormal(
-                    text = deck.name ?: "No Name",
+                    text = deck.name,
                 )
                 TextNormal(
-                    text = "x${deck.size} cards",
+                    text = "x${deck.size} ${Res.string.decks_cards.localized()}",
                 )
             }
         }
