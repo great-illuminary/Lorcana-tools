@@ -1,6 +1,5 @@
 package eu.codlab.lorcana.blipya.deck.scenario
 
-import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
@@ -22,7 +21,6 @@ data class ShowScenarioModelState(
 
 @Suppress("TooManyFunctions")
 class ShowScenarioModel(
-    private val appModel: AppModel,
     deck: DeckModel,
     scenario: Scenario
 ) :
@@ -38,26 +36,18 @@ class ShowScenarioModel(
     companion object {
         fun fake(): ShowScenarioModel {
             val deck = Deck(UUID.randomUUID().toString(), "", 0, 0)
-            val scenario = Scenario("", "", deck) { _, _, _ -> /** nothing*/ }
-                .also { deck.addScenario(it) }
+            val scenario = Scenario("", "", deck).also { deck.addScenario(it) }
 
-            return ShowScenarioModel(
-                AppModel.fake(),
-                DeckModel(deck),
-                scenario
-            )
+            return ShowScenarioModel(DeckModel(deck), scenario)
         }
     }
 
     fun triggerProbability() {
-        println("triggerProbability ${states.value.scenario.calculate()}")
         updateState {
             copy(probability = states.value.scenario.calculate())
         }
     }
 }
-
-private fun <T> List<T>.clone() = map { it }
 
 fun Double.round(decimals: Long = 2): Double {
     val factor = 10.0.pow(decimals.toDouble())

@@ -88,7 +88,7 @@ fun SavedDeckModel.toDeck(): DeckModel {
                 id = scenar.id,
                 name = scenar.name,
                 parent = newDeck,
-            ) { _, _, _ -> /** */ }
+            )
 
             scenar.cards.forEach { holder ->
                 scenario.add(

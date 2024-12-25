@@ -9,7 +9,7 @@ class TestFactorial {
         factorial(n).reduce { acc, i -> acc * i }
 
     @Test
-    fun testFactorial() {
+    fun testFactorialResults() {
         assertEquals(120, actualFactorial(5))
         assertEquals(3628800, actualFactorial(10))
         assertEquals(2432902008176640000, actualFactorial(20))
@@ -17,7 +17,7 @@ class TestFactorial {
     }
 
     @Test
-    fun testChoose() {
+    fun testChooseResults() {
         assertEquals(210, choose(4, 10))
         assertEquals(4426165368, choose(8, 64))
         assertEquals(55098996177225, choose(8, 200))

@@ -48,8 +48,8 @@ private fun PromptForNewDeckPreview() {
     PreviewDarkLightColumn { _, _ ->
         PromptForDreambornUrl(
             true,
-            onConfirm = { /** nothing */ },
-            onDismiss = { /** nothing */ }
+            onConfirm = { /* nothing */ },
+            onDismiss = { /* nothing */ }
         )
     }
 }

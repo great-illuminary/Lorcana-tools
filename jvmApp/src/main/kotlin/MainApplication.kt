@@ -6,20 +6,18 @@ import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import eu.codlab.lorcana.blipya.home.App
 import moe.tlaster.precompose.PreComposeApp
-import java.awt.Dimension
 import kotlin.system.exitProcess
+
+val WindowSize = DpSize(700.dp, 500.dp)
 
 fun main() = application {
     Window(
         onCloseRequest = {
             exitProcess(0)
         },
-        title = "Blipya",
-        state = WindowState(
-            size = DpSize(700.dp, 500.dp)
-        )
+        title = "Blip's",
+        state = WindowState(size = WindowSize)
     ) {
-        window.minimumSize = Dimension(700, 500)
         PreComposeApp {
             App(isDarkTheme = isSystemInDarkTheme())
         }

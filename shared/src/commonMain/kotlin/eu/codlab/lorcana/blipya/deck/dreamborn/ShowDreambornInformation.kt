@@ -31,6 +31,7 @@ import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
 
+@Suppress("LongMethod")
 @Composable
 fun ShowDreambornInformation(
     modifier: Modifier,
@@ -75,7 +76,6 @@ fun ShowDreambornInformation(
             if (state.loadingDreamborn) {
                 CircularProgressIndicator()
             } else {
-
                 state.deck.dreamborn?.data?.let {
                     TextNormal(
                         text = "Name: ${it.name}"

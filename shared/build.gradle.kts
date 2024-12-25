@@ -14,6 +14,8 @@ plugins {
 }
 
 kotlin {
+    applyDefaultHierarchyTemplate()
+
     androidTarget {
         publishLibraryVariants("release", "debug")
     }
@@ -46,8 +48,8 @@ kotlin {
             isStatic = true
         }
         pod("GoogleSignIn") // { linkOnly = true}
-        pod("FirebaseCore") // { linkOnly = true }
-        pod("FirebaseAuth") // { linkOnly = true }
+        // pod("FirebaseCore") // { linkOnly = true }
+        pod("FirebaseAuth") { linkOnly = true }
     }
 
     sourceSets {
@@ -118,6 +120,14 @@ kotlin {
                 // and issue exists in the 1.7.2-alpha01 so using 03 on the web
                 // but the 03 is faulty in non js env -> we can then just override how it works
                 api(additionals.multiplatform.precompose.web)
+            }
+        }
+    }
+
+    targets.configureEach {
+        compilations.configureEach {
+            compileTaskProvider.get().compilerOptions {
+                freeCompilerArgs.add("-Xexpect-actual-classes")
             }
         }
     }

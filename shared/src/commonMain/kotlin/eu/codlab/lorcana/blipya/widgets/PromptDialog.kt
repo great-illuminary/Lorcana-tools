@@ -33,6 +33,7 @@ import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.utils.localized
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PromptDialog(

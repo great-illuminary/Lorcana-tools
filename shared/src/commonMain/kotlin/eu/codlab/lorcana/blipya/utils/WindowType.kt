@@ -3,7 +3,6 @@ package eu.codlab.lorcana.blipya.utils
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-
 enum class WindowType {
     SMARTPHONE_TINY,
     SMARTPHONE,

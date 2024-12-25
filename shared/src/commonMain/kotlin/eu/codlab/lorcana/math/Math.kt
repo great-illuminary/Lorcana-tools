@@ -3,6 +3,8 @@ package eu.codlab.lorcana.math
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.ionspin.kotlin.bignum.integer.toBigInteger
 
+private const val MaxPercentage = 100.0
+
 fun factorial(x: Long) = factorial(1, x)
 
 fun factorial(startAt: Long, x: Long): List<Long> {
@@ -13,6 +15,7 @@ fun factorial(startAt: Long, x: Long): List<Long> {
     return (startAt..x).map { it }
 }
 
+@Suppress("ReturnCount")
 fun choose(k: Long, n: Long): Long {
     val kPos = if (k < 0) 0 else k
     val nPos = if (n < 0) 0 else n
@@ -23,11 +26,11 @@ fun choose(k: Long, n: Long): Long {
     // we can then already simplify n! with -> (k+1)*...*n / (n-k)!
 
     // instead of having the following ->
-    //val numerator = factorial(nPos)
-    //val denominator = listOf(
+    // val numerator = factorial(nPos)
+    // val denominator = listOf(
     //    factorial(nPos - kPos),
     //    factorial(kPos)
-    //).flatten()
+    // ).flatten()
 
     // we can have
     val numerator = factorial(kPos + 1, nPos)
@@ -51,22 +54,17 @@ fun calculate(
     objects: List<ExpectedCard>
 ): Double {
     if (miscAmount == 0L && deckSize == handSize) {
-        return 100.0
+        return MaxPercentage
     }
 
-    val recursive = recursiveCombination(handSize, miscAmount, mutableListOf(), 0, objects, 0)
+    val recursive = recursiveCombination(handSize, miscAmount, emptyList(), 0, objects, 0)
 
     val chosen = choose(handSize, deckSize)
 
-    return if (chosen == 0L) 0.0 else (recursive * 1.0 / chosen) * 100
+    return if (chosen == 0L) 0.0 else (recursive * 1.0 / chosen) * MaxPercentage
 }
 
-private fun spaces(depth: Int): String {
-    var result = ""
-    (0..depth).forEach { result += " " }
-    return result
-}
-
+@Suppress("ReturnCount")
 private fun recursiveCombination(
     handSize: Long,
     miscAmount: Long,
@@ -75,33 +73,22 @@ private fun recursiveCombination(
     objects: List<ExpectedCard>,
     depth: Int
 ): Long {
-    fun log(text: String) {
-        // unused for now but keeping for reintegration println("${spaces(depth)} $text")
-    }
-    log("  --> recursiveCombination($handSize, $miscAmount, ${currentHand.size}, $currentHandSize, ${objects.size}, $depth)")
-
     // if we are in an invalid state
     if (currentHandSize > handSize) {
-        log("currentHandSize > handSize")
         return 0
     }
 
     if (currentHandSize == handSize) {
-        val invalid = objects.firstOrNull { it.min != 0L }
-
-        log("having invalid -> ${null != invalid}")
-
-        if (null != invalid) return 0
+        // check if we can find at least one item which is not with an empty minimum
+        objects.firstOrNull { it.min != 0L } ?: return 0
     }
 
     // we don't have any objects anymore, we can check the resulting result
     // by combining all choose(k,n) & remaining hand size if any
 
     if (objects.isEmpty()) {
-        log("objects.isEmpty")
         // calculate the probability to have at least "k" cards in amount of said cards
-        return (currentHand.map { choose(it.first, it.second) }
-            .reduceOrNull { acc, l -> acc * l } ?: 0)
+        return currentHand.map { choose(it.first, it.second) }.reduceMultiplyOr0()
             .let { result ->
                 // and now calculate how much cards remaining we can have to complete the hand
                 if (currentHandSize < handSize) {
@@ -114,12 +101,9 @@ private fun recursiveCombination(
     }
 
     // we extract can calculate the combinations
-    log("objects info ${objects.size}")
     return objects.last().let { last ->
-
         (last.min..last.max).sumOf { i ->
-            log("calculate sumOf for ${last.min} / ${last.max} -> ($i to ${last.amount})")
-            val result = recursiveCombination(
+            recursiveCombination(
                 handSize,
                 miscAmount,
                 currentHand + (i to last.amount),
@@ -127,12 +111,12 @@ private fun recursiveCombination(
                 objects.dropLast(1),
                 depth + 1
             )
-            log("calculate sumOf for ${last.min} / ${last.max} -> $i -> $result")
-
-            result
         }
     }
 }
+
+private fun Iterable<Long>.reduceMultiplyOr0(): Long =
+    reduceOrNull { acc, l -> acc * l } ?: 0
 
 private fun reduceNumeratorDenominator(
     numerator: List<Long>,

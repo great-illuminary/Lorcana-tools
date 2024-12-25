@@ -8,4 +8,5 @@ actual fun GoogleMultiplatformButton(
     modifier: Modifier,
     onGoogleAuthentIdToken: (Result<String>) -> Unit
 ) {
+    // nothing for now
 }

@@ -62,6 +62,6 @@ class TestDeck {
         assertEquals(0.0652, deck.calculate(), 0.01)
 
         println("now calculate the result ${deck.calculate()}")
-        */
+         */
     }
 }

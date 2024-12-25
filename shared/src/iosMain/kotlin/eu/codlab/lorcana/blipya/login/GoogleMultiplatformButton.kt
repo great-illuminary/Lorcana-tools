@@ -17,7 +17,7 @@ actual fun GoogleMultiplatformButton(
 ) {
     val model = rememberViewModel { GoogleAuthenticationModel() }
 
-    //Google Sign-In Button and authentication with Firebase
+    // Google Sign-In Button and authentication with Firebase
     GoogleButtonUiContainerFirebase(onResult = {
         model.setResult(it, onGoogleAuthentIdToken)
     }, linkAccount = false) {

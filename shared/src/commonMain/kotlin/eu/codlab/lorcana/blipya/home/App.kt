@@ -91,8 +91,7 @@ private fun InternalApp(
     val confirmPopup by remember { mutableStateOf(PopupLocalModel()) }
     val fontSizes = createFontSizes()
 
-    val model = staticModel // rememberViewModel { staticModel }
-    //val locale = Locale("fr_fr")
+    val model = staticModel
 
     LaunchedEffect(onBackPressed) {
         model.onBackPressed = onBackPressed

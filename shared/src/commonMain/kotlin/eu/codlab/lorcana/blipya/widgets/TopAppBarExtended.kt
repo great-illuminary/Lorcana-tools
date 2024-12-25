@@ -1,6 +1,5 @@
 package eu.codlab.lorcana.blipya.widgets
 
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Icon
@@ -8,7 +7,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,7 +26,7 @@ fun TopAppBarExtended(
     title: String,
     topSpacer: Boolean,
     canGoBack: Boolean,
-    isScreenExpanded: Boolean,
+    // isScreenExpanded: Boolean, // unused for now in the app
     appModel: AppModel,
     onNavigationClick: () -> Unit
 ) {
@@ -37,7 +36,7 @@ fun TopAppBarExtended(
     val appBarState = modelState.appBarState
 
     val menu = if (canGoBack) {
-        Icons.Filled.ArrowBack
+        Icons.AutoMirrored.Filled.ArrowBack
         // } else if (!isScreenExpanded) {
         //    Icons.Filled.Menu
     } else {

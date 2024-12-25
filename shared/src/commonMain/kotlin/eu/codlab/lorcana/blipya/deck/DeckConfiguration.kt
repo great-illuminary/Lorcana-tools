@@ -49,6 +49,7 @@ import eu.codlab.lorcana.math.Deck
 import eu.codlab.viewmodel.rememberViewModel
 import korlibs.io.util.UUID
 
+@Suppress("LongMethod")
 @Composable
 fun DeckConfiguration(
     app: AppModel,
@@ -67,15 +68,8 @@ fun DeckConfiguration(
 
     val color = defaultCardBackground()
     val maxWidth = 100.dp
-
-    // extract the required number of columns and the specific case where we will have 2 in a row
-    // represents the expected number of columns AND the "span" of the first one
-    val (columns, firstSpanColumns) = when (LocalFrame.current) {
-        WindowType.SMARTPHONE_TINY -> 2 to 2
-        WindowType.SMARTPHONE -> 2 to 2
-        WindowType.PHABLET -> 3 to 2
-        WindowType.TABLET -> 3 to 2
-    }
+    val numberOfColumnsForMainItem = 2
+    val columns = expectedNumberOfColumns()
 
     LazyVerticalGrid(
         modifier = modifier.imePadding(),
@@ -84,13 +78,13 @@ fun DeckConfiguration(
         verticalArrangement = Arrangement.spacedBy(AppSizes.paddings.default),
         horizontalArrangement = Arrangement.spacedBy(AppSizes.paddings.default),
     ) {
-        item(span = { GridItemSpan(firstSpanColumns) }) {
+        item(span = { GridItemSpan(numberOfColumnsForMainItem) }) {
             DefaultCard(
                 modifier = Modifier.fillMaxWidth(),
                 backgroundColor = color
             ) {
                 Column(
-                    Modifier.padding(16.dp).background(color),
+                    Modifier.padding(AppSizes.paddings.default).background(color),
                     verticalArrangement = Arrangement.spacedBy(AppSizes.paddings.default)
                 ) {
                     CustomOutlinedEditText(
@@ -164,6 +158,22 @@ fun DeckConfiguration(
                 }
             }
         }
+    }
+}
+
+@Suppress("MagicNumber")
+@Composable
+private fun expectedNumberOfColumns(): Int {
+    val columnsForReducedScreens = 2
+    val columnsForExpandedScreens = 3
+
+    // extract the required number of columns and the specific case where we will have 2 in a row
+    // represents the expected number of columns AND the "span" of the first one
+    return when (LocalFrame.current) {
+        WindowType.SMARTPHONE_TINY -> columnsForReducedScreens
+        WindowType.SMARTPHONE -> columnsForReducedScreens
+        WindowType.PHABLET -> columnsForExpandedScreens
+        WindowType.TABLET -> columnsForExpandedScreens
     }
 }
 

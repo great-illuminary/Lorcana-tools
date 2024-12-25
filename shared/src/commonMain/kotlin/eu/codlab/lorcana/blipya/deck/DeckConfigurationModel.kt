@@ -40,14 +40,13 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             scenarii = deck.scenarii
         )
     ) {
-
     private val client = createClient(
         Configuration(
             enableLogs = true,
             socketTimeoutMillis = 30000,
             requestTimeoutMillis = 30000
         )
-    ) { /** nothing*/ }
+    )
 
     private suspend fun dreamborn(id: String): eu.codlab.lorcana.blipya.dreamborn.Deck {
         val dreamborn = id.split("?").first().let { intermediate ->
@@ -61,24 +60,28 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         throw IllegalStateException("Error while loading $url")
     }
 
-
+    @Suppress("TooGenericExceptionCaught")
     fun loadDreamborn(url: String) = launch {
         if (states.value.loadingDreamborn) return@launch
 
         updateState { copy(loadingDreamborn = true) }
 
         try {
-            //TODO set to model as well ?
-            //states.value.deck.dreamborn = states.value.deck.dreamborn?.copy(
+            // TODO set to model as well ?
+            // states.value.deck.dreamborn = states.value.deck.dreamborn?.copy(
             //    url = url, data = null
-            //) ?: Dreamborn(url = url)
+            // ) ?: Dreamborn(url = url)
 
             val dreamborn = dreamborn(url)
 
-            //TODO set to model as well ?
+            // TODO set to model as well ?
             states.value.deck.dreamborn = states.value.deck.dreamborn?.copy(
-                url = url, data = dreamborn
-            ) ?: Dreamborn(url = url, data = dreamborn)
+                url = url,
+                data = dreamborn
+            ) ?: Dreamborn(
+                url = url,
+                data = dreamborn
+            )
 
             updateState { copy(loadingDreamborn = false) }
 
@@ -104,11 +107,12 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
     }
 
     fun add(id: String, added: (Scenario) -> Unit) = launch {
-        val scenario = Scenario(id, "", states.value.deck.deck) { _, _, _ ->
+        val scenario = Scenario(id, "", states.value.deck.deck)
+        /* to do later, something like -> { _, _, _ ->
             launch {
                 updateState { copy(updatedAt = DateTime.now()) }
             }
-        }
+        }*/
 
         states.value.deck.addScenario(scenario)
 
@@ -157,7 +161,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         }
 
         saveDeck()
-        //TODO update scenarii
+        // TODO update scenarii
     }
 
     fun updateHandSize(size: TextFieldValue) = launch {
@@ -170,7 +174,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         }
 
         saveDeck()
-        //TODO update scenarii
+        // TODO update scenarii
     }
 
     fun updateDeck(name: String) {
@@ -181,7 +185,6 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
 
     fun openDreamborn(uriHandler: UriHandler) {
         val lorcana = appModel.states.value.lorcana ?: return
-
 
         states.value.deck.dreamborn?.data?.let { data ->
             val mapped = data.cards.mapNotNull { c ->

@@ -44,7 +44,7 @@ fun ShowScenario(
     deck: DeckModel,
     scenario: Scenario
 ) {
-    val model = rememberViewModel { ShowScenarioModel(app, deck, scenario) }
+    val model = rememberViewModel { ShowScenarioModel(deck, scenario) }
     var promptDelete by remember { mutableStateOf(false) }
     val state by model.states.collectAsState()
 

@@ -36,8 +36,6 @@ import eu.codlab.lorcana.blipya.decks.PromptForNewDeck
 import eu.codlab.lorcana.blipya.init.InitializeScreen
 import eu.codlab.lorcana.blipya.login.LoginScreen
 import eu.codlab.lorcana.blipya.utils.LocalFrameProvider
-import eu.codlab.lorcana.blipya.utils.LocalWindow
-import eu.codlab.lorcana.blipya.utils.WindowType
 import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.BottomSpacer
@@ -60,7 +58,7 @@ val LocalMenuState: ProvidableCompositionLocal<ScaffoldState?> =
     compositionLocalOf { null }
 
 @Composable
-@Suppress("LongMethod")
+@Suppress("LongMethod", "ComplexMethod")
 fun AppContent() {
     StatusBarAndNavigation()
 
@@ -82,12 +80,12 @@ fun AppContent() {
 
     val currentState by model.states.collectAsState()
 
-    val isScreenExpanded = when (LocalWindow.current) {
+    /*val isScreenExpanded = when (LocalWindow.current) {
         WindowType.SMARTPHONE_TINY -> false
         WindowType.SMARTPHONE -> false
         WindowType.PHABLET -> true
         WindowType.TABLET -> true
-    }
+    }*/
 
     val currentEntry by navigator.currentEntry.collectAsState(null)
     val backStackCount by navigator.backStackCount.collectAsState(0)
@@ -201,7 +199,7 @@ fun AppContent() {
                 Scaffold(
                     scaffoldState = scaffoldState,
                     topBar = {
-                        val scaffoldState = LocalMenuState.current
+                        val scaffold = LocalMenuState.current
                         val appModel = LocalApp.current
                         val state by appModel.states.collectAsState()
 
@@ -210,7 +208,7 @@ fun AppContent() {
                                 title = state.appBarState.title,
                                 topSpacer = true,
                                 canGoBack = canGoBack,
-                                isScreenExpanded = isScreenExpanded,
+                                // isScreenExpanded = isScreenExpanded,
                                 appModel = model
                             ) {
                                 if (canGoBack) {
@@ -218,7 +216,7 @@ fun AppContent() {
                                     return@TopAppBarExtended
                                 }
                                 scope.launch {
-                                    scaffoldState?.drawerState?.let {
+                                    scaffold?.drawerState?.let {
                                         if (it.isOpen) {
                                             it.close()
                                         } else {
@@ -231,8 +229,7 @@ fun AppContent() {
                     },
                     floatingActionButton = {
                         Column {
-                            val model = LocalApp.current
-                            val state by model.states.collectAsState()
+                            val state by LocalApp.current.states.collectAsState()
 
                             state.floatingActionButtonState?.let {
                                 FloatingActionButton(
@@ -258,7 +255,7 @@ fun AppContent() {
                         Column(
                             modifier = Modifier.fillMaxSize().clickable(
                                 interactionSource = interactionSource,
-                                indication = null    // this gets rid of the ripple effect
+                                indication = null // this gets rid of the ripple effect
                             ) {
                                 if (currentPlatform != Platform.JVM) {
                                     keyboardController?.hide()
@@ -304,7 +301,7 @@ fun AppContent() {
                                             route = "/deck/{uuid}/scenario/{scenario}",
                                             navTransition = NavTransition(),
                                             swipeProperties = SwipeProperties(
-                                                //spaceToSwipe = 50.dp
+                                                // spaceToSwipe = 50.dp
                                             )
                                         ) { backStackEntry ->
                                             val appModel: AppModel = LocalApp.current
@@ -338,7 +335,7 @@ fun AppContent() {
                                             route = "/deck/{uuid}",
                                             navTransition = NavTransition(),
                                             swipeProperties = SwipeProperties(
-                                                //spaceToSwipe = 50.dp
+                                                // spaceToSwipe = 50.dp
                                             )
                                         ) { backStackEntry ->
                                             val appModel: AppModel = LocalApp.current

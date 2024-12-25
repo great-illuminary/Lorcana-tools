@@ -1,0 +1,81 @@
+name: Build
+
+permissions:
+  contents: write
+
+on: [ push ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+      checks: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Creating the android stuff
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          ANDROID_RELEASE_JKS: ${{ secrets.ANDROID_RELEASE_JKS }}
+        run: |
+          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > androidApp/google-services.json
+          echo "$ANDROID_RELEASE_JKS"   | base64 --decode > androidApp/release.jks
+
+      - name: Build
+        id: build
+        run: |
+          bash ./scripts/check.sh
+          
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        if: ${{ success() || failure() }}
+        with:
+          files: |
+            shared/build/test-results/**/*.xml
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      checks: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Creating the android stuff
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          ANDROID_RELEASE_JKS: ${{ secrets.ANDROID_RELEASE_JKS }}
+        run: |
+          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > androidApp/google-services.json
+          echo "$ANDROID_RELEASE_JKS"   | base64 --decode > androidApp/release.jks
+
+      - name: Build
+        id: build
+        run: |
+          bash ./scripts/assemble.sh 
+
+      - name: Read tag
+        id: read_version
+        uses: christian-draeger/read-properties@1.1.1
+        with:
+          path: './version.properties'
+          properties: 'version'

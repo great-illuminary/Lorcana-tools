@@ -3,7 +3,6 @@ package eu.codlab.lorcana.blipya.deck.edit
 import eu.codlab.lorcana.blipya.deck.scenario.ShowScenarioModel
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
-import eu.codlab.lorcana.math.CardValidator
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
 import eu.codlab.lorcana.math.Scenario
@@ -36,7 +35,8 @@ class EditScenarioModel(
             probability = scenario.calculate()
         )
     ) {
-    private val validator = CardValidator()
+    // future implementation will be to check the validity of this
+    // private val validator = CardValidator()
 
     private val onProbability: (Double) -> Unit = {
         println("onProbability called on parent's object")
@@ -114,14 +114,10 @@ class EditScenarioModel(
     companion object {
         fun fake(): ShowScenarioModel {
             val deck = Deck(UUID.randomUUID().toString(), "", 0, 0)
-            val scenario = Scenario("", "", deck) { _, _, _ -> /** nothing*/ }
+            val scenario = Scenario("", "", deck)
                 .also { deck.addScenario(it) }
 
-            return ShowScenarioModel(
-                AppModel.fake(),
-                DeckModel(deck),
-                scenario
-            )
+            return ShowScenarioModel(DeckModel(deck), scenario)
         }
     }
 

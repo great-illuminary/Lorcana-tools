@@ -4,7 +4,6 @@ class Scenario internal constructor(
     val id: String,
     var name: String,
     private val parent: Deck,
-    private val onValueUpdated: (amount: Long, min: Long, max: Long) -> Unit
 ) {
     private val onProbabilityUpdated: MutableList<(Double) -> Unit> = mutableListOf()
     private val mutableCards: MutableList<ExpectedCard> = mutableListOf()

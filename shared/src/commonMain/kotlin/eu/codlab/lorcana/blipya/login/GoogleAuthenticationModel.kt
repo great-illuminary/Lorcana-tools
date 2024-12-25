@@ -9,31 +9,30 @@ data class GoogleAuthenticationModelState(
     val idToken: String? = null
 )
 
-@Suppress("TooManyFunctions")
-class GoogleAuthenticationModel() :
-    StateViewModel<GoogleAuthenticationModelState>(
-        GoogleAuthenticationModelState()
-    ) {
-
+class GoogleAuthenticationModel : StateViewModel<GoogleAuthenticationModelState>(
+    GoogleAuthenticationModelState()
+) {
+    @Suppress("TooGenericExceptionCaught")
     fun setResult(
         result: GoogleUser?,
         onGoogleAuthentIdToken: (Result<String>) -> Unit
     ) = launch {
-        try {
-            // val id = Firebase.auth.currentUser?.getIdToken(false)!!
+        val res = try {
             val id = result?.idToken!!
-            //val id = result?.accessToken!!
 
             updateState {
                 copy(idToken = id)
             }
 
-            onGoogleAuthentIdToken(Result.success(id))
+            Result.success(id)
         } catch (err: Throwable) {
-            onGoogleAuthentIdToken(Result.failure(err))
+            Result.failure(err)
         }
+
+        onGoogleAuthentIdToken(res)
     }
 
+    @Suppress("TooGenericExceptionCaught")
     fun setResult(
         result: Result<FirebaseUser?>,
         onGoogleAuthentIdToken: (Result<String>) -> Unit

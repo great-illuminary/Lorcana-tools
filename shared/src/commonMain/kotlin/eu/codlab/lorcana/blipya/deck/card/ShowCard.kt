@@ -36,6 +36,7 @@ import eu.codlab.lorcana.blipya.utils.rememberInputSize
 import eu.codlab.lorcana.math.ExpectedCard
 import eu.codlab.viewmodel.rememberViewModel
 
+@Suppress("LongMethod")
 @Composable
 fun ShowCard(
     modifier: Modifier,

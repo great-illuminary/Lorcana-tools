@@ -24,6 +24,8 @@ import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.PopUpTo
 
+private const val Millis = 1000.0
+
 data class AppModelState(
     var currentRoute: String,
     var initialized: Boolean = false,
@@ -199,16 +201,17 @@ data class AppModel(
         activeDeck = model
     }
 
+    @Suppress("TooGenericExceptionCaught")
     fun login(token: String) = launch {
         try {
             val account = accountClient.login(token)
 
-            val now = DateTime.now().add(0, account.expiresIn * 1000.0)
+            val now = DateTime.now().add(0, account.expiresIn * Millis)
             val authentication = configurationLoader.save(account.token, now.unixMillisLong)
 
             updateState { copy(authentication = authentication) }
         } catch (err: Throwable) {
-            //TODO manage network issue
+            // TODO manage network issue
             err.printStackTrace()
         }
     }

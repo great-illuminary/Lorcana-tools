@@ -53,8 +53,8 @@ private fun PromptForNewDeckPreview() {
         PromptForNewDeck(
             AppModel.fake(),
             true,
-            onDeckSelected = { /** nothing */ },
-            onDismiss = { /** nothing */ }
+            onDeckSelected = { /* nothing */ },
+            onDismiss = { /* nothing */ }
         )
     }
 }
