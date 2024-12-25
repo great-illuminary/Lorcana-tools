@@ -38,7 +38,8 @@ import eu.codlab.lorcana.blipya.deck.dreamborn.ShowDreambornInformation
 import eu.codlab.lorcana.blipya.deck.scenario.ShowScenario
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
-import eu.codlab.lorcana.blipya.utils.LocalWindow
+import eu.codlab.lorcana.blipya.theme.AppSizes
+import eu.codlab.lorcana.blipya.utils.LocalFrame
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
 import eu.codlab.lorcana.blipya.utils.WindowType
 import eu.codlab.lorcana.blipya.utils.localized
@@ -47,8 +48,6 @@ import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.viewmodel.rememberViewModel
 import korlibs.io.util.UUID
-import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun DeckConfiguration(
@@ -71,7 +70,7 @@ fun DeckConfiguration(
 
     // extract the required number of columns and the specific case where we will have 2 in a row
     // represents the expected number of columns AND the "span" of the first one
-    val (columns, firstSpanColumns) = when (LocalWindow.current) {
+    val (columns, firstSpanColumns) = when (LocalFrame.current) {
         WindowType.SMARTPHONE_TINY -> 2 to 2
         WindowType.SMARTPHONE -> 2 to 2
         WindowType.PHABLET -> 3 to 2
@@ -80,10 +79,10 @@ fun DeckConfiguration(
 
     LazyVerticalGrid(
         modifier = modifier.imePadding(),
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(AppSizes.paddings.default),
         columns = GridCells.Fixed(columns),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(AppSizes.paddings.default),
+        horizontalArrangement = Arrangement.spacedBy(AppSizes.paddings.default),
     ) {
         item(span = { GridItemSpan(firstSpanColumns) }) {
             DefaultCard(
@@ -92,7 +91,7 @@ fun DeckConfiguration(
             ) {
                 Column(
                     Modifier.padding(16.dp).background(color),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(AppSizes.paddings.default)
                 ) {
                     CustomOutlinedEditText(
                         modifier = Modifier.width(200.dp),
@@ -107,10 +106,8 @@ fun DeckConfiguration(
                     )
 
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        horizontalArrangement = Arrangement.spacedBy(AppSizes.paddings.default)
                     ) {
-                        TextNormal(state.deck.name)
-
                         CustomOutlinedEditText(
                             modifier = Modifier.widthIn(0.dp, maxWidth),
                             value = state.deckSize,
@@ -160,8 +157,8 @@ fun DeckConfiguration(
                 backgroundColor = color
             ) {
                 Column(
-                    Modifier.padding(16.dp).background(color),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    Modifier.padding(AppSizes.paddings.default).background(color),
+                    verticalArrangement = Arrangement.spacedBy(AppSizes.paddings.default)
                 ) {
                     ShowScenario(Modifier.fillMaxWidth(), app, model, state.deck, holder)
                 }
@@ -173,7 +170,7 @@ fun DeckConfiguration(
 @Composable
 @Preview
 private fun PreviewDeckConfiguration() {
-    PreviewDarkLightColumn { modifier, _ ->
+    PreviewDarkLightColumn(frameType = WindowType.SMARTPHONE) { modifier, _ ->
         DeckConfiguration(
             AppModel.fake(),
             DeckModel(

@@ -19,15 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import eu.codlab.blipya.res.Res
-import eu.codlab.blipya.res.invalid
-import eu.codlab.blipya.res.result
 import eu.codlab.blipya.res.scenario_name
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.card.ShowCard
-import eu.codlab.lorcana.blipya.deck.scenario.round
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
+import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.MinusAdd
@@ -51,14 +49,14 @@ fun EditScenario(
     val color = defaultCardBackground()
 
     Column(
-        modifier = modifier.fillMaxSize().padding(16.dp)
+        modifier = modifier.fillMaxSize().padding(AppSizes.paddings.default)
     ) {
         DefaultCard(
             modifier = Modifier.fillMaxWidth(),
             backgroundColor = color
         ) {
             Column(
-                Modifier.padding(16.dp).background(color),
+                Modifier.padding(AppSizes.paddings.default).background(color),
             ) {
                 CustomOutlinedEditText(
                     modifier = Modifier.width(200.dp),
@@ -72,7 +70,7 @@ fun EditScenario(
                     }
                 )
 
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(AppSizes.paddings.reduced))
 
                 MinusAdd(
                     onMinus = {
@@ -85,12 +83,12 @@ fun EditScenario(
 
                 DisplayStatisticalResult(probability = state.probability)
 
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(AppSizes.paddings.default))
 
-                HorizontalDivider(thickness = 1.dp)
+                HorizontalDivider(thickness = AppSizes.divider)
 
                 state.expectedCards.forEach { holder ->
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(AppSizes.paddings.default))
                     ShowCard(Modifier.fillMaxWidth(), model, state.deck, holder)
                 }
             }

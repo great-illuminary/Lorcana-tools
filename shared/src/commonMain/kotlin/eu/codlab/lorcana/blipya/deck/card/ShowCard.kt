@@ -28,10 +28,11 @@ import eu.codlab.blipya.res.card_show_min
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.edit.EditScenarioModel
-import eu.codlab.lorcana.blipya.deck.scenario.rememberInputSize
 import eu.codlab.lorcana.blipya.model.DeckModel
+import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.utils.asLongOrNull
 import eu.codlab.lorcana.blipya.utils.localized
+import eu.codlab.lorcana.blipya.utils.rememberInputSize
 import eu.codlab.lorcana.math.ExpectedCard
 import eu.codlab.viewmodel.rememberViewModel
 
@@ -126,7 +127,7 @@ fun ShowCard(
 
         Row(
             modifier,
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(AppSizes.paddings.default),
         ) {
             items.map { (value, label, valid, onValueChanged) ->
                 CustomOutlinedEditText(

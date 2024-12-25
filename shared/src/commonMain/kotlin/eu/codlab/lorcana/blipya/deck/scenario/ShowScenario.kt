@@ -17,15 +17,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.delete
 import eu.codlab.blipya.res.edit
-import eu.codlab.blipya.res.invalid
-import eu.codlab.blipya.res.result
 import eu.codlab.blipya.res.show_scenario_delete_text
 import eu.codlab.blipya.res.show_scenario_delete_title
 import eu.codlab.compose.theme.LocalDarkTheme
@@ -35,8 +30,7 @@ import eu.codlab.lorcana.blipya.deck.edit.DisplayStatisticalResult
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.theme.AppColor
-import eu.codlab.lorcana.blipya.utils.LocalWindow
-import eu.codlab.lorcana.blipya.utils.WindowType
+import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.PopupConfirm
 import eu.codlab.lorcana.math.Scenario
@@ -79,10 +73,10 @@ fun ShowScenario(
         model.triggerProbability()
     }
 
-    Column {
+    Column(modifier) {
         TextNormal(state.name)
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(AppSizes.paddings.reduced))
 
         DisplayStatisticalResult(probability = state.probability)
 
@@ -108,12 +102,4 @@ fun ShowScenario(
             }
         }
     }
-}
-
-@Composable                          
-fun rememberInputSize(min: Dp = 90.dp) = when (LocalWindow.current) {
-    WindowType.SMARTPHONE_TINY -> min
-    WindowType.SMARTPHONE -> min
-    WindowType.PHABLET -> 90.dp
-    WindowType.TABLET -> 100.dp
 }

@@ -13,7 +13,10 @@ import androidx.compose.ui.Modifier
 import eu.codlab.lorcana.blipya.theme.ApplicationTheme
 import eu.codlab.lorcana.blipya.theme.FontSizes
 import eu.codlab.lorcana.blipya.theme.createFontSizes
+import eu.codlab.lorcana.blipya.utils.LocalFrame
+import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.LocalWindowProvider
+import eu.codlab.lorcana.blipya.utils.WindowType
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
 import eu.codlab.lorcana.blipya.widgets.popup.PopupConfirmCompose
 import eu.codlab.lorcana.blipya.widgets.popup.PopupLocalModel
@@ -37,19 +40,20 @@ fun App(
         println("Having a new lifecycle state $it")
     }
 
-    InternalApp(
-        modifier = Modifier.fillMaxSize(),
-        isDarkTheme,
-        onBackPressed
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .defaultBackground()
+    LocalWindowProvider(Modifier.fillMaxSize()) {
+        InternalApp(
+            isDarkTheme,
+            onBackPressed
         ) {
-            AppContent()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .defaultBackground()
+            ) {
+                AppContent()
 
-            PopupConfirmCompose()
+                PopupConfirmCompose()
+            }
         }
     }
 }
@@ -57,27 +61,29 @@ fun App(
 @Composable
 fun PreviewApp(
     modifier: Modifier = Modifier,
+    windowType: WindowType = WindowType.TABLET,
+    frameType: WindowType = WindowType.TABLET,
     isDarkTheme: Boolean,
     onBackPressed: AppBackPressProvider = AppBackPressProvider(),
     content: @Composable () -> Unit
 ) {
-    InternalApp(
-        modifier = modifier,
-        isDarkTheme,
-        onBackPressed
+    CompositionLocalProvider(
+        LocalWindow provides windowType,
+        LocalFrame provides frameType,
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .defaultBackground()
+        InternalApp(
+            isDarkTheme,
+            onBackPressed
         ) {
-            content()
+            Column(modifier.fillMaxSize().defaultBackground()) {
+                content()
+            }
         }
     }
 }
 
 @Composable
 private fun InternalApp(
-    modifier: Modifier = Modifier,
     isDarkTheme: Boolean,
     onBackPressed: AppBackPressProvider = AppBackPressProvider(),
     content: @Composable () -> Unit
@@ -97,12 +103,6 @@ private fun InternalApp(
         LocalApp provides model,
         LocalFontSizes provides fontSizes
     ) {
-        ApplicationTheme(
-            darkTheme = isDarkTheme
-        ) {
-            LocalWindowProvider(modifier) {
-                content()
-            }
-        }
+        ApplicationTheme(isDarkTheme, content)
     }
 }

@@ -13,13 +13,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.decks_cards
 import eu.codlab.blipya.res.decks_no_decks
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
+import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
 import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.utils.rememberColumns
@@ -52,15 +52,15 @@ fun DecksScreen(
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        contentPadding = PaddingValues(AppSizes.paddings.default),
+        verticalArrangement = Arrangement.spacedBy(AppSizes.paddings.default),
+        horizontalArrangement = Arrangement.spacedBy(AppSizes.paddings.default)
     ) {
         items(decks.size) { index ->
             val deck = decks[index]
 
             DefaultCard(
-                columnModifier = Modifier.padding(12.dp),
+                columnModifier = Modifier.padding(AppSizes.paddings.card),
                 backgroundColor = color,
                 onClick = { onDeckSelected(deck) }
             ) {

@@ -35,6 +35,8 @@ fun LocalFrameProvider(
                 if (newWindowSize != frame) {
                     frame = newWindowSize
                 }
+
+                // throw IllegalStateException("frame -> $frame / $width")
             }.background(AppColor.BackgroundBlue)
         ) {
             content()
