@@ -18,11 +18,25 @@ import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.Scenario
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
+import io.ktor.websocket.readText
+import korlibs.io.async.async
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.Serializer
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.PopUpTo
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 private const val Millis = 1000.0
 
@@ -48,9 +62,12 @@ data class AppModel(
     private val accountClient = Account()
     private val configurationLoader = ConfigurationLoader(VirtualFile(RootPath, "Blipya"))
     private var activeDeck: DeckConfigurationModel? = null
+    private var json = Json
 
     var navigator: Navigator? = null
     var scaffoldState: ScaffoldState? = null
+
+    private val backendSocket = accountClient.createSocket()
 
     companion object {
         fun fake(): AppModel {
@@ -88,6 +105,17 @@ data class AppModel(
                 lorcana = lorcana,
                 authentication = if (validAuthent) authentication else null
             )
+        }
+
+        onReceiveMessage()
+        // emitOnSocket("hello world")
+    }
+
+    private fun onReceiveMessage() = launch {
+        async {
+            backendSocket.incoming.collect {
+                println("BACKEND HAVING $it")
+            }
         }
     }
 
@@ -215,4 +243,30 @@ data class AppModel(
             err.printStackTrace()
         }
     }
+
+    suspend fun requestForUrlToOpen(provider: String): String? {
+        val id = DateTime.now().unixMillisLong
+        val obj = SocketMessage(id, RequestForUrlToOpen(provider))
+        val serializerIn = SocketMessage.serializer(RequestForUrlToOpen.serializer())
+        backendSocket.emit(obj, serializerIn)
+
+        return backendSocket.waitForSocket(id, 5.seconds, ResultForUrlToOpen.serializer())?.url
+    }
 }
+
+@Serializable
+data class RequestForUrlToOpen(
+    val request: String
+)
+
+@Serializable
+data class ResultForUrlToOpen(
+    val url: String
+)
+
+@Serializable
+data class SocketMessage<T>(
+    val id: Long,
+    val message: T
+)
+

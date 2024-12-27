@@ -1,9 +1,14 @@
 package eu.codlab.lorcana.blipya.login
 
+import androidx.compose.ui.platform.UriHandler
 import com.mmk.kmpauth.google.GoogleUser
 import dev.gitlive.firebase.auth.FirebaseUser
+import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
+import korlibs.time.DateTime
+import kotlinx.serialization.Serializable
+import kotlin.time.Duration.Companion.seconds
 
 data class GoogleAuthenticationModelState(
     val idToken: String? = null
@@ -49,4 +54,19 @@ class GoogleAuthenticationModel : StateViewModel<GoogleAuthenticationModelState>
             onGoogleAuthentIdToken(Result.failure(err))
         }
     }
+
+    fun sendRequestForUrlToOpen(
+        app: AppModel,
+        uriHandler: UriHandler
+    ) = launch {
+        val result = app.requestForUrlToOpen("google")
+
+        if (null == result) {
+            println("Didn't receive an url !!")
+            return@launch
+        }
+
+        uriHandler.openUri(result)
+    }
 }
+
