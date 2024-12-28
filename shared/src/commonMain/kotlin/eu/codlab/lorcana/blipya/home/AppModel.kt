@@ -1,6 +1,7 @@
 package eu.codlab.lorcana.blipya.home
 
 import androidx.compose.material.ScaffoldState
+import dev.gitlive.firebase.auth.OAuthProvider
 import eu.codlab.files.VirtualFile
 import eu.codlab.lorcana.Lorcana
 import eu.codlab.lorcana.LorcanaLoaded
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.Serializer
@@ -49,7 +51,8 @@ data class AppModelState(
     val decks: List<DeckModel> = listOf(),
     val showPromptNewDeck: Boolean = false,
     val lorcana: LorcanaLoaded? = null,
-    val authentication: SavedAuthentication? = null
+    val authentication: SavedAuthentication? = null,
+    val requestForGoogleAuthenticationState: String? = null
 )
 
 @Suppress("TooManyFunctions")
@@ -115,6 +118,19 @@ data class AppModel(
         async {
             backendSocket.incoming.collect {
                 println("BACKEND HAVING $it")
+
+                try {
+                    val googleToken = json.decodeFromString(
+                        SocketMessage.serializer(
+                            BackendGoogleCookie.serializer()
+                        ), it.readText()
+                    ).message
+
+                    saveTokenFromBackend(googleToken.token, googleToken.expiresIn)
+
+                } catch (err: Throwable) {
+
+                }
             }
         }
     }
@@ -234,21 +250,32 @@ data class AppModel(
         try {
             val account = accountClient.login(token)
 
-            val now = DateTime.now().add(0, account.expiresIn * Millis)
-            val authentication = configurationLoader.save(account.token, now.unixMillisLong)
-
-            updateState { copy(authentication = authentication) }
+            saveTokenFromBackend(account.token, account.expiresIn)
         } catch (err: Throwable) {
             // TODO manage network issue
             err.printStackTrace()
         }
     }
 
+    private suspend fun saveTokenFromBackend(token: String, expiresIn: Long) {
+        val now = DateTime.now().add(0, expiresIn * Millis)
+        val authentication = configurationLoader.save(token, now.unixMillisLong)
+
+        updateState { copy(authentication = authentication) }
+    }
+
     suspend fun requestForUrlToOpen(provider: String): String? {
         val id = DateTime.now().unixMillisLong
-        val obj = SocketMessage(id, RequestForUrlToOpen(provider))
+        val state = UUID.randomUUID().toString()
+        val obj = SocketMessage(id, RequestForUrlToOpen(provider, state))
         val serializerIn = SocketMessage.serializer(RequestForUrlToOpen.serializer())
         backendSocket.emit(obj, serializerIn)
+
+        updateState {
+            copy(
+                requestForGoogleAuthenticationState = state
+            )
+        }
 
         return backendSocket.waitForSocket(id, 5.seconds, ResultForUrlToOpen.serializer())?.url
     }
@@ -256,7 +283,16 @@ data class AppModel(
 
 @Serializable
 data class RequestForUrlToOpen(
-    val request: String
+    val request: String,
+    val state: String
+)
+
+@Serializable
+data class BackendGoogleCookie(
+    val provider: String,
+    val token: String,
+    @SerialName("expires_in")
+    val expiresIn: Long
 )
 
 @Serializable

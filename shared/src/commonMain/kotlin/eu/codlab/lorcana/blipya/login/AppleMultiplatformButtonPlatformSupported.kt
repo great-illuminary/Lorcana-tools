@@ -4,18 +4,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.mmk.kmpauth.firebase.apple.AppleButtonUiContainer
 import com.mmk.kmpauth.uihelper.apple.AppleSignInButton
-import eu.codlab.platform.Platform
-import eu.codlab.platform.currentPlatform
 import eu.codlab.viewmodel.rememberViewModel
 
 @Composable
-fun AppleMultiplatformButton(
+fun AppleMultiplatformButtonPlatformSupport(
     modifier: Modifier,
     onGoogleAuthentIdToken: (Result<String>) -> Unit
 ) {
-    if (currentPlatform == Platform.ANDROID || currentPlatform == Platform.IOS) {
-        AppleMultiplatformButtonPlatformSupport(modifier, onGoogleAuthentIdToken)
-    } else {
-        AppleMultiplatformButtonOAuthOnly(modifier)
+    val model = rememberViewModel { GoogleAuthenticationModel() }
+
+    AppleButtonUiContainer(
+        modifier,
+        linkAccount = false,
+        onResult = {
+            model.setResult(it, onGoogleAuthentIdToken)
+        }
+    ) {
+        AppleSignInButton(modifier = modifier) { this.onClick() }
     }
 }

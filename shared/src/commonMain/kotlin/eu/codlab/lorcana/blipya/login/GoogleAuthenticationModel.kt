@@ -57,9 +57,10 @@ class GoogleAuthenticationModel : StateViewModel<GoogleAuthenticationModelState>
 
     fun sendRequestForUrlToOpen(
         app: AppModel,
-        uriHandler: UriHandler
+        uriHandler: UriHandler,
+        provider: OAuthProvider
     ) = launch {
-        val result = app.requestForUrlToOpen("google")
+        val result = app.requestForUrlToOpen(provider.provider)
 
         if (null == result) {
             println("Didn't receive an url !!")
@@ -70,3 +71,7 @@ class GoogleAuthenticationModel : StateViewModel<GoogleAuthenticationModelState>
     }
 }
 
+enum class OAuthProvider(val provider: String) {
+    Google("google"),
+    Apple("apple")
+}
