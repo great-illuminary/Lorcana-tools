@@ -1,9 +1,14 @@
 package eu.codlab.lorcana.blipya.login
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.mmk.kmpauth.firebase.apple.AppleButtonUiContainer
+import com.mmk.kmpauth.uihelper.apple.AppleButtonMode
 import com.mmk.kmpauth.uihelper.apple.AppleSignInButton
+import eu.codlab.compose.theme.LocalDarkTheme
+import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.viewmodel.rememberViewModel
 
 @Composable
@@ -13,6 +18,12 @@ fun AppleMultiplatformButtonPlatformSupport(
 ) {
     val model = rememberViewModel { GoogleAuthenticationModel() }
 
+    val buttonMode = if (LocalDarkTheme.current) {
+        AppleButtonMode.White
+    } else {
+        AppleButtonMode.Black
+    }
+
     AppleButtonUiContainer(
         modifier,
         linkAccount = false,
@@ -20,6 +31,9 @@ fun AppleMultiplatformButtonPlatformSupport(
             model.setResult(it, onGoogleAuthentIdToken)
         }
     ) {
-        AppleSignInButton(modifier = modifier) { this.onClick() }
+        AppleSignInButton(
+            modifier = Modifier.loginButton(),
+            mode = buttonMode
+        ) { this.onClick() }
     }
 }

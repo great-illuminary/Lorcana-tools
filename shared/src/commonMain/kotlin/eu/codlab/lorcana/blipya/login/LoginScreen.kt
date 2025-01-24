@@ -1,7 +1,9 @@
 package eu.codlab.lorcana.blipya.login
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -10,6 +12,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.home.AppModel
+import eu.codlab.lorcana.blipya.theme.AppSizes
 
 @Composable
 fun LoginScreen(
@@ -20,21 +23,27 @@ fun LoginScreen(
     val account = states.authentication
 
     println("account info -> $account")
-    Column(modifier) {
+    Column(
+        modifier.padding(AppSizes.paddings.default),
+        verticalArrangement = Arrangement.spacedBy(
+            AppSizes.paddings.default
+        )
+    ) {
         if (null != account) {
             TextNormal(
                 "Logged in with ${account.token}",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+
             return@Column
         }
 
-        AppleMultiplatformButton(Modifier.height(20.dp)) { result ->
+        AppleMultiplatformButton(Modifier.loginButton()) { result ->
             result.getOrNull()?.let { appModel.login(it) }
         }
 
-        GoogleMultiplatformButton(Modifier.height(20.dp)) { result ->
+        GoogleMultiplatformButton(Modifier.loginButton()) { result ->
             result.getOrNull()?.let { appModel.login(it) }
         }
     }

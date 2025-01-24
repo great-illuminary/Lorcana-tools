@@ -6,7 +6,7 @@ pluginManagement {
     }
 }
 
-ext.GRADLE_EXTENDED_VERSION_USED = "fea148e108b8f9854439c62f0cf71d1c922f21d5"
+ext.GRADLE_EXTENDED_VERSION_USED = "8ec13357bc5d6a6e75ed7140cd22fe0cfd9d5022"
 
 apply from: "https://raw.githubusercontent.com/the-inkwell/gradle-tools/${ext.GRADLE_EXTENDED_VERSION_USED}/extended.gradle"
 

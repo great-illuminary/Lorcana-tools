@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mmk.kmpauth.firebase.google.GoogleButtonUiContainerFirebase
 import com.mmk.kmpauth.uihelper.google.GoogleSignInButton
+import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.viewmodel.rememberViewModel
 
 @Composable
@@ -22,8 +23,8 @@ actual fun GoogleMultiplatformButton(
         model.setResult(it, onGoogleAuthentIdToken)
     }, linkAccount = false) {
         GoogleSignInButton(
-            modifier = Modifier.fillMaxWidth().height(25.dp),
-            fontSize = 15.sp
+            modifier = Modifier.loginButton(),
+            fontSize = AppSizes.login.fontSize
         ) { this.onClick() }
     }
 }

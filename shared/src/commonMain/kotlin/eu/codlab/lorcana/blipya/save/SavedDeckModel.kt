@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SavedDeckModel(
     val id: String,
+    val version: Int = 0,
     val name: String,
     val size: Long,
     val hand: Long,

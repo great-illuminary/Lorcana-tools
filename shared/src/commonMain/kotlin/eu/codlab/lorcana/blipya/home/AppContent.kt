@@ -35,6 +35,7 @@ import eu.codlab.lorcana.blipya.decks.DecksScreen
 import eu.codlab.lorcana.blipya.decks.PromptForNewDeck
 import eu.codlab.lorcana.blipya.init.InitializeScreen
 import eu.codlab.lorcana.blipya.login.LoginScreen
+import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.utils.LocalFrameProvider
 import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.AppBarState
@@ -109,7 +110,13 @@ fun AppContent() {
                 imageVector = Icons.Outlined.ManageAccounts,
                 contentDescription = "Login"
             ) {
-                LoginScreen(Modifier.widthIn(100.dp, 200.dp), model)
+                LoginScreen(
+                    Modifier.widthIn(
+                        AppSizes.overflowMenu.minWidth,
+                        AppSizes.overflowMenu.maxWidth
+                    ),
+                    model
+                )
             }
         )
 
