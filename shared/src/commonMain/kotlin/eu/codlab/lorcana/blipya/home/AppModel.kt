@@ -1,7 +1,10 @@
 package eu.codlab.lorcana.blipya.home
 
 import androidx.compose.material.ScaffoldState
+import com.mmk.kmpauth.google.GoogleAuthCredentials
+import com.mmk.kmpauth.google.GoogleAuthProvider
 import dev.gitlive.firebase.auth.OAuthProvider
+import eu.codlab.blipya.buildconfig.BuildKonfig
 import eu.codlab.files.VirtualFile
 import eu.codlab.lorcana.Lorcana
 import eu.codlab.lorcana.LorcanaLoaded
@@ -83,6 +86,12 @@ data class AppModel(
     @Suppress("TooGenericExceptionCaught", "SwallowedException")
     fun initialize() = launch {
         configurationLoader.init()
+
+        GoogleAuthProvider.create(
+            credentials = GoogleAuthCredentials(
+                serverId = BuildKonfig.googleAuthServerId
+            )
+        )
 
         AuthentInit.initialize()
 

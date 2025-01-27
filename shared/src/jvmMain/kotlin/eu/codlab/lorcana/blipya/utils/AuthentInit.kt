@@ -1,15 +1,13 @@
 package eu.codlab.lorcana.blipya.utils
 
-import com.mmk.kmpauth.google.GoogleAuthCredentials
-import com.mmk.kmpauth.google.GoogleAuthProvider
-import eu.codlab.blipya.buildconfig.BuildKonfig
+import java.awt.Desktop
+import java.awt.Desktop.Action
 
 actual object AuthentInit {
     actual fun initialize() {
-        GoogleAuthProvider.create(
-            credentials = GoogleAuthCredentials(
-                serverId = BuildKonfig.googleAuthServerId
-            )
-        )
+        // https://twalcari.github.io/blog/url-handler-as-an-alternative-to-java-webstart/
+        if (Desktop.getDesktop().isSupported(Action.APP_OPEN_URI)) {
+            Desktop.getDesktop().setOpenURIHandler { println("caught uri ${it.uri}") }
+        }
     }
 }

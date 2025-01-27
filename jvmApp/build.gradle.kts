@@ -85,7 +85,18 @@ val macExtraPlistKeys: String
     get() = """
 <key>CFBundleLocalizations</key>
 <array>
-<string>en</string>
-<string>fr</string>
+    <string>en</string>
+    <string>fr</string>
+</array>
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+        <string>decktool</string>
+    </array>
+    <key>CFBundleURLName</key>
+    <string></string>
+  </dict>
 </array>
 """
