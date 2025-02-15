@@ -2,11 +2,8 @@ package eu.codlab.lorcana.blipya.login
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mmk.kmpauth.firebase.apple.AppleButtonUiContainer
-import com.mmk.kmpauth.uihelper.apple.AppleSignInButton
 import eu.codlab.platform.Platform
 import eu.codlab.platform.currentPlatform
-import eu.codlab.viewmodel.rememberViewModel
 
 @Composable
 fun AppleMultiplatformButton(

@@ -3,7 +3,6 @@ package eu.codlab.lorcana.blipya.home
 import androidx.compose.material.ScaffoldState
 import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider
-import dev.gitlive.firebase.auth.OAuthProvider
 import eu.codlab.blipya.buildconfig.BuildKonfig
 import eu.codlab.files.VirtualFile
 import eu.codlab.lorcana.Lorcana
@@ -26,21 +25,12 @@ import io.ktor.websocket.readText
 import korlibs.io.async.async
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withTimeoutOrNull
-import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.Serializer
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.PopUpTo
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 private const val Millis = 1000.0

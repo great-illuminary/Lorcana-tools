@@ -6,9 +6,6 @@ import dev.gitlive.firebase.auth.FirebaseUser
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
-import korlibs.time.DateTime
-import kotlinx.serialization.Serializable
-import kotlin.time.Duration.Companion.seconds
 
 data class GoogleAuthenticationModelState(
     val idToken: String? = null
