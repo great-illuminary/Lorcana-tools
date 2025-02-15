@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.blipya.deck.scenario
 
+import eu.codlab.lorcana.blipya.deck.edit.safeLaunch
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
@@ -30,21 +31,25 @@ class ShowScenarioModel(
             name = scenario.name,
             scenario = scenario,
             expectedCards = scenario.cards,
-            probability = scenario.calculate()
+            probability = scenario.probability.value
         )
     ) {
     companion object {
         fun fake(): ShowScenarioModel {
             val deck = Deck(UUID.randomUUID().toString(), "", 0, 0)
-            val scenario = Scenario("", "", deck).also { deck.addScenario(it) }
+            val scenario = deck.appendNewScenario("", "")
 
             return ShowScenarioModel(DeckModel(deck), scenario)
         }
     }
 
-    fun triggerProbability() {
-        updateState {
-            copy(probability = states.value.scenario.calculate())
+    init {
+        safeLaunch {
+            states.value.scenario.probability.collect {
+                updateState {
+                    copy(probability = it)
+                }
+            }
         }
     }
 }

@@ -1,50 +1,50 @@
 package eu.codlab.lorcana.math
 
+import eu.codlab.lorcana.contexts.DefaultDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+
 class Scenario internal constructor(
     val id: String,
     var name: String,
-    private val parent: Deck,
+    defaultDeckState: DeckState
 ) {
-    private val onProbabilityUpdated: MutableList<(Double) -> Unit> = mutableListOf()
+    // todo : another context
+    private val context = CoroutineScope(DefaultDispatcher)
     private val mutableCards: MutableList<ExpectedCard> = mutableListOf()
+
+    private var parentState: DeckState = defaultDeckState
 
     val cards: List<ExpectedCard>
         get() {
             return mutableCards
         }
 
-    var others = ExpectedCard(
+    val others = ExpectedCard(
         "others",
         "others",
-        originalAmount = parent.size,
-        originalMin = 0,
-        originalMax = parent.hand
-    ) { _, _, _ ->
-        // nothing for this one
-    }
-        private set
+        amount = parentState.size,
+        min = 0,
+        max = parentState.hand
+    )
+
+    private val _probability = MutableStateFlow(calculate())
+    val probability: StateFlow<Double> = _probability
 
     fun addCard(expectedCard: ExpectedCard) {
         mutableCards.add(expectedCard)
+        updateRemainingCards()
     }
 
-    fun addCallback(callback: (Double) -> Unit) {
-        if (!onProbabilityUpdated.contains(callback)) {
-            onProbabilityUpdated.add(callback)
-        }
-    }
-
-    fun removeCallback(callback: (Double) -> Unit) {
-        if (onProbabilityUpdated.contains(callback)) {
-            onProbabilityUpdated.remove(callback)
-        }
-    }
-
-    fun calculate(): Double {
+    private fun calculate(): Double {
         val validator = CardValidator()
 
         val invalid = cards.find {
-            val result = validator.validate(parent, it)
+            val result = validator.validate(parentState, it)
 
             !result.amountValid || !result.minValid || !result.maxValid
         }
@@ -52,8 +52,8 @@ class Scenario internal constructor(
         if (null != invalid) return -1.0
 
         return calculate(
-            parent.size,
-            parent.hand,
+            parentState.size,
+            parentState.hand,
             others.amount,
             cards
         )
@@ -62,26 +62,24 @@ class Scenario internal constructor(
     fun add(id: String, amount: Long? = null, min: Long? = null, max: Long? = null): ExpectedCard {
         remove(id)
 
-        return ExpectedCard(id, "", amount ?: 0, min ?: 0, max ?: 0) { _, _, _ ->
-            calculate().let { result ->
-                onProbabilityUpdated.forEach { it.invoke(result) }
-            }
-        }.also {
-            mutableCards.add(it)
+        return ExpectedCard(id, "", amount ?: 0, min ?: 0, max ?: 0)
+            .also {
+                it.collectWithContext()
 
-            updateRemainingCards()
-        }
+                mutableCards.add(it)
+
+                updateRemainingCards()
+            }
     }
 
     fun remove(id: String) {
         val index = mutableCards.indexOfFirst { it.id == id }
         if (index < 0) return
 
+        //TODO -> remove the collected instance for this card will be better
         mutableCards.removeAt(index)
 
-        calculate().let { result ->
-            onProbabilityUpdated.forEach { it.invoke(result) }
-        }
+        _probability.update { calculate() }
     }
 
     fun update(id: String, name: String) {
@@ -99,7 +97,7 @@ class Scenario internal constructor(
             updateRemainingCards()
         }
 
-        return amount <= parent.size && min <= parent.hand && max <= parent.size
+        return amount <= parentState.size && min <= parentState.hand && max <= parentState.size
     }
 
     fun updateRemainingCards() {
@@ -109,13 +107,24 @@ class Scenario internal constructor(
             .reduceOrNull { acc, l -> acc + l } ?: 0
 
         others.update(
-            amount = parent.size - cardsAddedAmount,
+            amount = parentState.size - cardsAddedAmount,
             min = 0,
-            max = parent.hand - cardsMinAmount
+            max = parentState.hand - cardsMinAmount
         )
 
-        calculate().let { result ->
-            onProbabilityUpdated.forEach { it.invoke(result) }
+        _probability.update { calculate() }
+    }
+
+    internal fun setParentState(state: DeckState) {
+        parentState = state
+        updateRemainingCards()
+    }
+
+    private fun ExpectedCard.collectWithContext() {
+        context.async {
+            state.collect {
+                _probability.update { calculate() }
+            }
         }
     }
 }

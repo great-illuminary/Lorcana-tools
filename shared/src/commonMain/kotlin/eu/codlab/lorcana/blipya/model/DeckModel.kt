@@ -17,45 +17,30 @@ data class DeckModel(
         }
 
     var name: String
-        get() {
-            return deck.name
-        }
-        set(value) {
-            deck.name = value
-        }
+        get() = deck.state.value.name
+        set(value) { deck.name = value }
 
     var size: Long
-        get() {
-            return deck.size
-        }
-        set(value) {
-            deck.size = value
-        }
+        get() = deck.state.value.size
+        set(value) { deck.size = value }
 
     var hand: Long
+        get() = deck.state.value.hand
+        set(value) { deck.hand = value }
+
+    val scenarios: List<Scenario>
         get() {
-            return deck.hand
+            return deck.scenarios.value
         }
-        set(value) {
-            deck.hand = value
-        }
-
-    val scenarii: List<Scenario>
-        get() {
-            return deck.scenarii
-        }
-
-    fun addScenario(scenario: Scenario) = deck.addScenario(scenario)
-
-    fun removeScenario(scenario: Scenario) = deck.removeScenario(scenario)
 
     fun toDeckModel(): SavedDeckModel {
+        val state = deck.state.value
         return SavedDeckModel(
             id = deck.id,
-            name = deck.name,
-            size = deck.size,
-            hand = deck.hand,
-            scenarii = deck.scenarii.map { scenar ->
+            name = state.name,
+            size = state.size,
+            hand = state.hand,
+            scenarii = deck.scenarios.value.map { scenar ->
                 println("setting the scenario's name in the json to ${scenar.name}")
                 ScenarioModel(
                     id = scenar.id,
@@ -84,10 +69,9 @@ fun SavedDeckModel.toDeck(): DeckModel {
         defaultHand = this.hand,
     ).let { newDeck ->
         scenarii.forEach { scenar ->
-            val scenario = Scenario(
+            val scenario = newDeck.appendNewScenario(
                 id = scenar.id,
                 name = scenar.name,
-                parent = newDeck,
             )
 
             scenar.cards.forEach { holder ->
@@ -99,8 +83,6 @@ fun SavedDeckModel.toDeck(): DeckModel {
                 )
                 scenario.update(holder.id, holder.name)
             }
-
-            newDeck.addScenario(scenario)
         }
 
         newDeck

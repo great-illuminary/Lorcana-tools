@@ -3,7 +3,7 @@ package eu.codlab.lorcana.blipya.account
 import eu.codlab.http.Configuration
 import eu.codlab.http.createClient
 import eu.codlab.lorcana.blipya.home.SocketMessage
-import eu.codlab.viewmodel.launch
+import eu.codlab.lorcana.contexts.DefaultDispatcher
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.websocket.webSocket
@@ -16,23 +16,17 @@ import io.ktor.websocket.readText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.json.Json
-import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 
 class Account {
     private val client = createClient(Configuration(enableSocket = true)) { }
@@ -63,7 +57,7 @@ class BackendSocket(
     private val backend: String,
     private val client: HttpClient
 ) {
-    private val context = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private val context = CoroutineScope(DefaultDispatcher + SupervisorJob())
     private val incomingFlow = MutableSharedFlow<Frame.Text>()
     private var sendFlow: suspend (String) -> Unit = { /* nothing */ }
     private var connected = false

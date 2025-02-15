@@ -37,7 +37,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             name = deck.name,
             deckSize = TextFieldValue("${deck.size}"),
             handSize = TextFieldValue("${deck.hand}"),
-            scenarii = deck.scenarii
+            scenarii = deck.scenarios
         )
     ) {
     private val client = createClient(
@@ -101,20 +101,13 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
                 deck = deck,
                 deckSize = TextFieldValue("${deck.size}"),
                 handSize = TextFieldValue("${deck.hand}"),
-                scenarii = deck.scenarii.clone()
+                scenarii = deck.scenarios.clone()
             )
         }
     }
 
     fun add(id: String, added: (Scenario) -> Unit) = launch {
-        val scenario = Scenario(id, "", states.value.deck.deck)
-        /* to do later, something like -> { _, _, _ ->
-            launch {
-                updateState { copy(updatedAt = DateTime.now()) }
-            }
-        }*/
-
-        states.value.deck.addScenario(scenario)
+        val scenario = states.value.deck.deck.appendNewScenario(id, "")
 
         updateCards()
 
@@ -122,20 +115,20 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
     }
 
     fun delete(scenario: Scenario) {
-        states.value.deck.removeScenario(scenario)
+        states.value.deck.deck.removeScenario(scenario)
 
         updateCards()
     }
 
     fun removeLast() = launch {
         val deck = states.value.deck
-        deck.scenarii.lastOrNull()?.let { deck.removeScenario(it) }
+        deck.scenarios.lastOrNull()?.let { deck.deck.removeScenario(it) }
 
         updateCards()
     }
 
     private fun updateCards() {
-        val array = states.value.deck.scenarii.clone()
+        val array = states.value.deck.scenarios.clone()
 
         updateState {
             copy(

@@ -148,7 +148,7 @@ fun AppContent() {
                     .firstOrNull { it.id == deckId }
                     ?: return@LaunchedEffect
 
-                val scenario = deck.scenarii.firstOrNull { it.id == scenarioId }
+                val scenario = deck.scenarios.firstOrNull { it.id == scenarioId }
                     ?: return@LaunchedEffect
 
                 model.setAppBarState(
@@ -320,7 +320,7 @@ fun AppContent() {
                                                 .firstOrNull { it.id == deckId }
                                                 ?: return@scene
                                             val scenario =
-                                                deck.scenarii.firstOrNull { it.id == scenarioId }
+                                                deck.scenarios.firstOrNull { it.id == scenarioId }
                                                     ?: return@scene
 
                                             println("SHOW SCENE /deck/{uuid}")

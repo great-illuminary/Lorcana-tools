@@ -9,10 +9,16 @@ class CardValidator {
     fun validate(deck: Deck, card: ExpectedCard) =
         validate(deck, card.amount, card.min, card.max)
 
+    fun validate(deck: DeckState, card: ExpectedCard) =
+        validate(deck, card.amount, card.min, card.max)
+
     fun validate(deck: DeckModel, amount: Long, min: Long, max: Long) =
         validate(deck.deck, amount, min, max)
 
-    fun validate(deck: Deck, amount: Long, min: Long, max: Long) = CardValidation(
+    fun validate(deck: Deck, amount: Long, min: Long, max: Long) =
+        validate(deck.state.value, amount, min, max)
+
+    fun validate(deck: DeckState, amount: Long, min: Long, max: Long) = CardValidation(
         amountValid = amount < deck.size,
         minValid = min in 1..<amount && min <= deck.hand,
         maxValid = max in min..amount && max <= deck.size,

@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.blipya.deck.edit
 
+import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import eu.codlab.lorcana.blipya.deck.scenario.ShowScenarioModel
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
@@ -10,6 +11,8 @@ import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 
 data class EditScenarioModelState(
     val deck: DeckModel,
@@ -32,30 +35,37 @@ class EditScenarioModel(
             name = scenario.name,
             scenario = scenario,
             expectedCards = scenario.cards,
-            probability = scenario.calculate()
+            probability = scenario.probability.value
         )
     ) {
     // future implementation will be to check the validity of this
     // private val validator = CardValidator()
 
-    private val onProbability: (Double) -> Unit = {
-        println("onProbability called on parent's object")
-        triggerProbability()
-    }
+    private var collectingProbability: Job? = null
 
     init {
-        states.value.scenario.addCallback(onProbability)
+        collectProbability(states.value.scenario)
+    }
+
+    private fun collectProbability(scenario: Scenario) {
+        collectingProbability?.cancel()
+        collectingProbability = null
+
+        collectingProbability = safeLaunch {
+            scenario.probability.collect {
+                triggerProbability(it)
+            }
+        }
     }
 
     fun changeDeck(deck: DeckModel, scenario: Scenario) = launch {
-        states.value.scenario.removeCallback(onProbability)
-        scenario.addCallback(onProbability)
+        collectProbability(scenario)
 
         updateState {
             copy(
                 deck = deck,
                 scenario = scenario,
-                probability = scenario.calculate(),
+                probability = scenario.probability.value,
                 expectedCards = scenario.cards.clone()
             )
         }
@@ -81,7 +91,7 @@ class EditScenarioModel(
             copy(
                 updatedAt = DateTime.now(),
                 expectedCards = array,
-                probability = states.value.scenario.calculate()
+                probability = states.value.scenario.probability.value
             )
         }
 
@@ -96,7 +106,7 @@ class EditScenarioModel(
         states.value.scenario.update(id, amount, min, max)
 
         saveDeck()
-        triggerProbability()
+        // triggerProbability()
     }
 
     fun updateScenario(name: String) {
@@ -114,18 +124,24 @@ class EditScenarioModel(
     companion object {
         fun fake(): ShowScenarioModel {
             val deck = Deck(UUID.randomUUID().toString(), "", 0, 0)
-            val scenario = Scenario("", "", deck)
-                .also { deck.addScenario(it) }
+            val scenario = deck.appendNewScenario("", "")
 
             return ShowScenarioModel(DeckModel(deck), scenario)
         }
     }
 
-    private fun triggerProbability() {
+    private fun triggerProbability(newValue: Double) {
         updateState {
-            copy(probability = states.value.scenario.calculate())
+            copy(probability = newValue)
         }
     }
 }
 
 private fun <T> List<T>.clone() = map { it }
+
+fun ViewModel.safeLaunch(
+    onError: (Throwable) -> Unit = {
+        // nothing
+    },
+    run: suspend CoroutineScope.() -> Unit
+) = launch(onError, run)
