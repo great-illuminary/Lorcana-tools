@@ -1,43 +1,108 @@
 package eu.codlab.lorcana.blipya.deck.card
 
-import eu.codlab.lorcana.blipya.model.DeckModel
-import eu.codlab.lorcana.math.CardValidator
+import eu.codlab.lorcana.blipya.deck.edit.safeLaunch
+import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
+import eu.codlab.lorcana.math.calculate
+import eu.codlab.viewmodel.StateHandler
 import eu.codlab.viewmodel.StateViewModel
-import eu.codlab.viewmodel.launch
+import korlibs.io.util.UUID
+import korlibs.time.DateTime
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 data class ShowCardModelState(
-    val deck: DeckModel,
-    val card: ExpectedCard,
-    val amountValid: Boolean = true,
-    val minValid: Boolean = true,
-    val maxValid: Boolean = true,
+    val deck: Deck,
+    val cardNumber: Long,
+    val probability: Double,
+    val updatedAt: DateTime = DateTime.now()
 )
 
-private val validator = CardValidator()
+interface ShowCardModel : StateHandler<ShowCardModelState> {
+    fun setCardNumber(cardNumber: Long)
+}
 
 @Suppress("TooManyFunctions")
-class ShowCardModel(
-    deck: DeckModel,
-    card: ExpectedCard,
-) : StateViewModel<ShowCardModelState>(
+class ShowCardModelImpl(
+    deck: Deck,
+    cardNumber: Long,
+) :
+    ShowCardModel, StateViewModel<ShowCardModelState>(
     ShowCardModelState(
         deck,
-        card = card,
-        amountValid = validator.validate(deck, card).amountValid,
-        minValid = validator.validate(deck, card).minValid,
-        maxValid = validator.validate(deck, card).maxValid,
+        cardNumber = cardNumber,
+        probability = 0.0
     )
 ) {
-    fun update(amount: Long, min: Long, max: Long) = launch {
-        updateState {
-            val validation = validator.validate(deck, amount, min, max)
+    private var collectingProbability: Job? = null
 
-            copy(
-                amountValid = validation.amountValid,
-                minValid = validation.minValid,
-                maxValid = validation.maxValid,
-            )
+    init {
+        collectProbability(states.value.deck)
+    }
+
+    override fun setCardNumber(cardNumber: Long) {
+        safeLaunch {
+            updateState { copy(cardNumber = cardNumber) }
+        }
+    }
+
+    private fun collectProbability(deck: Deck) {
+        collectingProbability?.cancel()
+        collectingProbability = null
+
+        collectingProbability = safeLaunch {
+            deck.state.collect {
+                val cardNumber = states.value.cardNumber
+                val others = deck.size - cardNumber
+
+                if (cardNumber > 7) {
+                    triggerProbability(0.0)
+                    return@collect
+                }
+
+                val calculation = calculate(
+                    deck.size,
+                    7,
+                    others,
+                    listOf(ExpectedCard("", "", cardNumber, 1, cardNumber))
+                )
+                triggerProbability(calculation)
+            }
+        }
+    }
+
+    companion object {
+        fun fake(): ShowCardModel {
+            val deck = Deck(UUID.randomUUID().toString(), "", 0, 0)
+            return object : ShowCardModel {
+                override fun setCardNumber(cardNumber: Long) {
+                    // nothing
+                }
+
+                override val states: StateFlow<ShowCardModelState>
+                    get() = MutableStateFlow(
+                        ShowCardModelState(
+                            deck = deck,
+                            cardNumber = 1,
+                            probability = 0.0
+                        )
+                    )
+
+                override fun setState(state: ShowCardModelState) {
+                    // nothing
+                }
+
+                override fun updateState(block: ShowCardModelState.() -> ShowCardModelState) {
+                    // nothing
+                }
+            }
+        }
+    }
+
+    private fun triggerProbability(newValue: Double) {
+        updateState {
+            copy(probability = newValue)
         }
     }
 }

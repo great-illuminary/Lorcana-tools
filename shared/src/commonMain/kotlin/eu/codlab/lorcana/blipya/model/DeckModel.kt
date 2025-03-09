@@ -18,15 +18,21 @@ data class DeckModel(
 
     var name: String
         get() = deck.state.value.name
-        set(value) { deck.name = value }
+        set(value) {
+            deck.name = value
+        }
 
     var size: Long
         get() = deck.state.value.size
-        set(value) { deck.size = value }
+        set(value) {
+            deck.size = value
+        }
 
     var hand: Long
         get() = deck.state.value.hand
-        set(value) { deck.hand = value }
+        set(value) {
+            deck.hand = value
+        }
 
     val scenarios: List<Scenario>
         get() {
@@ -56,7 +62,7 @@ data class DeckModel(
                     }
                 )
             },
-            dreamborn = dreamborn
+            dreambornDeck = dreamborn
         )
     }
 }
@@ -90,6 +96,6 @@ fun SavedDeckModel.toDeck(): DeckModel {
 
     return DeckModel(
         deck = deck,
-        dreamborn = dreamborn
+        dreamborn = dreambornDeck
     )
 }

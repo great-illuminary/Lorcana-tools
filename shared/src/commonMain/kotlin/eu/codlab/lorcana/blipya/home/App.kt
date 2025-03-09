@@ -22,12 +22,10 @@ import eu.codlab.lorcana.blipya.widgets.popup.PopupConfirmCompose
 import eu.codlab.lorcana.blipya.widgets.popup.PopupLocalModel
 import eu.codlab.viewmodel.effects.LifecycleEffect
 
-val staticModel = AppModel(
-    "",
-    ""
-)
+var staticModel: AppModel? = null
 
-val LocalApp = compositionLocalOf { staticModel }
+val LocalApp = compositionLocalOf<AppModel> { error("No StaticModel, check LocalApp") }
+val LocalIsPreview = compositionLocalOf { false }
 val LocalConfirmPopup = compositionLocalOf<PopupLocalModel> { error("No LocalPopup") }
 val LocalFontSizes = compositionLocalOf<FontSizes> { error("No LocalFontSizes") }
 
@@ -65,11 +63,13 @@ fun PreviewApp(
     frameType: WindowType = WindowType.TABLET,
     isDarkTheme: Boolean,
     onBackPressed: AppBackPressProvider = AppBackPressProvider(),
+    isPreview: Boolean = false,
     content: @Composable () -> Unit
 ) {
     CompositionLocalProvider(
         LocalWindow provides windowType,
         LocalFrame provides frameType,
+        LocalIsPreview provides isPreview
     ) {
         InternalApp(
             isDarkTheme,
@@ -91,7 +91,13 @@ private fun InternalApp(
     val confirmPopup by remember { mutableStateOf(PopupLocalModel()) }
     val fontSizes = createFontSizes()
 
-    val model = staticModel
+    if (null == staticModel) {
+        staticModel = AppModel(
+            "",
+            ""
+        )
+    }
+    val model = staticModel!!
 
     LaunchedEffect(onBackPressed) {
         model.onBackPressed = onBackPressed

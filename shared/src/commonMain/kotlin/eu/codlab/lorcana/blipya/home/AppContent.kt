@@ -5,6 +5,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -259,7 +261,7 @@ fun AppContent() {
                     LocalFrameProvider(
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        Column(
+                        BackgroundWrapper(
                             modifier = Modifier.fillMaxSize().clickable(
                                 interactionSource = interactionSource,
                                 indication = null // this gets rid of the ripple effect
@@ -270,106 +272,107 @@ fun AppContent() {
                                 }
                             }
                         ) {
-                            Surface {
-                                Column(modifier = Modifier.weight(1f).defaultBackground()) {
-                                    NavHost(
-                                        modifier = Modifier.weight(1f).defaultBackground(),
-                                        // Assign the navigator to the NavHost
-                                        navigator = navigator,
-                                        // Navigation transition for the scenes in this NavHost, this is optional
+                            // Surface {
+                            Column(modifier = Modifier.weight(1f).defaultBackground()) {
+                                NavHost(
+                                    modifier = Modifier.weight(1f).defaultBackground(),
+                                    // Assign the navigator to the NavHost
+                                    navigator = navigator,
+                                    // Navigation transition for the scenes in this NavHost, this is optional
+                                    navTransition = NavTransition(),
+                                    // The start destination
+                                    initialRoute = "/main",
+                                    /*swipeProperties = SwipeProperties(
+                                        //spaceToSwipe = 50.dp
+                                    )*/
+                                ) {
+                                    scene(
+                                        route = "/main",
                                         navTransition = NavTransition(),
-                                        // The start destination
-                                        initialRoute = "/main",
                                         /*swipeProperties = SwipeProperties(
                                             //spaceToSwipe = 50.dp
                                         )*/
                                     ) {
-                                        scene(
-                                            route = "/main",
-                                            navTransition = NavTransition(),
-                                            /*swipeProperties = SwipeProperties(
-                                                //spaceToSwipe = 50.dp
-                                            )*/
+                                        val appModel = LocalApp.current
+
+                                        Column(
+                                            modifier = Modifier.fillMaxSize()
+                                                .defaultBackground()
                                         ) {
-                                            val appModel = LocalApp.current
-
-                                            Column(
-                                                modifier = Modifier.fillMaxSize()
-                                                    .defaultBackground()
-                                            ) {
-                                                DecksScreen(
-                                                    Modifier.fillMaxSize(),
-                                                    appModel
-                                                ) { appModel.show(it) }
-                                            }
-                                        }
-
-                                        scene(
-                                            route = "/deck/{uuid}/scenario/{scenario}",
-                                            navTransition = NavTransition(),
-                                            swipeProperties = SwipeProperties(
-                                                // spaceToSwipe = 50.dp
-                                            )
-                                        ) { backStackEntry ->
-                                            val appModel: AppModel = LocalApp.current
-                                            val deckId =
-                                                backStackEntry.pathMap["uuid"] ?: return@scene
-                                            val scenarioId =
-                                                backStackEntry.pathMap["scenario"] ?: return@scene
-                                            val deck = appModel.states.value.decks
-                                                .firstOrNull { it.id == deckId }
-                                                ?: return@scene
-                                            val scenario =
-                                                deck.scenarios.firstOrNull { it.id == scenarioId }
-                                                    ?: return@scene
-
-                                            println("SHOW SCENE /deck/{uuid}")
-
-                                            Column(
-                                                modifier = Modifier.fillMaxSize()
-                                                    .defaultBackground()
-                                            ) {
-                                                EditScenario(
-                                                    modifier = Modifier.fillMaxSize(),
-                                                    appModel,
-                                                    deck = deck,
-                                                    scenario = scenario
-                                                )
-                                            }
-                                        }
-
-                                        scene(
-                                            route = "/deck/{uuid}",
-                                            navTransition = NavTransition(),
-                                            swipeProperties = SwipeProperties(
-                                                // spaceToSwipe = 50.dp
-                                            )
-                                        ) { backStackEntry ->
-                                            val appModel: AppModel = LocalApp.current
-                                            val deckId =
-                                                backStackEntry.pathMap["uuid"] ?: return@scene
-                                            val deck = appModel.states.value.decks
-                                                .firstOrNull { it.id == deckId }
-                                                ?: return@scene
-
-                                            println("SHOW SCENE /deck/{uuid}")
-
-                                            Column(
-                                                modifier = Modifier.fillMaxSize()
-                                                    .defaultBackground()
-                                            ) {
-                                                DeckConfiguration(
-                                                    appModel,
-                                                    deck = deck,
-                                                    modifier = Modifier.fillMaxSize()
-                                                )
-                                            }
+                                            DecksScreen(
+                                                Modifier.fillMaxSize(),
+                                                appModel
+                                            ) { appModel.show(it) }
                                         }
                                     }
 
-                                    BottomSpacer()
+                                    scene(
+                                        route = "/deck/{uuid}/scenario/{scenario}",
+                                        navTransition = NavTransition(),
+                                        swipeProperties = SwipeProperties(
+                                            // spaceToSwipe = 50.dp
+                                        )
+                                    ) { backStackEntry ->
+                                        val appModel: AppModel = LocalApp.current
+                                        val deckId =
+                                            backStackEntry.pathMap["uuid"] ?: return@scene
+                                        val scenarioId =
+                                            backStackEntry.pathMap["scenario"] ?: return@scene
+                                        val deck = appModel.states.value.decks
+                                            .firstOrNull { it.id == deckId }
+                                            ?: return@scene
+                                        val scenario =
+                                            deck.scenarios.firstOrNull { it.id == scenarioId }
+                                                ?: return@scene
+
+                                        println("SHOW SCENE /deck/{uuid}")
+
+                                        Column(
+                                            modifier = Modifier.fillMaxSize()
+                                                .defaultBackground()
+                                                .verticalScroll(state = rememberScrollState())
+                                        ) {
+                                            EditScenario(
+                                                modifier = Modifier.fillMaxSize(),
+                                                appModel,
+                                                deck = deck,
+                                                scenario = scenario
+                                            )
+                                        }
+                                    }
+
+                                    scene(
+                                        route = "/deck/{uuid}",
+                                        navTransition = NavTransition(),
+                                        swipeProperties = SwipeProperties(
+                                            // spaceToSwipe = 50.dp
+                                        )
+                                    ) { backStackEntry ->
+                                        val appModel: AppModel = LocalApp.current
+                                        val deckId =
+                                            backStackEntry.pathMap["uuid"] ?: return@scene
+                                        val deck = appModel.states.value.decks
+                                            .firstOrNull { it.id == deckId }
+                                            ?: return@scene
+
+                                        println("SHOW SCENE /deck/{uuid}")
+
+                                        Column(
+                                            modifier = Modifier.fillMaxSize()
+                                                .defaultBackground()
+                                        ) {
+                                            DeckConfiguration(
+                                                appModel,
+                                                deck = deck,
+                                                modifier = Modifier.fillMaxSize()
+                                            )
+                                        }
+                                    }
                                 }
+
+                                BottomSpacer()
                             }
+                            //}
                         }
                     }
                 }

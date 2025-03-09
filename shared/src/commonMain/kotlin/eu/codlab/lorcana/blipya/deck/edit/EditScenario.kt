@@ -22,7 +22,7 @@ import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.scenario_name
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
-import eu.codlab.lorcana.blipya.deck.card.ShowCard
+import eu.codlab.lorcana.blipya.deck.scenariocard.ShowScenarioCard
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.theme.AppSizes
@@ -89,7 +89,7 @@ fun EditScenario(
 
                 state.expectedCards.forEach { holder ->
                     Spacer(Modifier.height(AppSizes.paddings.default))
-                    ShowCard(Modifier.fillMaxWidth(), model, state.deck, holder)
+                    ShowScenarioCard(Modifier.fillMaxWidth(), model, state.deck, holder)
                 }
             }
         }

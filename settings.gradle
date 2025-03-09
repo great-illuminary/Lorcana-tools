@@ -6,7 +6,7 @@ pluginManagement {
     }
 }
 
-ext.GRADLE_EXTENDED_VERSION_USED = "8ec13357bc5d6a6e75ed7140cd22fe0cfd9d5022"
+ext.GRADLE_EXTENDED_VERSION_USED = "b5fcb95c9b2d897c97a454b5bdb33dba48ad3821"
 
 apply from: "https://raw.githubusercontent.com/the-inkwell/gradle-tools/${ext.GRADLE_EXTENDED_VERSION_USED}/extended.gradle"
 
@@ -23,6 +23,7 @@ dependencyResolutionManagement {
     }
 }
 
+include(":shared-buildkonfig")
 include(":shared")
 include(":androidApp")
 include(":jsApp")

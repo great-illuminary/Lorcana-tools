@@ -11,7 +11,7 @@ data class SavedDeckModel(
     val size: Long,
     val hand: Long,
     val scenarii: List<ScenarioModel> = emptyList(),
-    val dreamborn: Dreamborn? = null
+    val dreambornDeck: Dreamborn? = null
 )
 
 @Serializable

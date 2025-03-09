@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -16,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.navigator.LocalNavigator
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.delete
@@ -31,6 +34,7 @@ import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.utils.localized
+import eu.codlab.lorcana.blipya.widgets.MenuItemOverflowMenu
 import eu.codlab.lorcana.blipya.widgets.PopupConfirm
 import eu.codlab.lorcana.math.Scenario
 import eu.codlab.viewmodel.rememberViewModel
@@ -69,32 +73,41 @@ fun ShowScenario(
     }
 
     Column(modifier) {
-        TextNormal(state.name)
+        Row {
+            TextNormal(
+                modifier = Modifier.weight(1.0f),
+                text = state.name
+            )
+
+            MenuItemOverflowMenu(
+                tint = Color.White,
+                imageVector = Icons.Outlined.MoreVert,
+                contentDescription = "Manage"
+            ) {
+                // show the actions to edit & delete the current scenario
+                listOf(
+                    Triple(
+                        Res.string.edit.localized(),
+                        Icons.Default.Edit
+                    ) { app.show(state.deck, state.scenario) },
+                    Triple(
+                        "${Res.string.delete.localized()} ${state.name}",
+                        Icons.Default.Delete
+                    ) { promptDelete = true },
+                ).forEach { (contentDescription, imageVector, onClick) ->
+                    IconButton(onClick) {
+                        Icon(
+                            imageVector,
+                            contentDescription,
+                            tint = tintColor
+                        )
+                    }
+                }
+            }
+        }
 
         Spacer(Modifier.height(AppSizes.paddings.reduced))
 
         DisplayStatisticalResult(probability = state.probability)
-
-        Row {
-            // show the actions to edit & delete the current scenario
-            listOf(
-                Triple(
-                    Res.string.edit.localized(),
-                    Icons.Default.Edit
-                ) { app.show(state.deck, state.scenario) },
-                Triple(
-                    "${Res.string.delete.localized()} ${state.name}",
-                    Icons.Default.Delete
-                ) { promptDelete = true },
-            ).forEach { (contentDescription, imageVector, onClick) ->
-                IconButton(onClick) {
-                    Icon(
-                        imageVector,
-                        contentDescription,
-                        tint = tintColor
-                    )
-                }
-            }
-        }
     }
 }

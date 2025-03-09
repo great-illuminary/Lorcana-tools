@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.IconButton
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
@@ -48,35 +49,49 @@ sealed class MenuItem {
     ) : MenuItem() {
         @Composable
         override fun Draw(scope: RowScope, tint: Color) {
-            val isDark = LocalDarkTheme.current
-            var showMenu by remember { mutableStateOf(false) }
-            Box {
-                IconButton(onClick = {
-                    showMenu = !showMenu
-                }) {
-                    Icon(
-                        tint = tint,
-                        imageVector = imageVector,
-                        contentDescription = contentDescription
-                    )
-                }
-                DropdownMenu(
-                    modifier = Modifier
-                        .background(
-                            if (isDark) {
-                                Color.Black
-                            } else {
-                                Color.White
-                            }
-                        )
-                        .padding(0.dp),
-                    expanded = showMenu,
-                    onDismissRequest = { showMenu = false }
-                ) {
-                    content(scope) {
-                        showMenu = false
+            scope.MenuItemOverflowMenu(tint, imageVector, contentDescription, content)
+        }
+    }
+}
+
+@Composable
+fun RowScope.MenuItemOverflowMenu(
+    tint: Color,
+    imageVector: ImageVector,
+    contentDescription: String = "",
+    content: @Composable RowScope.(
+        dismiss: () -> Unit
+    ) -> Unit
+) {
+    val localThis = this
+    val isDark = LocalDarkTheme.current
+    var showMenu by remember { mutableStateOf(false) }
+    Box {
+        IconButton(
+            modifier = Modifier.size(24.dp),
+            onClick = { showMenu = !showMenu }
+        ) {
+            Icon(
+                tint = tint,
+                imageVector = imageVector,
+                contentDescription = contentDescription
+            )
+        }
+        DropdownMenu(
+            modifier = Modifier
+                .background(
+                    if (isDark) {
+                        Color.Black
+                    } else {
+                        Color.White
                     }
-                }
+                )
+                .padding(0.dp),
+            expanded = showMenu,
+            onDismissRequest = { showMenu = false }
+        ) {
+            content(localThis) {
+                showMenu = false
             }
         }
     }

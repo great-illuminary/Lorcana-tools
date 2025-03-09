@@ -4,6 +4,7 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.input.TextFieldValue
 import eu.codlab.http.Configuration
 import eu.codlab.http.createClient
+import eu.codlab.lorcana.blipya.dreamborn.CardNumber
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.save.Dreamborn
@@ -27,6 +28,7 @@ data class DeckConfigurationModelState(
     val scenarii: List<Scenario>,
     val updatedAt: DateTime = DateTime.now(),
     val loadingDreamborn: Boolean = false,
+    val deckContent: List<CardNumber> = emptyList()
 )
 
 @Suppress("TooManyFunctions")
@@ -37,9 +39,10 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             name = deck.name,
             deckSize = TextFieldValue("${deck.size}"),
             handSize = TextFieldValue("${deck.hand}"),
-            scenarii = deck.scenarios
-        )
-    ) {
+            scenarii = deck.scenarios,
+            deckContent = deck.dreamborn?.data?.list ?: emptyList()
+    )
+) {
     private val client = createClient(
         Configuration(
             enableLogs = true,
@@ -53,7 +56,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             intermediate.split("/").lastOrNull() ?: intermediate
         }.trim()
 
-        val url = "https://api-lorcana.com/deck/fetch/$dreamborn"
+        val url = "https://api-lorcana.com/deck/fetch/light/$dreamborn"
         val request = client.get(url)
 
         if (request.status.isSuccess()) return request.body()
@@ -75,7 +78,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             val dreamborn = dreamborn(url)
 
             // TODO set to model as well ?
-            states.value.deck.dreamborn = states.value.deck.dreamborn?.copy(
+            val dreambornDeck = states.value.deck.dreamborn?.copy(
                 url = url,
                 data = dreamborn
             ) ?: Dreamborn(
@@ -83,7 +86,14 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
                 data = dreamborn
             )
 
-            updateState { copy(loadingDreamborn = false) }
+            states.value.deck.dreamborn = dreambornDeck
+
+            updateState {
+                copy(
+                    loadingDreamborn = false,
+                    deckContent = dreambornDeck.data?.list ?: emptyList()
+                )
+            }
 
             saveDeck()
         } catch (err: Throwable) {
@@ -183,14 +193,14 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             val mapped = data.cards.mapNotNull { c ->
                 var variant: VariantClassification? = null
                 lorcana.cards.find { card ->
-                    val found = card.variants.find { variant -> variant.dreamborn == c.dreamborn }
+                    val found = card.variants.find { variant -> variant.dreamborn == c.key }
                     if (null != found) variant = found
                     null != found
                 }
 
                 variant?.let { finalVariant ->
                     val str = "${finalVariant.set.name.lowercase()}-${finalVariant.id}"
-                    (0..<c.count).map { str }
+                    (0..<c.value).map { str }
                 }
             }.flatten()
 

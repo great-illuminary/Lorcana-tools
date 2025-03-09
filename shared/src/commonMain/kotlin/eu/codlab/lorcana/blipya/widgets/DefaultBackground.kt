@@ -9,13 +9,14 @@ import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.lorcana.blipya.theme.AppColor
 
 fun Modifier.defaultBackground() = composed {
-    this.background(
+    /*this.background(
         if (LocalDarkTheme.current) {
             AppColor.BackgroundBlue
         } else {
             AppColor.GrayExtraLight // gray hyper light
         }
-    )
+    )*/
+    this
 }
 
 fun Modifier.defaultCardBackground() = composed {

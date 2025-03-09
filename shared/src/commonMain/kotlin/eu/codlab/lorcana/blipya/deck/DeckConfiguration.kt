@@ -34,6 +34,7 @@ import eu.codlab.blipya.res.deck_configuration_deck_size
 import eu.codlab.blipya.res.deck_configuration_hand_size
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
+import eu.codlab.lorcana.blipya.deck.card.ShowCard
 import eu.codlab.lorcana.blipya.deck.dreamborn.ShowDreambornInformation
 import eu.codlab.lorcana.blipya.deck.scenario.ShowScenario
 import eu.codlab.lorcana.blipya.home.AppModel
@@ -143,6 +144,10 @@ fun DeckConfiguration(
             )
         }
 
+        item(span = { GridItemSpan(columns) }) {
+            // nothing
+        }
+
         items(state.scenarii.size) { index ->
             val holder = state.scenarii[index]
 
@@ -158,6 +163,18 @@ fun DeckConfiguration(
                 }
             }
         }
+
+        item(span = { GridItemSpan(columns) }) {
+            // nothing
+        }
+
+        items(state.deckContent.size) { index ->
+            ShowCard(
+                modifier = Modifier.fillMaxWidth(),
+                deck = state.deck.deck,
+                number = state.deckContent[index]
+            )
+        }
     }
 }
 
@@ -165,7 +182,7 @@ fun DeckConfiguration(
 @Composable
 private fun expectedNumberOfColumns(): Int {
     val columnsForReducedScreens = 2
-    val columnsForExpandedScreens = 3
+    val columnsForExpandedScreens = 5
 
     // extract the required number of columns and the specific case where we will have 2 in a row
     // represents the expected number of columns AND the "span" of the first one

@@ -1,150 +1,177 @@
 package eu.codlab.lorcana.blipya.deck.card
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ionspin.kotlin.bignum.integer.Quadruple
-import eu.codlab.blipya.res.Res
-import eu.codlab.blipya.res.card_show_amount
-import eu.codlab.blipya.res.card_show_card_name
-import eu.codlab.blipya.res.card_show_max
-import eu.codlab.blipya.res.card_show_min
-import eu.codlab.compose.widgets.CustomOutlinedEditText
+import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.compose.widgets.TextNormal
-import eu.codlab.lorcana.blipya.deck.edit.EditScenarioModel
-import eu.codlab.lorcana.blipya.model.DeckModel
-import eu.codlab.lorcana.blipya.theme.AppSizes
-import eu.codlab.lorcana.blipya.utils.asLongOrNull
-import eu.codlab.lorcana.blipya.utils.localized
-import eu.codlab.lorcana.blipya.utils.rememberInputSize
-import eu.codlab.lorcana.math.ExpectedCard
-import eu.codlab.viewmodel.rememberViewModel
+import eu.codlab.lorcana.blipya.deck.scenario.round
+import eu.codlab.lorcana.blipya.dreamborn.CardNumber
+import eu.codlab.lorcana.blipya.home.HotPreviewApp
+import eu.codlab.lorcana.blipya.home.LocalApp
+import eu.codlab.lorcana.blipya.home.LocalIsPreview
+import eu.codlab.lorcana.blipya.widgets.DefaultCard
+import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
+import eu.codlab.lorcana.cards.CardTranslation
+import eu.codlab.lorcana.cards.CardTranslations
+import eu.codlab.lorcana.cards.CardType
+import eu.codlab.lorcana.cards.InkColor
+import eu.codlab.lorcana.cards.VariantRarity
+import eu.codlab.lorcana.franchises.Franchise
+import eu.codlab.lorcana.math.Deck
+import eu.codlab.lorcana.raw.Ravensburger
+import eu.codlab.lorcana.raw.SetDescription
+import eu.codlab.lorcana.raw.VariantClassification
+import eu.codlab.lorcana.raw.VirtualCard
+import eu.codlab.tcgmapper.TranslationHolder
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 
-@Suppress("LongMethod")
+val ratio = 734.0f / 1024.0f
+
 @Composable
 fun ShowCard(
     modifier: Modifier,
-    model: EditScenarioModel,
-    deck: DeckModel,
-    holder: ExpectedCard
+    deck: Deck,
+    number: CardNumber
 ) {
-    var name by remember { mutableStateOf(TextFieldValue(holder.name)) }
-    var amount by remember { mutableStateOf(TextFieldValue("${holder.amount}")) }
-    var min by remember { mutableStateOf(TextFieldValue("${holder.min}")) }
-    var max by remember { mutableStateOf(TextFieldValue("${holder.max}")) }
+    // nothing for now
+    val model = LocalApp.current
+    val found = model.cardFromDreamborn(number.card) ?: return
+    val (card, variant) = found
 
-    val validationModel = rememberViewModel { ShowCardModel(deck, holder) }
-    val validationState by validationModel.states.collectAsState()
-
-    val maxWidth = rememberInputSize()
-
-    val items: List<Quadruple<TextFieldValue, String, Boolean, (TextFieldValue) -> Unit>> = listOf(
-        Quadruple(
-            amount,
-            Res.string.card_show_amount.localized(),
-            validationState.amountValid
-        ) {
-            validationModel.update(
-                it.asLongOrNull() ?: 0,
-                holder.min,
-                holder.max
+    val showCardModel by remember {
+        mutableStateOf(
+            ShowCardModelImpl(
+                deck,
+                number.number.toLong()
             )
-            model.updateScenario(
-                holder.id,
-                it.asLongOrNull() ?: 0,
-                holder.min,
-                holder.max
-            )
-            amount = it
-        },
-        Quadruple(
-            min,
-            Res.string.card_show_min.localized(),
-            validationState.minValid
-        ) {
-            validationModel.update(
-                holder.amount,
-                it.asLongOrNull() ?: 0,
-                holder.max
-            )
-            model.updateScenario(
-                holder.id,
-                holder.amount,
-                it.asLongOrNull() ?: 0,
-                holder.max
-            )
-            min = it
-        },
-        Quadruple(
-            max,
-            Res.string.card_show_max.localized(),
-            validationState.maxValid
-        ) {
-            validationModel.update(
-                holder.amount,
-                holder.min,
-                it.asLongOrNull() ?: 0
-            )
-            model.updateScenario(
-                holder.id,
-                holder.amount,
-                holder.min,
-                it.asLongOrNull() ?: 0
-            )
-            max = it
-        }
-    )
-
-    Column {
-        CustomOutlinedEditText(
-            modifier = Modifier.width(150.dp),
-            value = name,
-            onValueChanged = {
-                name = it
-                model.updateScenario(holder.id, name.text)
-            },
-            label = {
-                TextNormal(Res.string.card_show_card_name.localized())
-            }
         )
+    }
 
-        Spacer(Modifier.height(8.dp))
+    LaunchedEffect(number.number) {
+        showCardModel.setCardNumber(number.number.toLong())
+    }
 
-        Row(
-            modifier,
-            horizontalArrangement = Arrangement.spacedBy(AppSizes.paddings.default),
-        ) {
-            items.map { (value, label, valid, onValueChanged) ->
-                CustomOutlinedEditText(
-                    modifier = Modifier.widthIn(0.dp, maxWidth),
-                    value = value,
-                    isError = !valid,
-                    onValueChanged = onValueChanged,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
-                    ),
-                    label = {
-                        TextNormal(label)
-                    }
+    ShowCardInternal(modifier, showCardModel, variant)
+}
+
+@Composable
+private fun ShowCardInternal(
+    modifier: Modifier,
+    model: ShowCardModel,
+    variant: VariantClassification,
+) {
+    val cardModifier = modifier.aspectRatio(ratio)
+
+    val state by model.states.collectAsState()
+    val url = "https://api-lorcana.com/public/images/" +
+                "${variant.set.name.lowercase()}/fr/${variant.id}.webp.jpeg"
+
+    Box(cardModifier) {
+        ShowCardFromUrl(cardModifier, url)
+
+        listOf(
+            Alignment.BottomEnd to "${state.probability.round(2)}%",
+            Alignment.TopStart to "x${state.cardNumber}"
+        ).map { (align, text) ->
+            DefaultCard(
+                modifier = Modifier.align(align),
+                backgroundColor = defaultCardBackground()
+            ) {
+                TextNormal(
+                    modifier = Modifier.padding(8.dp),
+                    text = text
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ShowCardFromUrl(
+    modifier: Modifier,
+    url: String
+) {
+    if (LocalIsPreview.current) {
+        Column(modifier = modifier.background(Color.Blue)) { }
+        return
+    }
+
+    KamelImage(
+        modifier = modifier,
+        resource = asyncPainterResource(url),
+        contentDescription = "",
+        onLoading = { _ ->
+            // nothing
+        },
+        onFailure = { exception ->
+            exception.printStackTrace()
+            println("error ${exception.message}")
+        }
+    )
+}
+
+@HotPreview(widthDp = 200, heightDp = 200, darkMode = true)
+@Preview
+@Composable
+fun ShowCardPreview() {
+    val modifier = Modifier.fillMaxHeight()
+    HotPreviewApp(modifier, isDarkTheme = true, isPreview = true) {
+        val variantClassification = VariantClassification(
+            SetDescription.TFC,
+            1,
+            "",
+            Ravensburger(
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ),
+            VariantRarity.D23
+        )
+
+        val card = VirtualCard(
+            color = InkColor.Amber,
+            colors = listOf(InkColor.Amber),
+            type = CardType.Item,
+            languages = CardTranslations(
+                CardTranslation()
+            ),
+            franchise = Franchise(
+                "",
+                TranslationHolder(
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                )
+            )
+        )
+
+        val model = ShowCardModelImpl.fake()
+
+        ShowCardInternal(
+            modifier,
+            model,
+            variantClassification
+        )
     }
 }

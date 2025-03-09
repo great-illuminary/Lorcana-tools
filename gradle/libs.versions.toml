@@ -26,11 +26,18 @@ libraries-report = "10.9.0-b02"
 
 bignum = "0.3.10"
 
-lorcana = "0.15.0"
+lorcana = "0.17.1"
 
 kmp-auth = "2.3.0-beta01" #2.2.1
 
+kamel-image = "1.0.3"
+
+hotpreview = "0.1.4"
+
 [libraries]
+
+kamel-image = { group = "media.kamel", name = "kamel-image", version.ref = "kamel-image" }
+kamel-image-default = { group = "media.kamel", name = "kamel-image-default", version.ref = "kamel-image" }
 
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidx-ui-tooling" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-ui-tooling" }
@@ -69,6 +76,7 @@ kmp-auth-google = { group = "io.github.mirzemehdi", name = "kmpauth-google", ver
 kmp-auth-firebase = { group = "io.github.mirzemehdi", name = "kmpauth-firebase", version.ref = "kmp-auth" }
 kmp-auth-uihelper = { group = "io.github.mirzemehdi", name = "kmpauth-uihelper", version.ref = "kmp-auth" }
 
+hotpreview = { group = "de.drick.compose", name = "hotpreview", version.ref = "hotpreview" }
 
 [plugins]
 android-google-services = { id = "com.google.gms.google-services", version.ref = "android-google-services" }

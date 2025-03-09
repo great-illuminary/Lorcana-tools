@@ -8,7 +8,6 @@ plugins {
     alias(additionals.plugins.compose.compiler)
     alias(additionals.plugins.kotlin.serialization)
     alias(libs.plugins.libraries.report)
-    alias(additionals.plugins.multiplatform.buildkonfig)
     id("jvmCompat")
     id("iosSimulatorConfiguration")
 }
@@ -80,7 +79,9 @@ kotlin {
                 api(additionals.multiplatform.viewpager)
                 api(additionals.multiplatform.viewmodel)
                 api(additionals.multiplatform.platform)
-                api(additionals.multiplatform.kamel.image.ext)
+                // api(libs.kamel.image)
+                api(libs.kamel.image.default)
+                //api(additionals.multiplatform.kamel.image.ext)
                 api(additionals.multiplatform.file.access)
                 api(additionals.multiplatform.http.client)
                 api(libs.koalaplot)
@@ -91,6 +92,10 @@ kotlin {
                 api(libs.kmp.auth.google)
                 api(libs.kmp.auth.firebase)
                 api(libs.kmp.auth.uihelper)
+
+                api(libs.hotpreview)
+
+                api(project(":shared-buildkonfig"))
             }
         }
         commonTest {
@@ -155,18 +160,6 @@ dependencies {
 aboutLibraries {
     registerAndroidTasks = false
     prettyPrint = true
-}
-
-buildkonfig {
-    packageName = "eu.codlab.blipya.buildconfig"
-
-    defaultConfigs {
-        buildConfigField(
-            FieldSpec.Type.STRING,
-            "googleAuthServerId",
-            rootProject.extra["GOOGLE_AUTH_SERVER_ID"] as String
-        )
-    }
 }
 
 val licenseCopy by tasks.registering(Copy::class) {

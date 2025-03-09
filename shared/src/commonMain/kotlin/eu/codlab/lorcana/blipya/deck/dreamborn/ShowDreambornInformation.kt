@@ -78,7 +78,7 @@ fun ShowDreambornInformation(
             } else {
                 state.deck.dreamborn?.data?.let {
                     TextNormal(
-                        text = "Name: ${it.name}"
+                        text = "Id: ${it.url.split("/").lastOrNull() ?: ""}"
                     )
                 }
 

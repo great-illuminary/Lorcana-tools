@@ -22,6 +22,7 @@ fun PreviewDarkLightColumn(
         windowType = windowType,
         frameType = frameType,
         isDarkTheme = isDark,
+        isPreview = true,
         content = {
             repeatableContent(submodifier(), isDark)
         }
@@ -44,6 +45,7 @@ fun PreviewDarkLightRow(
         windowType = windowType,
         frameType = frameType,
         isDarkTheme = isDark,
+        isPreview = true,
         content = {
             repeatableContent(submodifier(), isDark)
         }

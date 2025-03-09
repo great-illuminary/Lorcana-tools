@@ -3,7 +3,7 @@ package eu.codlab.lorcana.blipya.home
 import androidx.compose.material.ScaffoldState
 import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider
-import eu.codlab.blipya.buildconfig.BuildKonfig
+import eu.codlab.blipya.config.SharedConfig
 import eu.codlab.files.VirtualFile
 import eu.codlab.lorcana.Lorcana
 import eu.codlab.lorcana.LorcanaLoaded
@@ -19,6 +19,8 @@ import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.Scenario
+import eu.codlab.lorcana.raw.VariantClassification
+import eu.codlab.lorcana.raw.VirtualCard
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
 import io.ktor.websocket.readText
@@ -79,7 +81,7 @@ data class AppModel(
 
         GoogleAuthProvider.create(
             credentials = GoogleAuthCredentials(
-                serverId = BuildKonfig.googleAuthServerId
+                serverId = SharedConfig.googleAuthServerId
             )
         )
 
@@ -277,6 +279,22 @@ data class AppModel(
         }
 
         return backendSocket.waitForSocket(id, 5.seconds, ResultForUrlToOpen.serializer())?.url
+    }
+
+    fun cardFromDreamborn(dreambornId: String): Pair<VirtualCard, VariantClassification>? {
+        var foundVariant: VariantClassification? = null
+        val card = states.value.lorcana?.cards?.find { card ->
+            val variant = card.variants.firstOrNull { variant -> variant.dreamborn == dreambornId }
+
+            if (null != variant) foundVariant = variant
+            null != variant
+        }
+
+        return if (null != card && null != foundVariant) {
+            card to foundVariant!!
+        } else {
+            return null
+        }
     }
 }
 
