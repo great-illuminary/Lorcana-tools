@@ -68,9 +68,9 @@
 
     var html = array.map(row =>
         `<div class="d-flex flex-row">` +
-        row.map(item => `<div class="position-relative"><img src="${item}" /></div>`) +
+        row.map(item => `<div class="position-relative"><img src="${item}" /></div>`).join("") +
         `</div>`
-    );
+    ).join("");
 
     document.getElementById("main").innerHTML = html;
 </script>
