@@ -38,3 +38,4 @@ GoogleService-Info.plist
 Pods/
 
 **/vendor/bundle
+bundles/
