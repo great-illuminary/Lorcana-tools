@@ -3,7 +3,7 @@ package eu.codlab.lorcana.blipya.deck.card
 import eu.codlab.lorcana.blipya.deck.edit.safeLaunch
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
-import eu.codlab.lorcana.math.calculate
+import eu.codlab.lorcana.math.tools.calculate
 import eu.codlab.viewmodel.StateHandler
 import eu.codlab.viewmodel.StateViewModel
 import korlibs.io.util.UUID

@@ -1,5 +1,7 @@
 package eu.codlab.lorcana.math
 
+import eu.codlab.lorcana.math.tools.Choose.choose
+import eu.codlab.lorcana.math.tools.Choose.factorial
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

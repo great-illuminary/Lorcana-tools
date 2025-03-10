@@ -2,7 +2,6 @@ package eu.codlab.lorcana.math
 
 import eu.codlab.lorcana.contexts.DefaultDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -51,7 +50,7 @@ class Scenario internal constructor(
 
         if (null != invalid) return -1.0
 
-        return calculate(
+        return eu.codlab.lorcana.math.tools.calculate(
             parentState.size,
             parentState.hand,
             others.amount,
