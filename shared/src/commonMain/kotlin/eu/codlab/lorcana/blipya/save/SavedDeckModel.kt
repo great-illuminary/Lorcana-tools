@@ -11,6 +11,7 @@ data class SavedDeckModel(
     val size: Long,
     val hand: Long,
     val scenarii: List<ScenarioModel> = emptyList(),
+    val mulligans: List<MulliganModel> = emptyList(),
     val dreambornDeck: Dreamborn? = null
 )
 
@@ -25,4 +26,11 @@ data class ScenarioModel(
     val id: String,
     val name: String,
     val cards: List<ExpectedCardModel>
+)
+
+@Serializable
+data class MulliganModel(
+    val id: String,
+    val name: String,
+    val cards: List<MulliganCardModel>
 )

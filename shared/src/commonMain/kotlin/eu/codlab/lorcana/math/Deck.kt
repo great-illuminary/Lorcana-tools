@@ -3,7 +3,6 @@ package eu.codlab.lorcana.math
 import eu.codlab.lorcana.contexts.DefaultDispatcher
 import korlibs.io.async.async
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -33,6 +32,9 @@ class Deck(
     private val _scenarios = MutableStateFlow<List<Scenario>>(emptyList())
     val scenarios: StateFlow<List<Scenario>> = _scenarios
 
+    private val _mulligans = MutableStateFlow<List<MulliganScenario>>(emptyList())
+    val mulligans: StateFlow<List<MulliganScenario>> = _mulligans
+
     var name: String
         get() = state.value.name
         set(value) {
@@ -55,7 +57,29 @@ class Deck(
         context.async {
             _state.collect {
                 scenarios.value.forEach { scenar -> scenar.setParentState(it) }
+                mulligans.value.forEach { scenar -> scenar.setParentState(it) }
             }
+        }
+    }
+
+    fun appendNewMulligan(id: String, name: String) =
+        MulliganScenario(id, name, this.state.value)
+            .also { this.addMulligan(it) }
+
+    fun addMulligan(mulligan: MulliganScenario) {
+        if (_mulligans.value.contains(mulligan)) {
+            println("addMulligan :: already added, skipping")
+            return
+        }
+
+        println("addMulligan :: adding the scenario ${mulligan.id}")
+
+        _mulligans.update { it + mulligan }
+    }
+
+    fun removeMulligan(mulligan: MulliganScenario) {
+        if (_mulligans.value.contains(mulligan)) {
+            _mulligans.update { it - mulligan }
         }
     }
 

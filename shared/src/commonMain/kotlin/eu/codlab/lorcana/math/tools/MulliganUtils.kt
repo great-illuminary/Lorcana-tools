@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.math.tools
 
+import eu.codlab.lorcana.math.MulliganCardState
 import kotlin.math.min
 
 /**
@@ -16,15 +17,15 @@ import kotlin.math.min
  *
  * Credits to the original code to https://github.com/frankkarsten
  */
-class Mulligan(
-    val deckSize: Long,
-    val cards: List<MulliganExpected>
+class MulliganUtils(
+    private val deckSize: Long,
+    private val cards: List<MulliganCardState>
 ) {
     // transform to a map of name -> number of cards
-    private val listOfCardsInTheDeck = cards.associate { it.name to it.inDeck.toLong() }
+    private val listOfCardsInTheDeck = cards.associate { it.name to it.amount.toLong() }
 
     // and create the number of other cards in the deck
-    private val othersInTheDeck = deckSize - cards.sumOf { it.inDeck }
+    private val othersInTheDeck = deckSize - cards.sumOf { it.amount }
 
     fun calculate(): MulliganResult {
 
