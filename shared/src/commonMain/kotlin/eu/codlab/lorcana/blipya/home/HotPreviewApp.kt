@@ -18,7 +18,6 @@ fun HotPreviewApp(
     windowType: WindowType = WindowType.TABLET,
     frameType: WindowType = WindowType.TABLET,
     isDarkTheme: Boolean,
-    onBackPressed: AppBackPressProvider = AppBackPressProvider(),
     isPreview: Boolean = false,
     content: @Composable () -> Unit
 ) {
@@ -28,7 +27,7 @@ fun HotPreviewApp(
         LocalWindow provides windowType,
         LocalFrame provides frameType,
         LocalIsPreview provides isPreview,
-        LocalFontSizes provides fontSizes
+        LocalFontSizes provides fontSizes,
     ) {
         Column(modifier.fillMaxSize().defaultBackground()) {
             ApplicationTheme(isDarkTheme, content)

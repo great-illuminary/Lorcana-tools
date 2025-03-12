@@ -56,13 +56,14 @@ fun ShowMulliganCard(
             Res.string.card_show_amount.localized(),
             validationState.amountValid
         ) {
-            validationModel.update(
-                it.asLongOrNull() ?: 0,
-            )
-            model.updateScenario(
-                holder.id,
-                it.asLongOrNull() ?: 0
-            )
+            (it.asLongOrNull() ?: 0).let { newValue ->
+                validationModel.update(newValue)
+
+                model.updateScenario(
+                    holder.id,
+                    newValue
+                )
+            }
             amount = it
         }
     )

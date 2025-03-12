@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.math.tools
 
+import eu.codlab.lorcana.math.LorcanaInfo.DefaultHandSize
 import eu.codlab.lorcana.math.MulliganCardState
 import kotlin.math.min
 
@@ -28,7 +29,6 @@ class MulliganUtils(
     private val othersInTheDeck = deckSize - cards.sumOf { it.amount }
 
     fun calculate(): MulliganResult {
-
         val writableResult = WritableMulliganResult(0.0, 0.0)
 
         val keys = cards.map { it.name }
@@ -41,7 +41,7 @@ class MulliganUtils(
     private fun loopResult(writableResult: WritableMulliganResult, keys: List<String>) {
         val wholeListOfCombination = mutableListOf<Map<String, Long>>()
 
-        if(keys.isEmpty()) return
+        if (keys.isEmpty()) return
 
         prepareMap(listOfCardsInTheDeck, wholeListOfCombination, mutableMapOf(), keys.first(), keys)
 
@@ -57,7 +57,7 @@ class MulliganUtils(
         val inHand = hand.values.sum()
         val containsAtLeast1OfEach = null == hand.values.find { it < 1L }
 
-        val othersInHand = 7 - inHand
+        val othersInHand = DefaultHandSize - inHand
         val initialOpeningHandProb = multivariateHyperGeometric(
             listInDeck = listOfCardsInTheDeck,
             othersInDeck = othersInTheDeck,
@@ -74,7 +74,7 @@ class MulliganUtils(
         // we didn't have both of them so now we need to actually toss everything we didn't want...
         val toKeepInHand = hand.keys.associate { it to min(hand[it]!!, 1) }
         val cardsKeptInHand = toKeepInHand.values.sum()
-        val cardsToAdjust = 7 - cardsKeptInHand
+        val cardsToAdjust = DefaultHandSize - cardsKeptInHand
 
         // we compute the actual number of relevant cards which are in the deck now
         val remainingInTheDeck = listOfCardsInTheDeck.keys.associate {
@@ -138,16 +138,15 @@ class MulliganUtils(
         // but in this case, we need to check for which key we could recover if possible
         val zeroed = combinedHand.values.filter { it == 0L }
         val unrecoverable = zeroed.size > 1
+        // we are getting the key which can be recovered and used with the lists of card in the deck
+        val recoverableKey = combinedHand.keys.find { combinedHand[it]!! == 0L }
 
-        if (unrecoverable || zeroed.isEmpty()) {
-            // we have more than 1 keys where the cound is 0
+        if (unrecoverable || zeroed.isEmpty() || null == recoverableKey) {
+            // we have more than 1 keys where the count is 0, we can't recover to have all >= 1
             return
         }
 
-        val recoverableKey = combinedHand.keys.find { combinedHand[it]!! == 0L }
-            ?: return // shouldn't happen given above
-
-        val remaining = deckSize - 7 - cardsToAdjust
+        val remaining = deckSize - DefaultHandSize - cardsToAdjust
         result.onDraw += adjustedProb * listOfCardsInTheDeck[recoverableKey]!! / remaining
     }
 
@@ -158,7 +157,7 @@ class MulliganUtils(
         key: String,
         keys: List<String>,
         handSize: Long = 0,
-        maximumCardsAdjusted: Long = 7L
+        maximumCardsAdjusted: Long = DefaultHandSize
     ) {
         // second case, we are going down more...
         val checkUpperHand = min(remainingCardsInTheDeck[key]!!, maximumCardsAdjusted) + 1

@@ -14,7 +14,6 @@ import io.ktor.http.isSuccess
 import io.ktor.websocket.Frame
 import io.ktor.websocket.readText
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -69,6 +68,7 @@ class BackendSocket(
     // todo : reconnection
     init {
         context.launch {
+            @Suppress("TooGenericExceptionCaught", "SwallowedException")
             try {
                 client.webSocket("$backend/socket") {
                     connected = true
@@ -107,6 +107,7 @@ class BackendSocket(
     fun <T> emit(obj: T, serializer: SerializationStrategy<T>) =
         emit(json.encodeToString(serializer, obj))
 
+    @Suppress("SwallowedException", "TooGenericExceptionCaught")
     suspend fun <T> waitForSocket(
         id: Long,
         seconds: Duration,

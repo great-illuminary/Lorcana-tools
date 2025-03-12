@@ -1,5 +1,5 @@
 package eu.codlab.blipya.config
 
 object SharedConfig {
-    val googleAuthServerId = ""
+    const val googleAuthServerId = ""
 }

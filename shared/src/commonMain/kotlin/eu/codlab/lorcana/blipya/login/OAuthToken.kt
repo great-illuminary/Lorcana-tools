@@ -1,6 +1,7 @@
 package eu.codlab.lorcana.blipya.login
 
 import io.ktor.util.decodeBase64String
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -20,7 +21,9 @@ class OAuthToken(val originalToken: String) {
 data class FirebaseToken(
     val iss: String,
     val name: String = "",
-    val user_id: String = "",
+    @SerialName("user_id")
+    val userId: String = "",
     val email: String = "",
-    val sign_in_provider: String = ""
+    @SerialName("sign_in_provider")
+    val signInProvider: String = ""
 )

@@ -33,8 +33,8 @@ import eu.codlab.blipya.res.decks_title
 import eu.codlab.compose.widgets.StatusBarAndNavigation
 import eu.codlab.lorcana.blipya.deck.DeckConfiguration
 import eu.codlab.lorcana.blipya.deck.PromptForNewScenarioOrMulligan
-import eu.codlab.lorcana.blipya.deck.scenario.edit.EditScenario
 import eu.codlab.lorcana.blipya.deck.mulligan.edit.EditMulligan
+import eu.codlab.lorcana.blipya.deck.scenario.edit.EditScenario
 import eu.codlab.lorcana.blipya.decks.DecksScreen
 import eu.codlab.lorcana.blipya.decks.PromptForNewDeck
 import eu.codlab.lorcana.blipya.init.InitializeScreen
@@ -300,7 +300,6 @@ fun AppContent() {
                                 }
                             }
                         ) {
-                            // Surface {
                             Column(modifier = Modifier.weight(1f).defaultBackground()) {
                                 NavHost(
                                     modifier = Modifier.weight(1f).defaultBackground(),
@@ -353,7 +352,7 @@ fun AppContent() {
                                             deck.mulligans.firstOrNull { it.id == mulliganId }
                                                 ?: return@scene
 
-                                        println("SHOW SCENE /deck/${deckId}/mulligan/${mulliganId}")
+                                        println("SHOW SCENE /deck/$deckId/mulligan/$mulliganId")
 
                                         Column(
                                             modifier = Modifier.fillMaxSize()
@@ -435,7 +434,6 @@ fun AppContent() {
 
                                 BottomSpacer()
                             }
-                            //}
                         }
                     }
                 }

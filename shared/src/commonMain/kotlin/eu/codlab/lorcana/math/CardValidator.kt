@@ -1,6 +1,7 @@
 package eu.codlab.lorcana.math
 
 import eu.codlab.lorcana.blipya.model.DeckModel
+import eu.codlab.lorcana.math.LorcanaInfo.DefaultHandSize
 
 class CardValidator {
     fun validate(deck: DeckModel, card: ExpectedCard) =
@@ -23,6 +24,8 @@ class CardValidator {
         minValid = min in 1..<amount && min <= deck.hand,
         maxValid = max in min..amount && max <= deck.size,
     )
+
+    fun validateMulligan(amount: Long) = amount <= DefaultHandSize
 }
 
 data class CardValidation(

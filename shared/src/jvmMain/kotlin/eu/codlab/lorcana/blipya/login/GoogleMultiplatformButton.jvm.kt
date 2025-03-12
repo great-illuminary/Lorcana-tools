@@ -24,21 +24,3 @@ actual fun GoogleMultiplatformButton(
         model.sendRequestForUrlToOpen(app, uriHandler, OAuthProvider.Google)
     }
 }
-
-/*@Composable
-actual fun GoogleMultiplatformButton(
-    modifier: Modifier,
-    onGoogleAuthentIdToken: (Result<String>) -> Unit
-) {
-    val model = rememberViewModel { GoogleAuthenticationModel() }
-
-    GoogleButtonUiContainer(onGoogleSignInResult = {
-        model.setResult(it, onGoogleAuthentIdToken)
-    }) {
-        GoogleSignInButton(
-            modifier = Modifier.fillMaxWidth().height(25.dp),
-            fontSize = 15.sp
-        ) { this.onClick() }
-    }
-}
-*/

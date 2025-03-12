@@ -117,6 +117,7 @@ data class AppModel(
         // emitOnSocket("hello world")
     }
 
+    @Suppress("SwallowedException", "TooGenericExceptionCaught")
     private fun onReceiveMessage() = launch {
         async {
             backendSocket.incoming.collect {
@@ -126,13 +127,13 @@ data class AppModel(
                     val googleToken = json.decodeFromString(
                         SocketMessage.serializer(
                             BackendGoogleCookie.serializer()
-                        ), it.readText()
+                        ),
+                        it.readText()
                     ).message
 
                     saveTokenFromBackend(googleToken.token, googleToken.expiresIn)
-
                 } catch (err: Throwable) {
-
+                    // nothing for now
                 }
             }
         }
@@ -361,4 +362,3 @@ data class SocketMessage<T>(
     val id: Long,
     val message: T
 )
-

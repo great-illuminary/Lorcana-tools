@@ -34,7 +34,7 @@ import eu.codlab.lorcana.raw.VariantClassification
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
-val ratio = 734.0f / 1024.0f
+const val Ratio = 734.0f / 1024.0f
 
 @Composable
 fun ShowCard(
@@ -69,7 +69,7 @@ private fun ShowCardInternal(
     model: ShowCardModel,
     variant: VariantClassification,
 ) {
-    val cardModifier = modifier.aspectRatio(ratio)
+    val cardModifier = modifier.aspectRatio(Ratio)
 
     val state by model.states.collectAsState()
     val url = "https://api-lorcana.com/public/images/" +

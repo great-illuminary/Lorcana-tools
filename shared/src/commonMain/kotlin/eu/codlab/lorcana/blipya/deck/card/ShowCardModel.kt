@@ -3,6 +3,7 @@ package eu.codlab.lorcana.blipya.deck.card
 import eu.codlab.lorcana.blipya.deck.scenario.edit.safeLaunch
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
+import eu.codlab.lorcana.math.LorcanaInfo.DefaultHandSize
 import eu.codlab.lorcana.math.tools.calculate
 import eu.codlab.viewmodel.StateHandler
 import eu.codlab.viewmodel.StateViewModel
@@ -56,14 +57,14 @@ class ShowCardModelImpl(
                 val cardNumber = states.value.cardNumber
                 val others = deck.size - cardNumber
 
-                if (cardNumber > 7) {
+                if (cardNumber > DefaultHandSize) {
                     triggerProbability(0.0)
                     return@collect
                 }
 
                 val calculation = calculate(
                     deck.size,
-                    7,
+                    DefaultHandSize,
                     others,
                     listOf(ExpectedCard("", "", cardNumber, 1, cardNumber))
                 )

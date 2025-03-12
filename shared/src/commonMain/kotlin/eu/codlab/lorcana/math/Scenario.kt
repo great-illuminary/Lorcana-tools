@@ -75,7 +75,7 @@ class Scenario internal constructor(
         val index = mutableCards.indexOfFirst { it.id == id }
         if (index < 0) return
 
-        //TODO -> remove the collected instance for this card will be better
+        // TODO -> remove the collected instance for this card will be better
         mutableCards.removeAt(index)
 
         _probability.update { calculate() }

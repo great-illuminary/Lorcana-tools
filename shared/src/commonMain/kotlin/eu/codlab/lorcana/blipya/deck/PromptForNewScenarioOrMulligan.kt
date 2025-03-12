@@ -2,7 +2,6 @@ package eu.codlab.lorcana.blipya.deck
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.cancel
 import eu.codlab.blipya.res.new_scenario_option_draws
@@ -10,7 +9,6 @@ import eu.codlab.blipya.res.new_scenario_option_mulligan
 import eu.codlab.blipya.res.new_scenario_text
 import eu.codlab.blipya.res.new_scenario_title
 import eu.codlab.lorcana.blipya.home.AppModel
-import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
 import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.PopupConfirm
@@ -58,8 +56,6 @@ fun PromptForNewScenarioOrMulligan(
 @Composable
 private fun PromptForNewScenarioOrMulliganPreview() {
     PreviewDarkLightColumn { _, _ ->
-        PromptForNewScenarioOrMulligan(AppModel.fake(), true) {
-            /* nothing */
-        }
+        PromptForNewScenarioOrMulligan(AppModel.fake(), true) { /* nothing */ }
     }
 }

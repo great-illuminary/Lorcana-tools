@@ -14,7 +14,7 @@ object Choose {
         return (startAt..x).map { it }
     }
 
-    @Suppress("ReturnCount")
+    @Suppress("MemberNameEqualsClassName", "ReturnCount")
     fun choose(k: Long, n: Long): Long {
         val kPos = if (k < 0) 0 else k
         val nPos = if (n < 0) 0 else n

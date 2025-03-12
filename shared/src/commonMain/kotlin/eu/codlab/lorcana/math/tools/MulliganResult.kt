@@ -10,7 +10,9 @@ data class WritableMulliganResult(
     var onDraw: Double
 ) {
     fun toMulliganResult() = MulliganResult(
-        onPlay = onPlay * 100,
-        onDraw = onDraw * 100
+        onPlay = onPlay * PercentMultiplier,
+        onDraw = onDraw * PercentMultiplier
     )
 }
+
+private const val PercentMultiplier = 100

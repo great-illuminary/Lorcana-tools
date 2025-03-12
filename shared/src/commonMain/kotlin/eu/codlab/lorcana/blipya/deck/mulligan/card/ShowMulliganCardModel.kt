@@ -22,14 +22,14 @@ class ShowMulliganCardModel(
     ShowMulliganCardModelState(
         deck,
         card = card,
-        amountValid = true // todo implement check
+        amountValid = validator.validateMulligan(card.amount)
     )
 ) {
     fun update(amount: Long) = launch {
         updateState {
-            //val validation = validator.validate(deck, amount, min, max)
-
-            copy(amountValid = true) //validation.amountValid)
+            copy(
+                amountValid = validator.validateMulligan(amount)
+            )
         }
     }
 }
