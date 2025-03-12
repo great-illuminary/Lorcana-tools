@@ -69,24 +69,28 @@ class BackendSocket(
     // todo : reconnection
     init {
         context.launch {
-            client.webSocket("$backend/socket") {
-                connected = true
+            try {
+                client.webSocket("$backend/socket") {
+                    connected = true
 
-                sendFlow = { string ->
-                    try {
-                        send(Frame.Text(string))
-                    } catch (err: Throwable) {
-                        err.printStackTrace()
+                    sendFlow = { string ->
+                        try {
+                            send(Frame.Text(string))
+                        } catch (err: Throwable) {
+                            err.printStackTrace()
+                        }
+                    }
+
+                    awaiting.forEach { emit(it) }
+
+                    for (message in incoming) {
+                        if (message is Frame.Text) {
+                            incomingFlow.emit(message)
+                        }
                     }
                 }
-
-                awaiting.forEach { emit(it) }
-
-                for (message in incoming) {
-                    if (message is Frame.Text) {
-                        incomingFlow.emit(message)
-                    }
-                }
+            } catch (err: Throwable) {
+                println("managed exception in the app ! TODO reconnect")
             }
         }
     }

@@ -40,6 +40,9 @@ class MulliganUtils(
 
     private fun loopResult(writableResult: WritableMulliganResult, keys: List<String>) {
         val wholeListOfCombination = mutableListOf<Map<String, Long>>()
+
+        if(keys.isEmpty()) return
+
         prepareMap(listOfCardsInTheDeck, wholeListOfCombination, mutableMapOf(), keys.first(), keys)
 
         // we now have our list of possible scenarios which are the expected starting hands

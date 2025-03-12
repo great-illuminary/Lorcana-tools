@@ -1,6 +1,6 @@
-package eu.codlab.lorcana.blipya.deck.scenario
+package eu.codlab.lorcana.blipya.deck.scenario.show
 
-import eu.codlab.lorcana.blipya.deck.edit.safeLaunch
+import eu.codlab.lorcana.blipya.deck.scenario.edit.safeLaunch
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard

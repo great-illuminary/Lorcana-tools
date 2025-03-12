@@ -36,7 +36,8 @@ import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.card.ShowCard
 import eu.codlab.lorcana.blipya.deck.dreamborn.ShowDreambornInformation
-import eu.codlab.lorcana.blipya.deck.scenario.ShowScenario
+import eu.codlab.lorcana.blipya.deck.mulligan.show.ShowMulligan
+import eu.codlab.lorcana.blipya.deck.scenario.show.ShowScenario
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.theme.AppSizes
@@ -142,6 +143,26 @@ fun DeckConfiguration(
                 Modifier.fillMaxSize(),
                 model
             )
+        }
+
+        item(span = { GridItemSpan(columns) }) {
+            // nothing
+        }
+
+        items(state.mulligans.size) { index ->
+            val holder = state.mulligans[index]
+
+            DefaultCard(
+                modifier = Modifier.fillMaxWidth(),
+                backgroundColor = color
+            ) {
+                Column(
+                    Modifier.padding(AppSizes.paddings.default).background(color),
+                    verticalArrangement = Arrangement.spacedBy(AppSizes.paddings.default)
+                ) {
+                    ShowMulligan(Modifier.fillMaxWidth(), app, model, state.deck, holder)
+                }
+            }
         }
 
         item(span = { GridItemSpan(columns) }) {

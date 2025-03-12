@@ -1,4 +1,4 @@
-package eu.codlab.lorcana.blipya.deck.scenariocard
+package eu.codlab.lorcana.blipya.deck.scenario.card
 
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.math.CardValidator

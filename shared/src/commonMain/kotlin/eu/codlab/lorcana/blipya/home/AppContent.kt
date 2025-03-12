@@ -32,7 +32,9 @@ import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.decks_title
 import eu.codlab.compose.widgets.StatusBarAndNavigation
 import eu.codlab.lorcana.blipya.deck.DeckConfiguration
-import eu.codlab.lorcana.blipya.deck.edit.EditScenario
+import eu.codlab.lorcana.blipya.deck.PromptForNewScenarioOrMulligan
+import eu.codlab.lorcana.blipya.deck.scenario.edit.EditScenario
+import eu.codlab.lorcana.blipya.deck.mulligan.edit.EditMulligan
 import eu.codlab.lorcana.blipya.decks.DecksScreen
 import eu.codlab.lorcana.blipya.decks.PromptForNewDeck
 import eu.codlab.lorcana.blipya.init.InitializeScreen
@@ -142,6 +144,25 @@ fun AppContent() {
                 )
             }
 
+            "/deck/{uuid}/mulligan/{mulligan}" -> {
+                println("LOADING DECK TITLE")
+                val deckId = entry.pathMap["uuid"] ?: return@LaunchedEffect
+                val mulliganId = entry.pathMap["mulligan"] ?: return@LaunchedEffect
+                val deck = model.states.value.decks
+                    .firstOrNull { it.id == deckId }
+                    ?: return@LaunchedEffect
+
+                val scenario = deck.mulligans.firstOrNull { it.id == mulliganId }
+                    ?: return@LaunchedEffect
+
+                model.setAppBarState(
+                    AppBarState(
+                        title = scenario.name,
+                        actions
+                    )
+                )
+            }
+
             "/deck/{uuid}/scenario/{scenario}" -> {
                 println("LOADING DECK TITLE")
                 val deckId = entry.pathMap["uuid"] ?: return@LaunchedEffect
@@ -180,7 +201,8 @@ fun AppContent() {
                         icon = Icons.Filled.Add,
                         contentDescription = "Add a new scenario"
                     ) {
-                        model.addScenario(deck)
+                        println("showAddScenario(true)")
+                        model.showAddScenario(true)
                     }
                 )
             }
@@ -192,6 +214,12 @@ fun AppContent() {
         showPrompt = currentState.showPromptNewDeck,
         onDismiss = { model.showAddDeck(false) }
     ) { model.show(it) }
+
+    println("AppContent redraw with ${currentState.showPromptNewScenario}")
+    PromptForNewScenarioOrMulligan(
+        model,
+        showPrompt = currentState.showPromptNewScenario
+    ) { model.showAddScenario(false) }
 
     CompositionLocalProvider(
         LocalMenuState provides scaffoldState
@@ -303,6 +331,41 @@ fun AppContent() {
                                                 Modifier.fillMaxSize(),
                                                 appModel
                                             ) { appModel.show(it) }
+                                        }
+                                    }
+
+                                    scene(
+                                        route = "/deck/{uuid}/mulligan/{mulligan}",
+                                        navTransition = NavTransition(),
+                                        swipeProperties = SwipeProperties(
+                                            // spaceToSwipe = 50.dp
+                                        )
+                                    ) { backStackEntry ->
+                                        val appModel: AppModel = LocalApp.current
+                                        val deckId =
+                                            backStackEntry.pathMap["uuid"] ?: return@scene
+                                        val mulliganId =
+                                            backStackEntry.pathMap["mulligan"] ?: return@scene
+                                        val deck = appModel.states.value.decks
+                                            .firstOrNull { it.id == deckId }
+                                            ?: return@scene
+                                        val mulligan =
+                                            deck.mulligans.firstOrNull { it.id == mulliganId }
+                                                ?: return@scene
+
+                                        println("SHOW SCENE /deck/${deckId}/mulligan/${mulliganId}")
+
+                                        Column(
+                                            modifier = Modifier.fillMaxSize()
+                                                .defaultBackground()
+                                                .verticalScroll(state = rememberScrollState())
+                                        ) {
+                                            EditMulligan(
+                                                modifier = Modifier.fillMaxSize(),
+                                                appModel,
+                                                deck = deck,
+                                                mulligan = mulligan
+                                            )
                                         }
                                     }
 

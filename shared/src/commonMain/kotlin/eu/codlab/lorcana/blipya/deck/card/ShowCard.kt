@@ -19,25 +19,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.compose.widgets.TextNormal
-import eu.codlab.lorcana.blipya.deck.scenario.round
+import eu.codlab.lorcana.blipya.deck.scenario.show.round
 import eu.codlab.lorcana.blipya.dreamborn.CardNumber
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
 import eu.codlab.lorcana.blipya.home.LocalApp
 import eu.codlab.lorcana.blipya.home.LocalIsPreview
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
-import eu.codlab.lorcana.cards.CardTranslation
-import eu.codlab.lorcana.cards.CardTranslations
-import eu.codlab.lorcana.cards.CardType
-import eu.codlab.lorcana.cards.InkColor
 import eu.codlab.lorcana.cards.VariantRarity
-import eu.codlab.lorcana.franchises.Franchise
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.raw.Ravensburger
 import eu.codlab.lorcana.raw.SetDescription
 import eu.codlab.lorcana.raw.VariantClassification
-import eu.codlab.lorcana.raw.VirtualCard
-import eu.codlab.tcgmapper.TranslationHolder
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
@@ -80,7 +73,7 @@ private fun ShowCardInternal(
 
     val state by model.states.collectAsState()
     val url = "https://api-lorcana.com/public/images/" +
-                "${variant.set.name.lowercase()}/fr/${variant.id}.webp.jpeg"
+            "${variant.set.name.lowercase()}/fr/${variant.id}.webp.jpeg"
 
     Box(cardModifier) {
         ShowCardFromUrl(cardModifier, url)
@@ -145,25 +138,6 @@ fun ShowCardPreview() {
                 ""
             ),
             VariantRarity.D23
-        )
-
-        val card = VirtualCard(
-            color = InkColor.Amber,
-            colors = listOf(InkColor.Amber),
-            type = CardType.Item,
-            languages = CardTranslations(
-                CardTranslation()
-            ),
-            franchise = Franchise(
-                "",
-                TranslationHolder(
-                    "",
-                    "",
-                    "",
-                    "",
-                    ""
-                )
-            )
         )
 
         val model = ShowCardModelImpl.fake()

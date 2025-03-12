@@ -10,6 +10,7 @@ import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.save.Dreamborn
 import eu.codlab.lorcana.blipya.utils.asLongOrNull
 import eu.codlab.lorcana.math.Deck
+import eu.codlab.lorcana.math.MulliganScenario
 import eu.codlab.lorcana.math.Scenario
 import eu.codlab.lorcana.raw.VariantClassification
 import eu.codlab.viewmodel.StateViewModel
@@ -26,6 +27,7 @@ data class DeckConfigurationModelState(
     var deckSize: TextFieldValue,
     var handSize: TextFieldValue,
     val scenarii: List<Scenario>,
+    val mulligans: List<MulliganScenario>,
     val updatedAt: DateTime = DateTime.now(),
     val loadingDreamborn: Boolean = false,
     val deckContent: List<CardNumber> = emptyList()
@@ -40,9 +42,10 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             deckSize = TextFieldValue("${deck.size}"),
             handSize = TextFieldValue("${deck.hand}"),
             scenarii = deck.scenarios,
+            mulligans = deck.mulligans,
             deckContent = deck.dreamborn?.data?.list ?: emptyList()
-    )
-) {
+        )
+    ) {
     private val client = createClient(
         Configuration(
             enableLogs = true,
@@ -116,16 +119,32 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         }
     }
 
-    fun add(id: String, added: (Scenario) -> Unit) = launch {
-        val scenario = states.value.deck.deck.appendNewScenario(id, "")
+    fun add(id: String, added: (DeckModel, Scenario) -> Unit) = launch {
+        val deck = states.value.deck
+        val scenario = deck.deck.appendNewScenario(id, "")
 
         updateCards()
 
-        added(scenario)
+        added(deck, scenario)
     }
 
     fun delete(scenario: Scenario) {
         states.value.deck.deck.removeScenario(scenario)
+
+        updateCards()
+    }
+
+    fun addMulligan(id: String, added: (DeckModel, MulliganScenario) -> Unit) = launch {
+        val deck = states.value.deck
+        val mulligan = deck.deck.appendNewMulligan(id, "")
+
+        updateCards()
+
+        added(deck, mulligan)
+    }
+
+    fun delete(mulligan: MulliganScenario) {
+        states.value.deck.deck.removeMulligan(mulligan)
 
         updateCards()
     }
@@ -139,11 +158,13 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
 
     private fun updateCards() {
         val array = states.value.deck.scenarios.clone()
+        val mulligans = states.value.deck.mulligans.clone()
 
         updateState {
             copy(
                 updatedAt = DateTime.now(),
                 scenarii = array,
+                mulligans = mulligans
             )
         }
 

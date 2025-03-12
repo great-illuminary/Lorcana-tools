@@ -68,11 +68,8 @@ class Deck(
 
     fun addMulligan(mulligan: MulliganScenario) {
         if (_mulligans.value.contains(mulligan)) {
-            println("addMulligan :: already added, skipping")
             return
         }
-
-        println("addMulligan :: adding the scenario ${mulligan.id}")
 
         _mulligans.update { it + mulligan }
     }
@@ -89,11 +86,8 @@ class Deck(
 
     fun addScenario(scenario: Scenario) {
         if (_scenarios.value.contains(scenario)) {
-            println("addScenario :: already added, skipping")
             return
         }
-
-        println("addScenario :: adding the scenario ${scenario.id}")
 
         _scenarios.update { it + scenario }
     }

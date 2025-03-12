@@ -24,7 +24,7 @@ class TestMulligan {
 
         val result = mulliganUtils.calculate()
 
-        assertEquals(56.1, result.onPlay * 100, 0.1)
-        assertEquals(60.3, result.onDraw * 100, 0.1)
+        assertEquals(56.1, result.onPlay, 0.1)
+        assertEquals(60.3, result.onDraw, 0.1)
     }
 }

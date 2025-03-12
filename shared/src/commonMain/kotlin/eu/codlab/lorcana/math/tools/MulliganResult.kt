@@ -10,7 +10,7 @@ data class WritableMulliganResult(
     var onDraw: Double
 ) {
     fun toMulliganResult() = MulliganResult(
-        onPlay = onPlay,
-        onDraw = onDraw
+        onPlay = onPlay * 100,
+        onDraw = onDraw * 100
     )
 }

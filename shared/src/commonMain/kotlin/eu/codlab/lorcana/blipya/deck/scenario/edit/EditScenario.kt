@@ -1,4 +1,4 @@
-package eu.codlab.lorcana.blipya.deck.edit
+package eu.codlab.lorcana.blipya.deck.scenario.edit
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,8 @@ import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.scenario_name
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
-import eu.codlab.lorcana.blipya.deck.scenariocard.ShowScenarioCard
+import eu.codlab.lorcana.blipya.deck.edit.DisplayStatisticalResult
+import eu.codlab.lorcana.blipya.deck.scenario.card.ShowScenarioCard
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.theme.AppSizes

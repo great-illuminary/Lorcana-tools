@@ -5,6 +5,8 @@
     <string name="deck_configuration_deck_size">Deck Size</string>
     <string name="deck_configuration_hand_size">Hand Size</string>
 
+    <string name="deck_configuration_deck_name_text">Please indicate the deck name</string>
+
     <string name="card_show_card_name">Card Name</string>
     <string name="card_show_amount">Amount</string>
     <string name="card_show_min">Min</string>
@@ -17,9 +19,15 @@
     <string name="decks_no_decks">No decks for now</string>
     <string name="decks_cards">cards</string>
 
-    <string name="dreamborn_url_or_id">Dreamborn's URL or ID</string>
+    <string name="dreamborn_url_or_id_title">Dreamborn's Deck</string>
+    <string name="dreamborn_url_or_id_text">Please provide the Dreamborn's URL or ID</string>
 
     <string name="scenario_name">Scenario Name</string>
+
+    <string name="new_scenario_title">Create A New Scenario</string>
+    <string name="new_scenario_text">Please confirm which kind of scenario you want to add</string>
+    <string name="new_scenario_option_mulligan">Mulligan</string>
+    <string name="new_scenario_option_draws">Draw(s)</string>
 
     <string name="result">Result</string>
     <string name="invalid">Invalid</string>
@@ -29,4 +37,7 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="validate">Validate</string>
+
+    <string name="otp">OTP</string>
+    <string name="otd">OTD</string>
 </resources>

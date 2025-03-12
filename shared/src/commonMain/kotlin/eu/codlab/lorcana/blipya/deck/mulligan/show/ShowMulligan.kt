@@ -1,4 +1,4 @@
-package eu.codlab.lorcana.blipya.deck.scenario
+package eu.codlab.lorcana.blipya.deck.mulligan.show
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,18 +35,18 @@ import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.MenuItemOverflowMenu
 import eu.codlab.lorcana.blipya.widgets.PopupConfirm
-import eu.codlab.lorcana.math.Scenario
+import eu.codlab.lorcana.math.MulliganScenario
 import eu.codlab.viewmodel.rememberViewModel
 
 @Composable
-fun ShowScenario(
+fun ShowMulligan(
     modifier: Modifier,
     app: AppModel,
     parentModel: DeckConfigurationModel,
     deck: DeckModel,
-    scenario: Scenario
+    mulligan: MulliganScenario
 ) {
-    val model = rememberViewModel { ShowScenarioModel(deck, scenario) }
+    val model = rememberViewModel { ShowMulliganModel(deck, mulligan) }
     var promptDelete by remember { mutableStateOf(false) }
     val state by model.states.collectAsState()
 
@@ -66,7 +65,7 @@ fun ShowScenario(
             onDismiss = { promptDelete = false },
             onConfirm = {
                 promptDelete = false
-                parentModel.delete(scenario)
+                parentModel.delete(mulligan)
                 navigator?.pop()
             }
         )
@@ -89,7 +88,7 @@ fun ShowScenario(
                     Triple(
                         Res.string.edit.localized(),
                         Icons.Default.Edit
-                    ) { app.show(state.deck, state.scenario) },
+                    ) { app.show(state.deck, state.mulligan) },
                     Triple(
                         "${Res.string.delete.localized()} ${state.name}",
                         Icons.Default.Delete

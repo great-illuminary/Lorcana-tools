@@ -18,6 +18,7 @@ import eu.codlab.lorcana.blipya.utils.RootPath
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
 import eu.codlab.lorcana.math.Deck
+import eu.codlab.lorcana.math.MulliganScenario
 import eu.codlab.lorcana.math.Scenario
 import eu.codlab.lorcana.raw.VariantClassification
 import eu.codlab.lorcana.raw.VirtualCard
@@ -45,6 +46,7 @@ data class AppModelState(
     val floatingActionButtonState: FloatingActionButtonState? = null,
     val decks: List<DeckModel> = listOf(),
     val showPromptNewDeck: Boolean = false,
+    val showPromptNewScenario: Boolean = false,
     val lorcana: LorcanaLoaded? = null,
     val authentication: SavedAuthentication? = null,
     val requestForGoogleAuthenticationState: String? = null
@@ -100,7 +102,7 @@ data class AppModel(
 
         val validAuthent = authentication?.let {
             accountClient.checkAccount(it.token)
-        } ?: false
+        } == true
 
         updateState {
             copy(
@@ -152,6 +154,10 @@ data class AppModel(
         updateState { copy(showPromptNewDeck = showPromptNewDeck) }
     }
 
+    fun showAddScenario(showPromptNewScenario: Boolean) = launch {
+        updateState { copy(showPromptNewScenario = showPromptNewScenario) }
+    }
+
     fun addDeck(deckName: String, onDeck: (DeckModel) -> Unit) = launch {
         val newDeck = DeckModel(
             Deck(
@@ -179,6 +185,30 @@ data class AppModel(
         val route = "/deck/${deck.id}"
 
         popBackStack()
+
+        navigator?.navigate(
+            route = route,
+            options = NavOptions(
+                launchSingleTop = false,
+                popUpTo = PopUpTo.None
+            )
+        )
+
+        launch {
+            scaffoldState?.drawerState?.close()
+        }
+
+        updateState {
+            copy(
+                currentRoute = route,
+                appBarState = AppBarState(),
+                floatingActionButtonState = null
+            )
+        }
+    }
+
+    fun show(deck: DeckModel, mulligan: MulliganScenario) {
+        val route = "/deck/${deck.id}/mulligan/${mulligan.id}"
 
         navigator?.navigate(
             route = route,
@@ -237,9 +267,18 @@ data class AppModel(
         configurationLoader.save(decks.map { it.toDeckModel() })
     }
 
-    fun addScenario(deck: DeckModel) {
+    fun addScenario() {
         val id = UUID.randomUUID().toString()
-        activeDeck?.add(id) { show(deck, it) }
+        activeDeck?.add(id) { deck, scenario ->
+            show(deck, scenario)
+        }
+    }
+
+    fun addMulligan() {
+        val id = UUID.randomUUID().toString()
+        activeDeck?.addMulligan(id) { deck, mulligan ->
+            show(deck, mulligan)
+        }
     }
 
     fun setActiveDeck(model: DeckConfigurationModel) {

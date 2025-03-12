@@ -7,6 +7,7 @@ import eu.codlab.platform.currentPlatform
 
 data class FontSizes(
     val menu: MenuSize = MenuSize(),
+    val popup: PopupSize = PopupSize(),
     val actionBar: ActionBar = ActionBar(),
 )
 
@@ -14,6 +15,12 @@ data class MenuSize(
     val title: TextUnit = 14.sp,
     val item: TextUnit = 14.sp,
     val switch: TextUnit = 12.sp
+)
+
+data class PopupSize(
+    val title: TextUnit = 24.sp,
+    val text: TextUnit = 16.sp,
+    val button: TextUnit = 14.sp
 )
 
 data class ActionBar(
@@ -27,6 +34,11 @@ private val jvmFontSizes = FontSizes(
         title = 12.sp,
         item = 12.sp,
         switch = 10.sp,
+    ),
+    popup = PopupSize(
+        title = 20.sp,
+        text = 16.sp,
+        button = 12.sp
     ),
     actionBar = ActionBar(
         title = 18.sp

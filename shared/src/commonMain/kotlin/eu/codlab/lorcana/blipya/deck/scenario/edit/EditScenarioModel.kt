@@ -1,7 +1,7 @@
-package eu.codlab.lorcana.blipya.deck.edit
+package eu.codlab.lorcana.blipya.deck.scenario.edit
 
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import eu.codlab.lorcana.blipya.deck.scenario.ShowScenarioModel
+import eu.codlab.lorcana.blipya.deck.scenario.show.ShowScenarioModel
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.math.Deck

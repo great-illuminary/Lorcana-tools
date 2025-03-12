@@ -7,9 +7,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.deck_configuration_deck_name
+import eu.codlab.blipya.res.deck_configuration_deck_name_text
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
+import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.PromptDialog
 
 @Composable
@@ -30,7 +34,8 @@ fun PromptForNewDeck(
     }
 
     PromptDialog(
-        title = "Deck Name",
+        title = Res.string.deck_configuration_deck_name.localized(),
+        text = Res.string.deck_configuration_deck_name_text.localized(),
         onDismiss = {
             println("dismiss")
             prompt = false
