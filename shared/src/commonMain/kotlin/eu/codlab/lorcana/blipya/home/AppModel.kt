@@ -9,6 +9,7 @@ import eu.codlab.lorcana.Lorcana
 import eu.codlab.lorcana.LorcanaLoaded
 import eu.codlab.lorcana.blipya.account.Account
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
+import eu.codlab.lorcana.blipya.login.IRequestForUrlToOpen
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.model.toDeck
 import eu.codlab.lorcana.blipya.save.ConfigurationLoader
@@ -56,7 +57,7 @@ data class AppModelState(
 data class AppModel(
     val appId: String,
     val appSecret: String
-) : StateViewModel<AppModelState>(AppModelState("/main")) {
+) : StateViewModel<AppModelState>(AppModelState("/main")), IRequestForUrlToOpen {
     var onBackPressed: AppBackPressProvider = AppBackPressProvider()
 
     private val accountClient = Account()
@@ -305,7 +306,7 @@ data class AppModel(
         updateState { copy(authentication = authentication) }
     }
 
-    suspend fun requestForUrlToOpen(provider: String): String? {
+    override suspend fun requestForUrlToOpen(provider: String): String? {
         val id = DateTime.now().unixMillisLong
         val state = UUID.randomUUID().toString()
         val obj = SocketMessage(id, RequestForUrlToOpen(provider, state))

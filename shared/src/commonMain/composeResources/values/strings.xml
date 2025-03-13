@@ -40,4 +40,6 @@
 
     <string name="otp">OTP</string>
     <string name="otd">OTD</string>
+
+    <string name="you_are_connected">You are connected</string>
 </resources>

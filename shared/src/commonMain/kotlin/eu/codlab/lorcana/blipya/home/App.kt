@@ -10,8 +10,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import eu.codlab.lorcana.blipya.local.LocalConfirmPopup
+import eu.codlab.lorcana.blipya.local.LocalFontSizes
+import eu.codlab.lorcana.blipya.login.RequestForUrlToOpenProvider
 import eu.codlab.lorcana.blipya.theme.ApplicationTheme
-import eu.codlab.lorcana.blipya.theme.FontSizes
 import eu.codlab.lorcana.blipya.theme.createFontSizes
 import eu.codlab.lorcana.blipya.utils.LocalFrame
 import eu.codlab.lorcana.blipya.utils.LocalWindow
@@ -26,8 +28,6 @@ var staticModel: AppModel? = null
 
 val LocalApp = compositionLocalOf<AppModel> { error("No StaticModel, check LocalApp") }
 val LocalIsPreview = compositionLocalOf { false }
-val LocalConfirmPopup = compositionLocalOf<PopupLocalModel> { error("No LocalPopup") }
-val LocalFontSizes = compositionLocalOf<FontSizes> { error("No LocalFontSizes") }
 
 @Composable
 fun App(
@@ -108,6 +108,8 @@ private fun InternalApp(
         LocalApp provides model,
         LocalFontSizes provides fontSizes
     ) {
-        ApplicationTheme(isDarkTheme, content)
+        RequestForUrlToOpenProvider(model) {
+            ApplicationTheme(isDarkTheme, content)
+        }
     }
 }

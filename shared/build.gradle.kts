@@ -95,7 +95,11 @@ kotlin {
 
                 api(libs.hotpreview)
 
+                api(project(":shared-design"))
+                api(project(":shared-utils"))
                 api(project(":shared-buildkonfig"))
+                api(project(":shared-math"))
+                api(project(":shared-dispatchers"))
             }
         }
         commonTest {

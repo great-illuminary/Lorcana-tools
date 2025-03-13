@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.spacers.TopSpacer
 import eu.codlab.lorcana.blipya.home.AppModel
-import eu.codlab.lorcana.blipya.home.LocalFontSizes
+import eu.codlab.lorcana.blipya.local.LocalFontSizes
 import eu.codlab.lorcana.blipya.theme.AppColor
 
 @Composable

@@ -1,9 +1,9 @@
 package eu.codlab.lorcana.blipya.account
 
+import eu.codlab.dispatchers.DefaultDispatcher
 import eu.codlab.http.Configuration
 import eu.codlab.http.createClient
 import eu.codlab.lorcana.blipya.home.SocketMessage
-import eu.codlab.lorcana.contexts.DefaultDispatcher
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.websocket.webSocket

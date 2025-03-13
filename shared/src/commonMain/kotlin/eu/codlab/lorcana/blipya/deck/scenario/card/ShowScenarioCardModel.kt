@@ -7,7 +7,7 @@ import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
 
 data class ShowScenarioCardModelState(
-    val deck: DeckModel,
+    val deckModel: DeckModel,
     val card: ExpectedCard,
     val amountValid: Boolean = true,
     val minValid: Boolean = true,
@@ -18,20 +18,20 @@ private val validator = CardValidator()
 
 @Suppress("TooManyFunctions")
 class ShowScenarioCardModel(
-    deck: DeckModel,
+    deckModel: DeckModel,
     card: ExpectedCard,
 ) : StateViewModel<ShowScenarioCardModelState>(
     ShowScenarioCardModelState(
-        deck,
+        deckModel = deckModel,
         card = card,
-        amountValid = validator.validate(deck, card).amountValid,
-        minValid = validator.validate(deck, card).minValid,
-        maxValid = validator.validate(deck, card).maxValid,
+        amountValid = validator.validate(deckModel.deck, card).amountValid,
+        minValid = validator.validate(deckModel.deck, card).minValid,
+        maxValid = validator.validate(deckModel.deck, card).maxValid,
     )
 ) {
     fun update(amount: Long, min: Long, max: Long) = launch {
         updateState {
-            val validation = validator.validate(deck, amount, min, max)
+            val validation = validator.validate(deckModel.deck, amount, min, max)
 
             copy(
                 amountValid = validation.amountValid,

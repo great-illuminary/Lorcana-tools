@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import eu.codlab.lorcana.blipya.local.LocalFontSizes
 import eu.codlab.lorcana.blipya.theme.ApplicationTheme
 import eu.codlab.lorcana.blipya.theme.createFontSizes
 import eu.codlab.lorcana.blipya.utils.LocalFrame

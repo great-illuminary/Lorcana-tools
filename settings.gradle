@@ -23,7 +23,11 @@ dependencyResolutionManagement {
     }
 }
 
+include(":shared-dispatchers")
+include(":shared-math")
 include(":shared-buildkonfig")
+include(":shared-utils")
+include(":shared-design")
 include(":shared")
 include(":androidApp")
 include(":jsApp")

@@ -8,9 +8,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.you_are_connected
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.theme.AppSizes
+import eu.codlab.lorcana.blipya.utils.localized
 
 @Composable
 fun LoginScreen(
@@ -29,7 +32,7 @@ fun LoginScreen(
     ) {
         if (null != account) {
             TextNormal(
-                "Logged in with ${account.token}",
+                Res.string.you_are_connected.localized(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
