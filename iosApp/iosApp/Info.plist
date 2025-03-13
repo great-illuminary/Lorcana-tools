@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLocalizations</key>
@@ -22,9 +22,9 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.0.1</string>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>3</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>
@@ -54,21 +54,19 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>CFBundleDisplayName</key>
-	<string>Blip's</string>
-    
-    <key>GIDServerClientID</key>
-    <string>393180423504-5tmv179gndj3441fdjjbhcpdda05nl2m.apps.googleusercontent.com</string>
-
-    <key>GIDClientID</key>
-    <string>393180423504-5tmv179gndj3441fdjjbhcpdda05nl2m.apps.googleusercontent.com</string>
-    <key>CFBundleURLTypes</key>
-    <array>
-      <dict>
-        <key>CFBundleURLSchemes</key>
-        <array>
-          <string>com.googleusercontent.apps.393180423504-5tmv179gndj3441fdjjbhcpdda05nl2m</string>
-        </array>
-      </dict>
-    </array>
+	<string>Blip&apos;s</string>
+	<key>GIDServerClientID</key>
+	<string>393180423504-5tmv179gndj3441fdjjbhcpdda05nl2m.apps.googleusercontent.com</string>
+	<key>GIDClientID</key>
+	<string>393180423504-5tmv179gndj3441fdjjbhcpdda05nl2m.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.393180423504-5tmv179gndj3441fdjjbhcpdda05nl2m</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

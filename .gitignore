@@ -36,6 +36,7 @@ GoogleService-Info.plist
 *.dSYM.zip
 .env
 Pods/
+**/UserInterfaceState.xcuserstate
 
 **/vendor/bundle
 bundles/
