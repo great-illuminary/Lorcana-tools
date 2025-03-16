@@ -23,13 +23,9 @@ dependencyResolutionManagement {
     }
 }
 
-include(":shared-dispatchers")
-include(":shared-math")
-include(":shared-buildkonfig")
-include(":shared-utils")
-include(":shared-design")
-include(":shared")
-include(":androidApp")
-include(":jsApp")
-include(":jvmApp")
+[
+        ["dispatchers", "math", "buildkonfig", "utils", "design", "tournament"].collect { "shared-$it" },
+        ["shared", "androidApp", "jsApp", "jvmApp"]
+].flatten().forEach { include(":$it") }
+
 includeBuild "gradle/extended/${ext.GRADLE_EXTENDED_VERSION_USED}/kt-plugins"
