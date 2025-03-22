@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.blipya.home
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -18,7 +19,7 @@ fun HotPreviewApp(
     modifier: Modifier = Modifier,
     windowType: WindowType = WindowType.TABLET,
     frameType: WindowType = WindowType.TABLET,
-    isDarkTheme: Boolean,
+    isDarkTheme: Boolean = isSystemInDarkTheme(),
     isPreview: Boolean = false,
     content: @Composable () -> Unit
 ) {

@@ -38,6 +38,7 @@ fun createLoginSizes(platform: Platform = currentPlatform) = when (platform) {
 object AppSizes {
     val divider = 1.dp
     val paddings = Paddings()
+    val corners = Corners()
     val login = createLoginSizes()
     val overflowMenu: OverflowMenuSizes = OverflowMenuSizes()
 }
@@ -46,4 +47,9 @@ class Paddings {
     val card = 12.dp
     val default = 16.dp
     val reduced = 8.dp
+    val reducedHalf = 4.dp
+}
+
+class Corners {
+    val lorcanaCards = 8.dp
 }

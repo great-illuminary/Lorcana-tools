@@ -32,7 +32,7 @@ kmp-auth = "2.3.0-beta01" #2.2.1
 
 kamel-image = "1.0.3"
 
-hotpreview = "0.1.4"
+hotpreview = "0.1.5"
 
 [libraries]
 

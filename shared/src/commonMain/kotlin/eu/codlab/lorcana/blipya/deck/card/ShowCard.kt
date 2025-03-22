@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -15,8 +16,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.scenario.show.round
@@ -24,6 +25,7 @@ import eu.codlab.lorcana.blipya.dreamborn.CardNumber
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
 import eu.codlab.lorcana.blipya.home.LocalApp
 import eu.codlab.lorcana.blipya.home.LocalIsPreview
+import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
 import eu.codlab.lorcana.cards.VariantRarity
@@ -83,11 +85,11 @@ private fun ShowCardInternal(
             Alignment.TopStart to "x${state.cardNumber}"
         ).map { (align, text) ->
             DefaultCard(
-                modifier = Modifier.align(align),
+                modifier = Modifier.align(align).padding(AppSizes.paddings.reducedHalf),
                 backgroundColor = defaultCardBackground()
             ) {
                 TextNormal(
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(AppSizes.paddings.reduced),
                     text = text
                 )
             }
@@ -100,23 +102,27 @@ private fun ShowCardFromUrl(
     modifier: Modifier,
     url: String
 ) {
-    if (LocalIsPreview.current) {
-        Column(modifier = modifier.background(Color.Blue)) { }
-        return
-    }
-
-    KamelImage(
-        modifier = modifier,
-        resource = asyncPainterResource(url),
-        contentDescription = "",
-        onLoading = { _ ->
-            // nothing
-        },
-        onFailure = { exception ->
-            exception.printStackTrace()
-            println("error ${exception.message}")
+    Column(
+        modifier = modifier.clip(shape = RoundedCornerShape(AppSizes.corners.lorcanaCards))
+    ) {
+        if (LocalIsPreview.current) {
+            Column(modifier = modifier.background(Color.Blue)) { }
+            return
         }
-    )
+
+        KamelImage(
+            modifier = modifier,
+            resource = asyncPainterResource(url),
+            contentDescription = "",
+            onLoading = { _ ->
+                // nothing
+            },
+            onFailure = { exception ->
+                exception.printStackTrace()
+                println("error ${exception.message}")
+            }
+        )
+    }
 }
 
 @HotPreview(widthDp = 200, heightDp = 200, darkMode = true)
