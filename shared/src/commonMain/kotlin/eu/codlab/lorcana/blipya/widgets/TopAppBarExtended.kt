@@ -20,6 +20,8 @@ import eu.codlab.compose.widgets.spacers.TopSpacer
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
 import eu.codlab.lorcana.blipya.theme.AppColor
+import eu.codlab.lorcana.blipya.utils.localized
+import org.jetbrains.compose.resources.StringResource
 
 @Composable
 fun TopAppBarExtended(
@@ -92,10 +94,28 @@ fun TopAppBarExtended(
     }
 }
 
-data class AppBarState(
-    val title: String = "",
+sealed class AppBarState(
     val actions: List<MenuItem>? = null
-)
+) {
+    @Composable
+    abstract fun showTitle(): String
+
+    class Regular(
+        val title: String = "",
+        actions: List<MenuItem>? = null
+    ) : AppBarState(actions) {
+        @Composable
+        override fun showTitle() = title
+    }
+
+    class Localized(
+        val title: StringResource,
+        actions: List<MenuItem>? = null
+    ) : AppBarState(actions) {
+        @Composable
+        override fun showTitle() = title.localized()
+    }
+}
 
 data class FloatingActionButtonState(
     val icon: ImageVector,

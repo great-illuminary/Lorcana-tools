@@ -9,6 +9,7 @@ import eu.codlab.lorcana.Lorcana
 import eu.codlab.lorcana.LorcanaLoaded
 import eu.codlab.lorcana.blipya.account.Account
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
+import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 import eu.codlab.lorcana.blipya.login.IRequestForUrlToOpen
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.model.toDeck
@@ -19,8 +20,6 @@ import eu.codlab.lorcana.blipya.utils.RootPath
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
 import eu.codlab.lorcana.math.Deck
-import eu.codlab.lorcana.math.MulliganScenario
-import eu.codlab.lorcana.math.Scenario
 import eu.codlab.lorcana.raw.VariantClassification
 import eu.codlab.lorcana.raw.VirtualCard
 import eu.codlab.viewmodel.StateViewModel
@@ -32,9 +31,7 @@ import korlibs.time.DateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
-import moe.tlaster.precompose.navigation.PopUpTo
 import kotlin.time.Duration.Companion.seconds
 
 private const val Millis = 1000.0
@@ -43,7 +40,7 @@ data class AppModelState(
     var currentRoute: String,
     var initialized: Boolean = false,
     var loading: Boolean = false,
-    val appBarState: AppBarState = AppBarState(),
+    val appBarState: AppBarState = AppBarState.Regular(),
     val floatingActionButtonState: FloatingActionButtonState? = null,
     val decks: List<DeckModel> = listOf(),
     val showPromptNewDeck: Boolean = false,
@@ -183,17 +180,14 @@ data class AppModel(
         navigator?.popBackStack()
     }
 
-    fun show(deck: DeckModel) {
-        val route = "/deck/${deck.id}"
-
-        popBackStack()
+    fun show(navigateTo: NavigateTo) {
+        if (navigateTo.popBackStack) {
+            popBackStack()
+        }
 
         navigator?.navigate(
-            route = route,
-            options = NavOptions(
-                launchSingleTop = false,
-                popUpTo = PopUpTo.None
-            )
+            route = navigateTo.route,
+            options = navigateTo.options
         )
 
         launch {
@@ -202,56 +196,8 @@ data class AppModel(
 
         updateState {
             copy(
-                currentRoute = route,
-                appBarState = AppBarState(),
-                floatingActionButtonState = null
-            )
-        }
-    }
-
-    fun show(deck: DeckModel, mulligan: MulliganScenario) {
-        val route = "/deck/${deck.id}/mulligan/${mulligan.id}"
-
-        navigator?.navigate(
-            route = route,
-            options = NavOptions(
-                launchSingleTop = false,
-                popUpTo = PopUpTo.None
-            )
-        )
-
-        launch {
-            scaffoldState?.drawerState?.close()
-        }
-
-        updateState {
-            copy(
-                currentRoute = route,
-                appBarState = AppBarState(),
-                floatingActionButtonState = null
-            )
-        }
-    }
-
-    fun show(deck: DeckModel, scenario: Scenario) {
-        val route = "/deck/${deck.id}/scenario/${scenario.id}"
-
-        navigator?.navigate(
-            route = route,
-            options = NavOptions(
-                launchSingleTop = false,
-                popUpTo = PopUpTo.None
-            )
-        )
-
-        launch {
-            scaffoldState?.drawerState?.close()
-        }
-
-        updateState {
-            copy(
-                currentRoute = route,
-                appBarState = AppBarState(),
+                currentRoute = navigateTo.route,
+                appBarState = AppBarState.Regular(),
                 floatingActionButtonState = null
             )
         }
@@ -272,14 +218,14 @@ data class AppModel(
     fun addScenario() {
         val id = UUID.randomUUID().toString()
         activeDeck?.add(id) { deck, scenario ->
-            show(deck, scenario)
+            show(NavigateTo.DeckScenario(deck, scenario))
         }
     }
 
     fun addMulligan() {
         val id = UUID.randomUUID().toString()
         activeDeck?.addMulligan(id) { deck, mulligan ->
-            show(deck, mulligan)
+            show(NavigateTo.DeckMulligan(deck, mulligan))
         }
     }
 

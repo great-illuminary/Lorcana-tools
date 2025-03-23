@@ -1,7 +1,6 @@
 package eu.codlab.lorcana.blipya.deck.card
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -17,14 +16,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.scenario.show.round
 import eu.codlab.lorcana.blipya.dreamborn.CardNumber
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
 import eu.codlab.lorcana.blipya.home.LocalApp
-import eu.codlab.lorcana.blipya.home.LocalIsPreview
 import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
@@ -105,11 +102,6 @@ private fun ShowCardFromUrl(
     Column(
         modifier = modifier.clip(shape = RoundedCornerShape(AppSizes.corners.lorcanaCards))
     ) {
-        if (LocalIsPreview.current) {
-            Column(modifier = modifier.background(Color.Blue)) { }
-            return
-        }
-
         KamelImage(
             modifier = modifier,
             resource = asyncPainterResource(url),

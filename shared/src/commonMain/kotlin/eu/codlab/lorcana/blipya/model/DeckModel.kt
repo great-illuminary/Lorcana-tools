@@ -9,7 +9,6 @@ import eu.codlab.lorcana.blipya.save.ScenarioModel
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.MulliganScenario
 import eu.codlab.lorcana.math.Scenario
-import kotlin.String
 
 data class DeckModel(
     val deck: Deck,
