@@ -45,8 +45,9 @@ kotlin {
         framework {
             baseName = "shared"
             isStatic = true
+            linkerOpts("-ld_classic")
         }
-        pod("GoogleSignIn") // { linkOnly = true}
+        pod("GoogleSignIn") { linkOnly = true}
         // pod("FirebaseCore") // { linkOnly = true }
         pod("FirebaseAuth") { linkOnly = true }
     }

@@ -24,3 +24,25 @@ Set of Lorcana Tools
 ## Roadmap
 
 Adding scenarios for the decks retrieved via dreamborn to help trigger more visibilities
+
+## iOS Fastlane
+
+### Installation
+
+With the regular machine :
+```
+bundle exec fastlane match appstore
+bundle exec fastlane deliver download_screenshots
+bundle exec fastlane deliver download_metadata
+```
+
+With the ci environment :
+```
+bundle exec fastlane match appstore --readonly
+```
+
+### Compilation
+
+```
+bundle exec fastlane release
+```

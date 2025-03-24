@@ -1,0 +1,15 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Release the application for iOS"
+  lane :release do
+    get_certificates
+    get_provisioning_profile
+
+    build_app(
+      scheme: "iosApp",
+      workspace: "iosApp.xcworkspace",
+      include_bitcode: true
+    )
+  end
+end
