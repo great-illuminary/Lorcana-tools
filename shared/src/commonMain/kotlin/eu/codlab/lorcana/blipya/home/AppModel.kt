@@ -17,6 +17,7 @@ import eu.codlab.lorcana.blipya.save.ConfigurationLoader
 import eu.codlab.lorcana.blipya.save.SavedAuthentication
 import eu.codlab.lorcana.blipya.utils.AuthentInit
 import eu.codlab.lorcana.blipya.utils.RootPath
+import eu.codlab.lorcana.blipya.utils.safeSuspend
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
 import eu.codlab.lorcana.math.Deck
@@ -25,9 +26,9 @@ import eu.codlab.lorcana.raw.VirtualCard
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
 import io.ktor.websocket.readText
-import korlibs.io.async.async
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
+import kotlinx.coroutines.async
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -91,12 +92,7 @@ data class AppModel(
             conf.decks.map { it.toDeck() } to conf.authentication
         }
 
-        val lorcana = try {
-            Lorcana().loadFromResources()
-        } catch (err: Throwable) {
-            err.printStackTrace()
-            null
-        }
+        val lorcana = safeSuspend { Lorcana().loadFromResources() }
 
         val validAuthent = authentication?.let {
             accountClient.checkAccount(it.token)
@@ -112,15 +108,12 @@ data class AppModel(
         }
 
         onReceiveMessage()
-        // emitOnSocket("hello world")
     }
 
     @Suppress("SwallowedException", "TooGenericExceptionCaught")
     private fun onReceiveMessage() = launch {
         async {
             backendSocket.incoming.collect {
-                println("BACKEND HAVING $it")
-
                 try {
                     val googleToken = json.decodeFromString(
                         SocketMessage.serializer(

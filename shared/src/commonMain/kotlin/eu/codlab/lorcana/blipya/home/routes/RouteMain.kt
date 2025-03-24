@@ -45,7 +45,6 @@ class RouteMain : Route(
         defaultActions: List<MenuItem>,
         backStackEntry: BackStackEntry
     ) {
-        println("LOADING MAIN TITLE")
         appModel.setAppBarState(
             AppBarState.Localized(
                 title = Res.string.decks_title,
@@ -57,9 +56,7 @@ class RouteMain : Route(
             FloatingActionButtonState(
                 icon = Icons.Filled.Add,
                 contentDescription = "Add a new deck"
-            ) {
-                appModel.showAddDeck(true)
-            }
+            ) { appModel.showAddDeck(true) }
         )
     }
 }
