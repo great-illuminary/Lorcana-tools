@@ -53,7 +53,7 @@ ext {
     originalVersion = defaultVersion
     version = propSuffix(defaultVersion, "SUFFIX")
 
-    projectVersionCode = 1
+    projectVersionCode = versionProps.getProperty("versionCode").toInteger()
 
     ndkVersion = "25.1.8937393"
 

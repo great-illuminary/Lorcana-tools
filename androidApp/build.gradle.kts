@@ -10,13 +10,14 @@ plugins {
 
 
 val originalVersion: String by rootProject.ext
+val projectVersionCode: Int by rootProject.ext
 
 android {
     namespace = "eu.codlab.blipya"
 
     defaultConfig {
         applicationId = "eu.codlab.blipya"
-        versionCode = 1
+        versionCode = projectVersionCode
         versionName = originalVersion
     }
     buildFeatures {
