@@ -42,4 +42,14 @@
     <string name="otd">OTD</string>
 
     <string name="you_are_connected">You are connected</string>
+    <string name="disconnect_button">Disconnect</string>
+    <string name="delete_account_button">Delete your account</string>
+
+    <string name="disconnect_title">Disconnect</string>
+    <string name="disconnect_text">Do you want to disconnect your session ?</string>
+    <string name="disconnect_done">You are now disconnected</string>
+
+    <string name="delete_account_title">Delete Account</string>
+    <string name="delete_account_text">Do you want to delete your account ? You will lose the data synced on the backend but will keep your data locally.</string>
+    <string name="delete_account_done">Your account has been deleted on the backend</string>
 </resources>

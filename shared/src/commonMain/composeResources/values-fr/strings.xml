@@ -42,4 +42,14 @@
     <string name="otd">OTD</string>
 
     <string name="you_are_connected">Vous êtes connectés</string>
+    <string name="disconnect_button">Déconnection</string>
+    <string name="delete_account_button">Effacer le compte</string>
+
+    <string name="disconnect_title">Déconnection</string>
+    <string name="disconnect_text">Voulez-vous déconnecter votre session ?</string>
+    <string name="disconnect_done">Vous êtes maintenant déconnectés</string>
+
+    <string name="delete_account_title">Effacer le compte</string>
+    <string name="delete_account_text">Voulez-vous effacer votre compte ? Vous perdrez toutes les informations sauvegardées sur le serveur mais conserverez vos informations localement.</string>
+    <string name="delete_account_done">Votre compte est maintenant effacé du serveur</string>
 </resources>

@@ -42,7 +42,7 @@ fun PromptDialog(
                 }
             )
         },
-        onDismiss = { /* nothing */ },
+        onDismiss = onDismiss,
         actions = listOf(
             PopupConfirmAction(
                 text = Res.string.cancel.localized(),

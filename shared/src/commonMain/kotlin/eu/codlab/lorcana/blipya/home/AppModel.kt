@@ -9,6 +9,7 @@ import eu.codlab.lorcana.Lorcana
 import eu.codlab.lorcana.LorcanaLoaded
 import eu.codlab.lorcana.blipya.account.Account
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
+import eu.codlab.lorcana.blipya.deck.mulligan.edit.safeLaunch
 import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 import eu.codlab.lorcana.blipya.login.IRequestForUrlToOpen
 import eu.codlab.lorcana.blipya.model.DeckModel
@@ -275,6 +276,20 @@ data class AppModel(
         } else {
             return null
         }
+    }
+
+    fun disconnect(onDone: () -> Unit) = safeLaunch {
+        configurationLoader.disconnect()
+
+        updateState { copy(authentication = null) }
+        onDone()
+    }
+
+    fun delete(onDone: () -> Unit) = safeLaunch {
+        configurationLoader.disconnect()
+
+        updateState { copy(authentication = null) }
+        onDone()
     }
 }
 

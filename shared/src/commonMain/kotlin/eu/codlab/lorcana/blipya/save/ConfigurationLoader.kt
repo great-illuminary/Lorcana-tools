@@ -44,6 +44,13 @@ class ConfigurationLoader(
         save()
     }
 
+    suspend fun disconnect() {
+        configuration = configuration.copy(
+            authentication = null
+        )
+        save()
+    }
+
     suspend fun save() {
         val string = json.encodeToString(ConfigurationModel.serializer(), configuration)
         configurationFolder.write(string)
