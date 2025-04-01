@@ -1,15 +1,36 @@
 default_platform(:ios)
 
+whatsNew = File.read("metadata/en-US/release_notes.txt")
+
 platform :ios do
   desc "Release the application for iOS"
   lane :release do
     get_certificates
     get_provisioning_profile
 
+    clear_derived_data
+
     build_app(
       scheme: "iosApp",
       workspace: "iosApp.xcworkspace",
       include_bitcode: true
+    )
+
+    deliver(
+      submit_for_review: true,
+      skip_metadata: false,
+      skip_screenshots: true,
+      metadata_path: "./metadata",
+      force: true,
+      release_notes: {
+        # metadata couldn't be read properly, overriding the issue
+        "default" => whatsNew,
+        "en-US" => whatsNew,
+      },
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        export_compliance_uses_encryption: false
+      }
     )
   end
 end

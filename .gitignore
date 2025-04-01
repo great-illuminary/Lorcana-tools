@@ -47,3 +47,4 @@ iosApp/fastlane/report.xml
 iosApp/*.cer
 iosApp/fastlane/README.md
 iosApp/fastlane/metadata
+iosApp/fastlane/Preview.html
