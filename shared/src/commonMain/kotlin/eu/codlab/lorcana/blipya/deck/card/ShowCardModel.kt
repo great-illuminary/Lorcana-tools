@@ -1,6 +1,6 @@
 package eu.codlab.lorcana.blipya.deck.card
 
-import eu.codlab.lorcana.blipya.deck.scenario.edit.safeLaunch
+import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
 import eu.codlab.lorcana.math.LorcanaInfo.DefaultHandSize

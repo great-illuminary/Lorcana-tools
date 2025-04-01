@@ -54,10 +54,15 @@ buildkonfig {
     packageName = "eu.codlab.blipya.buildconfig"
 
     defaultConfigs {
-        buildConfigField(
-            FieldSpec.Type.STRING,
-            "googleAuthServerId",
-            rootProject.extra["GOOGLE_AUTH_SERVER_ID"] as String
-        )
+        listOf(
+            "googleAuthServerId" to "GOOGLE_AUTH_SERVER_ID",
+            "sentryDsn" to "SENTRY_LORCANA_BLIPYA"
+        ).forEach {
+            buildConfigField(
+                FieldSpec.Type.STRING,
+                it.first,
+                rootProject.extra[it.second] as String
+            )
+        }
     }
 }

@@ -9,12 +9,12 @@ import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.save.Dreamborn
 import eu.codlab.lorcana.blipya.utils.asLongOrNull
+import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.MulliganScenario
 import eu.codlab.lorcana.math.Scenario
 import eu.codlab.lorcana.raw.VariantClassification
 import eu.codlab.viewmodel.StateViewModel
-import eu.codlab.viewmodel.launch
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.isSuccess
@@ -67,8 +67,8 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
     }
 
     @Suppress("TooGenericExceptionCaught")
-    fun loadDreamborn(url: String) = launch {
-        if (states.value.loadingDreamborn) return@launch
+    fun loadDreamborn(url: String) = safeLaunch {
+        if (states.value.loadingDreamborn) return@safeLaunch
 
         updateState { copy(loadingDreamborn = true) }
 
@@ -106,7 +106,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         }
     }
 
-    fun changeDeck(deck: DeckModel) = launch {
+    fun changeDeck(deck: DeckModel) = safeLaunch {
         // TODO switch listeners
 
         updateState {
@@ -119,7 +119,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         }
     }
 
-    fun add(id: String, added: (DeckModel, Scenario) -> Unit) = launch {
+    fun add(id: String, added: (DeckModel, Scenario) -> Unit) = safeLaunch {
         val deck = states.value.deck
         val scenario = deck.deck.appendNewScenario(id, "")
 
@@ -134,7 +134,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         updateCards()
     }
 
-    fun addMulligan(id: String, added: (DeckModel, MulliganScenario) -> Unit) = launch {
+    fun addMulligan(id: String, added: (DeckModel, MulliganScenario) -> Unit) = safeLaunch {
         val deck = states.value.deck
         val mulligan = deck.deck.appendNewMulligan(id, "")
 
@@ -149,7 +149,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         updateCards()
     }
 
-    fun removeLast() = launch {
+    fun removeLast() = safeLaunch {
         val deck = states.value.deck
         deck.scenarios.lastOrNull()?.let { deck.deck.removeScenario(it) }
 
@@ -171,11 +171,11 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         saveDeck()
     }
 
-    private fun saveDeck() = launch {
+    private fun saveDeck() = safeLaunch {
         appModel.saveDecks()
     }
 
-    fun updateDeckSize(size: TextFieldValue) = launch {
+    fun updateDeckSize(size: TextFieldValue) = safeLaunch {
         updateState {
             copy(deckSize = size)
         }
@@ -188,7 +188,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         // TODO update scenarii
     }
 
-    fun updateHandSize(size: TextFieldValue) = launch {
+    fun updateHandSize(size: TextFieldValue) = safeLaunch {
         updateState {
             copy(handSize = size)
         }

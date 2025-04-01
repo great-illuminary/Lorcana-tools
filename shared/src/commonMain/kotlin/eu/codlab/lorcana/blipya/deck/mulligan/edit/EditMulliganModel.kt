@@ -1,18 +1,16 @@
 package eu.codlab.lorcana.blipya.deck.mulligan.edit
 
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import eu.codlab.lorcana.blipya.deck.scenario.show.ShowScenarioModel
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
+import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.MulliganCard
 import eu.codlab.lorcana.math.MulliganScenario
 import eu.codlab.lorcana.math.tools.MulliganResult
 import eu.codlab.viewmodel.StateViewModel
-import eu.codlab.viewmodel.launch
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 
 data class EditScenarioModelState(
@@ -59,13 +57,13 @@ class EditMulliganModel(
         }
     }
 
-    fun add(id: String) = launch {
+    fun add(id: String) = safeLaunch {
         states.value.mulligan.add(id)
 
         updateCards()
     }
 
-    fun removeLast() = launch {
+    fun removeLast() = safeLaunch {
         val mulligan = states.value.mulligan
         mulligan.cards.lastOrNull()?.let { mulligan.remove(it.id) }
 
@@ -86,11 +84,11 @@ class EditMulliganModel(
         saveDeck()
     }
 
-    private fun saveDeck() = launch {
+    private fun saveDeck() = safeLaunch {
         appModel.saveDecks()
     }
 
-    fun updateScenario(id: String, amount: Long) = launch {
+    fun updateScenario(id: String, amount: Long) = safeLaunch {
         states.value.mulligan.update(id, amount)
 
         saveDeck()
@@ -126,10 +124,3 @@ class EditMulliganModel(
 }
 
 private fun <T> List<T>.clone() = map { it }
-
-fun ViewModel.safeLaunch(
-    onError: (Throwable) -> Unit = {
-        // nothing
-    },
-    run: suspend CoroutineScope.() -> Unit
-) = launch(onError, run)

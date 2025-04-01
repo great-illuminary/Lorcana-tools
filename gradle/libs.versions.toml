@@ -34,6 +34,8 @@ kamel-image = "1.0.3"
 
 hotpreview = "0.1.5"
 
+sentry = "0.11.0"
+
 [libraries]
 
 kamel-image = { group = "media.kamel", name = "kamel-image", version.ref = "kamel-image" }

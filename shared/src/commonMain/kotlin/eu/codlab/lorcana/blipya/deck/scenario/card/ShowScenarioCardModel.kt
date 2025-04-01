@@ -1,10 +1,10 @@
 package eu.codlab.lorcana.blipya.deck.scenario.card
 
 import eu.codlab.lorcana.blipya.model.DeckModel
+import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.lorcana.math.CardValidator
 import eu.codlab.lorcana.math.ExpectedCard
 import eu.codlab.viewmodel.StateViewModel
-import eu.codlab.viewmodel.launch
 
 data class ShowScenarioCardModelState(
     val deckModel: DeckModel,
@@ -29,7 +29,7 @@ class ShowScenarioCardModel(
         maxValid = validator.validate(deckModel.deck, card).maxValid,
     )
 ) {
-    fun update(amount: Long, min: Long, max: Long) = launch {
+    fun update(amount: Long, min: Long, max: Long) = safeLaunch {
         updateState {
             val validation = validator.validate(deckModel.deck, amount, min, max)
 

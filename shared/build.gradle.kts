@@ -47,9 +47,13 @@ kotlin {
             isStatic = true
             linkerOpts("-ld_classic")
         }
-        pod("GoogleSignIn") { linkOnly = true}
-        // pod("FirebaseCore") // { linkOnly = true }
-        pod("FirebaseAuth") { linkOnly = true }
+        pod("GoogleSignIn") {
+            extraOpts += listOf("-compiler-option", "-fmodules")
+        }
+        pod("Sentry")
+        pod("FirebaseAuth") {
+            extraOpts += listOf("-compiler-option", "-fmodules")
+        }
     }
 
     sourceSets {
@@ -95,6 +99,8 @@ kotlin {
                 api(libs.kmp.auth.uihelper)
 
                 api(libs.hotpreview)
+
+                api(additionals.multiplatform.sentry)
 
                 api(project(":shared-design"))
                 api(project(":shared-utils"))

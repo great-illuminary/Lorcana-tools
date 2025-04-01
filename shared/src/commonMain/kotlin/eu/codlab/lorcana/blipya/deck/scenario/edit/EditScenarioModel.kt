@@ -1,17 +1,15 @@
 package eu.codlab.lorcana.blipya.deck.scenario.edit
 
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import eu.codlab.lorcana.blipya.deck.scenario.show.ShowScenarioModel
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
+import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
 import eu.codlab.lorcana.math.Scenario
 import eu.codlab.viewmodel.StateViewModel
-import eu.codlab.viewmodel.launch
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 
 data class EditScenarioModelState(
@@ -58,7 +56,7 @@ class EditScenarioModel(
         }
     }
 
-    fun changeDeck(deck: DeckModel, scenario: Scenario) = launch {
+    fun changeDeck(deck: DeckModel, scenario: Scenario) = safeLaunch {
         collectProbability(scenario)
 
         updateState {
@@ -71,13 +69,13 @@ class EditScenarioModel(
         }
     }
 
-    fun add(id: String) = launch {
+    fun add(id: String) = safeLaunch {
         states.value.scenario.add(id)
 
         updateCards()
     }
 
-    fun removeLast() = launch {
+    fun removeLast() = safeLaunch {
         val scenario = states.value.scenario
         scenario.cards.lastOrNull()?.let { scenario.remove(it.id) }
 
@@ -98,11 +96,11 @@ class EditScenarioModel(
         saveDeck()
     }
 
-    private fun saveDeck() = launch {
+    private fun saveDeck() = safeLaunch {
         appModel.saveDecks()
     }
 
-    fun updateScenario(id: String, amount: Long, min: Long, max: Long) = launch {
+    fun updateScenario(id: String, amount: Long, min: Long, max: Long) = safeLaunch {
         states.value.scenario.update(id, amount, min, max)
 
         saveDeck()
@@ -138,10 +136,3 @@ class EditScenarioModel(
 }
 
 private fun <T> List<T>.clone() = map { it }
-
-fun ViewModel.safeLaunch(
-    onError: (Throwable) -> Unit = {
-        // nothing
-    },
-    run: suspend CoroutineScope.() -> Unit
-) = launch(onError, run)

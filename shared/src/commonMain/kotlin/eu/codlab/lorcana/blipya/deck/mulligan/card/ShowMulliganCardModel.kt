@@ -1,10 +1,10 @@
 package eu.codlab.lorcana.blipya.deck.mulligan.card
 
 import eu.codlab.lorcana.blipya.model.DeckModel
+import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.lorcana.math.CardValidator
 import eu.codlab.lorcana.math.MulliganCard
 import eu.codlab.viewmodel.StateViewModel
-import eu.codlab.viewmodel.launch
 
 data class ShowMulliganCardModelState(
     val deck: DeckModel,
@@ -25,7 +25,7 @@ class ShowMulliganCardModel(
         amountValid = validator.validateMulligan(card.amount)
     )
 ) {
-    fun update(amount: Long) = launch {
+    fun update(amount: Long) = safeLaunch {
         updateState {
             copy(
                 amountValid = validator.validateMulligan(amount)

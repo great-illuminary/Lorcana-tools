@@ -9,7 +9,6 @@ import eu.codlab.lorcana.Lorcana
 import eu.codlab.lorcana.LorcanaLoaded
 import eu.codlab.lorcana.blipya.account.Account
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
-import eu.codlab.lorcana.blipya.deck.mulligan.edit.safeLaunch
 import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 import eu.codlab.lorcana.blipya.login.IRequestForUrlToOpen
 import eu.codlab.lorcana.blipya.model.DeckModel
@@ -18,22 +17,26 @@ import eu.codlab.lorcana.blipya.save.ConfigurationLoader
 import eu.codlab.lorcana.blipya.save.SavedAuthentication
 import eu.codlab.lorcana.blipya.utils.AuthentInit
 import eu.codlab.lorcana.blipya.utils.RootPath
+import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.lorcana.blipya.utils.safeSuspend
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.raw.VariantClassification
 import eu.codlab.lorcana.raw.VirtualCard
+import eu.codlab.sentry.wrapper.Sentry
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
 import io.ktor.websocket.readText
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import moe.tlaster.precompose.navigation.Navigator
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 private const val Millis = 1000.0
@@ -77,38 +80,43 @@ data class AppModel(
 
     fun isInitialized() = states.value.initialized
 
-    @Suppress("TooGenericExceptionCaught", "SwallowedException")
-    fun initialize() = launch {
-        configurationLoader.init()
-
-        GoogleAuthProvider.create(
-            credentials = GoogleAuthCredentials(
-                serverId = SharedConfig.googleAuthServerId
-            )
-        )
-
-        AuthentInit.initialize()
-
-        val (decks, authentication) = configurationLoader.configuration.let { conf ->
-            conf.decks.map { it.toDeck() } to conf.authentication
+    fun initialize() {
+        Sentry.init {
+            it.dsn = SharedConfig.sentryDsn
         }
 
-        val lorcana = safeSuspend { Lorcana().loadFromResources() }
+        safeLaunch {
+            configurationLoader.init()
 
-        val validAuthent = authentication?.let {
-            accountClient.checkAccount(it.token)
-        } == true
-
-        updateState {
-            copy(
-                initialized = true,
-                decks = decks,
-                lorcana = lorcana,
-                authentication = if (validAuthent) authentication else null
+            GoogleAuthProvider.create(
+                credentials = GoogleAuthCredentials(
+                    serverId = SharedConfig.googleAuthServerId
+                )
             )
-        }
 
-        onReceiveMessage()
+            AuthentInit.initialize()
+
+            val (decks, authentication) = configurationLoader.configuration.let { conf ->
+                conf.decks.map { it.toDeck() } to conf.authentication
+            }
+
+            val lorcana = safeSuspend { Lorcana().loadFromResources() }
+
+            val validAuthent = authentication?.let {
+                accountClient.checkAccount(it.token)
+            } == true
+
+            updateState {
+                copy(
+                    initialized = true,
+                    decks = decks,
+                    lorcana = lorcana,
+                    authentication = if (validAuthent) authentication else null
+                )
+            }
+
+            onReceiveMessage()
+        }
     }
 
     @Suppress("SwallowedException", "TooGenericExceptionCaught")
@@ -131,27 +139,27 @@ data class AppModel(
         }
     }
 
-    fun setAppBarState(appBarState: AppBarState) = launch {
+    fun setAppBarState(appBarState: AppBarState) = safeLaunch {
         updateState {
             copy(appBarState = appBarState)
         }
     }
 
-    fun setFloatingActionButton(floatingActionButtonState: FloatingActionButtonState) = launch {
+    fun setFloatingActionButton(floatingActionButtonState: FloatingActionButtonState) = safeLaunch {
         updateState {
             copy(floatingActionButtonState = floatingActionButtonState)
         }
     }
 
-    fun showAddDeck(showPromptNewDeck: Boolean) = launch {
+    fun showAddDeck(showPromptNewDeck: Boolean) = safeLaunch {
         updateState { copy(showPromptNewDeck = showPromptNewDeck) }
     }
 
-    fun showAddScenario(showPromptNewScenario: Boolean) = launch {
+    fun showAddScenario(showPromptNewScenario: Boolean) = safeLaunch {
         updateState { copy(showPromptNewScenario = showPromptNewScenario) }
     }
 
-    fun addDeck(deckName: String, onDeck: (DeckModel) -> Unit) = launch {
+    fun addDeck(deckName: String, onDeck: (DeckModel) -> Unit) = safeLaunch {
         val newDeck = DeckModel(
             Deck(
                 id = UUID.randomUUID().toString(),
@@ -184,7 +192,7 @@ data class AppModel(
             options = navigateTo.options
         )
 
-        launch {
+        safeLaunch {
             scaffoldState?.drawerState?.close()
         }
 
@@ -201,7 +209,7 @@ data class AppModel(
         return states.value.floatingActionButtonState
     }
 
-    fun saveDecks() = launch {
+    fun saveDecks() = safeLaunch {
         saveDecks(states.value.decks)
     }
 
@@ -228,7 +236,7 @@ data class AppModel(
     }
 
     @Suppress("TooGenericExceptionCaught")
-    fun login(token: String) = launch {
+    fun login(token: String) = safeLaunch {
         try {
             val account = accountClient.login(token)
 
