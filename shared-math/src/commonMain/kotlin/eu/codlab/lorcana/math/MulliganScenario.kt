@@ -25,8 +25,12 @@ class MulliganScenario internal constructor(
             return mutableCards
         }
 
-    private val _probability = MutableStateFlow(calculate())
+    private val _probability = MutableStateFlow(MulliganResult(0.0, 0.0))
     val probability: StateFlow<MulliganResult> = _probability
+
+    init {
+        updateRemainingCards()
+    }
 
     fun addCard(card: MulliganCard) {
         mutableCards.add(card)
@@ -61,7 +65,7 @@ class MulliganScenario internal constructor(
         // TODO -> remove the collected instance for this card will be better
         mutableCards.removeAt(index)
 
-        _probability.update { calculate() }
+        updateRemainingCards()
     }
 
     fun update(id: String, name: String) {
@@ -82,10 +86,6 @@ class MulliganScenario internal constructor(
         return amount <= parentState.size
     }
 
-    fun updateRemainingCards() {
-        _probability.update { calculate() }
-    }
-
     internal fun setParentState(state: DeckState) {
         parentState = state
         updateRemainingCards()
@@ -94,8 +94,36 @@ class MulliganScenario internal constructor(
     private fun MulliganCard.collectWithContext() {
         context.async {
             state.collect {
+                updateRemainingCards()
+            }
+        }
+    }
+
+    private var isInUpdatingRemainingCards = false
+    private var requestedUpdatingRemainingCards = false
+
+    private fun updateRemainingCards() {
+        // if we attempt to make multiple calls, just make sure
+        // we are doing 1 and calling a retrigger afterward
+        if (isInUpdatingRemainingCards) {
+            requestedUpdatingRemainingCards = true
+            return
+        }
+
+        isInUpdatingRemainingCards = true
+
+        context.async {
+            _probability.update { calculate() }
+
+            while (requestedUpdatingRemainingCards) {
+                requestedUpdatingRemainingCards = false
+
+                // since calculating can take some time, we make sure
+                // that we manage cases where UI would retrigger update
                 _probability.update { calculate() }
             }
+
+            isInUpdatingRemainingCards = false
         }
     }
 }
