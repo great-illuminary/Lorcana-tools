@@ -34,7 +34,6 @@ fun DrawerContentNormal(
     onMenuItemSelected: (title: String, navigateTo: NavigateTo) -> Unit
 ) {
     val dark = LocalDarkTheme.current
-    val app = LocalApp.current
 
     println("showing tiny ? $tiny")
 
@@ -74,7 +73,7 @@ fun DrawerContentNormal(
                 DrawerItem(
                     text = stringResource(Res.string.decks_title),
                     currentRoute = currentRoute,
-                    key = NavigateTo.Main,
+                    key = NavigateTo.Main(),
                     image = Icons.Rounded.Warning,
                     onClick = onMenuItemSelected,
                     tiny = tiny

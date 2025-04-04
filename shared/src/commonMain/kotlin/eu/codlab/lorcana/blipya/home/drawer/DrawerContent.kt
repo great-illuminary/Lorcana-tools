@@ -18,6 +18,8 @@ fun DrawerContent(
     )
 }
 
+@HotPreview(widthDp = 400, heightDp = 800, darkMode = true)
+@HotPreview(widthDp = 400, heightDp = 800, darkMode = false)
 @Composable
 private fun PreviewDrawerContent() {
     HotPreviewApp {
