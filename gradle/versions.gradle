@@ -16,6 +16,7 @@ def propSuffix = { prefix, suffixKeyName ->
 ext {
     minSdkVersion = 26
     javaVersion = "17"
+    javaVersionObject = JavaVersion.VERSION_17
     prop = { name, defValue ->
         return rootProject.properties.containsKey(name)
                 ? rootProject.properties[name] : defValue

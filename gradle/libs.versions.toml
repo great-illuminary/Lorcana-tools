@@ -22,7 +22,6 @@ koalaplot = "0.6.3"
 ui-android = "1.6.8"
 
 # License reporting
-libraries-report = "10.9.0-b02"
 
 bignum = "0.3.10"
 
@@ -68,9 +67,6 @@ koalaplot = { module = "io.github.koalaplot:koalaplot-core", version.ref = "koal
 file-picker = "com.darkrockstudios:mpfilepicker:3.1.0"
 androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "ui-android" }
 
-# License reporting
-libraries-report = { group = "com.mikepenz", name = "aboutlibraries-core", version.ref = "libraries-report" }
-
 bignum = { group = "com.ionspin.kotlin", name = "bignum", version.ref = "bignum" }
 lorcana = { group = "eu.codlab", name = "lorcana-data", version.ref = "lorcana" }
 
@@ -83,6 +79,3 @@ hotpreview = { group = "de.drick.compose", name = "hotpreview", version.ref = "h
 [plugins]
 android-google-services = { id = "com.google.gms.google-services", version.ref = "android-google-services" }
 android-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "android-appdistribution" }
-
-# License reporting
-libraries-report = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "libraries-report" }

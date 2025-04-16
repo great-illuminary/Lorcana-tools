@@ -3,6 +3,7 @@
 # bash ./check.sh
 
 ./gradlew kotlinUpgradeYarnLock || exit 1
+./gradlew :shared:exportLibraryDefinitions
 ./gradlew :androidApp:bundleRelease :androidApp:assembleRelease || exit 1
 # disable for now due to kotlin being really slow on ci for this one
 ./gradlew :jsApp:jsBrowserDistribution || exit 1

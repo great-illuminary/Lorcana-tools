@@ -1,5 +1,3 @@
-import com.codingfeline.buildkonfig.compiler.FieldSpec
-
 plugins {
     alias(additionals.plugins.kotlin.multiplatform)
     alias(additionals.plugins.android.library)
@@ -7,7 +5,7 @@ plugins {
     alias(additionals.plugins.jetbrains.compose)
     alias(additionals.plugins.compose.compiler)
     alias(additionals.plugins.kotlin.serialization)
-    alias(libs.plugins.libraries.report)
+    alias(additionals.plugins.libraries.report)
     id("jvmCompat")
     id("iosSimulatorConfiguration")
 }
@@ -163,21 +161,13 @@ android {
     }
 }
 
-dependencies {
-    implementation(libs.androidx.window)
-    implementation(libs.androidx.ui.android)
-}
-
 aboutLibraries {
-    registerAndroidTasks = false
-    prettyPrint = true
-}
+    android {
+        registerAndroidTasks = false
+    }
 
-val licenseCopy by tasks.registering(Copy::class) {
-    dependsOn("exportLibraryDefinitions")
-    from(layout.buildDirectory.file("generated/aboutLibraries/aboutLibraries.json"))
-    into(layout.projectDirectory.file("src/commonMain/composeResources/files/"))
-
-    tasks.matching { it.name.startsWith("process") && it.name.endsWith("JavaRes") }
-        .forEach { it.dependsOn(this) }
+    export {
+        outputPath = file("src/commonMain/composeResources/files/aboutlibraries.json")
+        prettyPrint = true
+    }
 }
