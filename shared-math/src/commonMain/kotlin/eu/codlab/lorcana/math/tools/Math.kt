@@ -16,7 +16,7 @@ fun calculate(
 
     val recursive = recursiveCombination(handSize, miscAmount, emptyList(), 0, objects, 0)
 
-    val chosen = Choose.choose(handSize, deckSize)
+    val chosen = BinomialCoefficient.binomial(handSize, deckSize)
 
     return if (chosen == 0L) 0.0 else (recursive * 1.0 / chosen) * MaxPercentage
 }
@@ -45,11 +45,11 @@ private fun recursiveCombination(
 
     if (objects.isEmpty()) {
         // calculate the probability to have at least "k" cards in amount of said cards
-        return currentHand.map { Choose.choose(it.first, it.second) }.reduceMultiplyOr0()
+        return currentHand.map { BinomialCoefficient.binomial(it.first, it.second) }.reduceMultiplyOr0()
             .let { result ->
                 // and now calculate how much cards remaining we can have to complete the hand
                 if (currentHandSize < handSize) {
-                    val chosen = Choose.choose(handSize - currentHandSize, miscAmount)
+                    val chosen = BinomialCoefficient.binomial(handSize - currentHandSize, miscAmount)
                     result * chosen
                 } else {
                     result

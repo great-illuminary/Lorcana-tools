@@ -23,7 +23,7 @@ class MulliganUtils(
     private val cards: List<MulliganCardState>
 ) {
     // transform to a map of name -> number of cards
-    private val listOfCardsInTheDeck = cards.associate { it.name to it.amount.toLong() }
+    private val listOfCardsInTheDeck = cards.associate { it.name to it.amount }
 
     // and create the number of other cards in the deck
     private val othersInTheDeck = deckSize - cards.sumOf { it.amount }
@@ -99,9 +99,9 @@ class MulliganUtils(
                 toKeepInHand,
                 remainingInTheDeck,
                 othersInTheDeck - othersInHand,
-                list,
-                cardsToAdjust,
-                initialOpeningHandProb
+                adjustedCards = list,
+                cardsToAdjust = cardsToAdjust,
+                initialOpeningHandProb = initialOpeningHandProb
             )
         }
     }
@@ -199,7 +199,7 @@ class MulliganUtils(
         var sumNeeded = 0L
 
         fun inEach(inHand: Long, inDeck: Long) {
-            result *= Choose.choose(inHand, inDeck)
+            result *= BinomialCoefficient.binomial(inHand, inDeck)
             sumDeck += inDeck
             sumNeeded += inHand
         }
@@ -207,6 +207,6 @@ class MulliganUtils(
         listInDeck.keys.forEach { inEach(listInHand[it]!!, listInDeck[it]!!) }
         inEach(othersInHand, othersInDeck)
 
-        return result / Choose.choose(sumNeeded, sumDeck)
+        return result / BinomialCoefficient.binomial(sumNeeded, sumDeck)
     }
 }

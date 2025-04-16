@@ -1,7 +1,7 @@
 package eu.codlab.lorcana.math
 
-import eu.codlab.lorcana.math.tools.Choose.choose
-import eu.codlab.lorcana.math.tools.Choose.factorial
+import eu.codlab.lorcana.math.tools.BinomialCoefficient.binomial
+import eu.codlab.lorcana.math.tools.BinomialCoefficient.factorial
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -20,9 +20,9 @@ class TestFactorial {
 
     @Test
     fun testChooseResults() {
-        assertEquals(210, choose(4, 10))
-        assertEquals(4426165368, choose(8, 64))
-        assertEquals(55098996177225, choose(8, 200))
-        assertEquals(342700125300, choose(11, 60))
+        assertEquals(210, binomial(4, 10))
+        assertEquals(4426165368, binomial(8, 64))
+        assertEquals(55098996177225, binomial(8, 200))
+        assertEquals(342700125300, binomial(11, 60))
     }
 }
