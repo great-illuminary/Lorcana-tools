@@ -89,7 +89,7 @@ class MulliganUtils(
             mutableMapOf(),
             remainingInTheDeck.keys.first(),
             remainingInTheDeck.keys.toList(),
-            handSize = 0,
+            handSize = cardsKeptInHand,
             maximumCardsAdjusted = cardsToAdjust
         )
 
