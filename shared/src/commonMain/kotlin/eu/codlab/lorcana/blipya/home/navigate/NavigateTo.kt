@@ -17,7 +17,17 @@ sealed class NavigateTo {
 
         override val options = NavOptions(
             launchSingleTop = false,
-            popUpTo = PopUpTo.None
+            popUpTo = PopUpTo.First(true)
+        )
+    }
+
+    class Licenses : NavigateTo() {
+        override val route = "/licenses"
+        override val popBackStack = true
+
+        override val options = NavOptions(
+            launchSingleTop = false,
+            popUpTo = PopUpTo.First(true)
         )
     }
 
