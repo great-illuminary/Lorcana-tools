@@ -2,28 +2,34 @@ package eu.codlab.lorcana.blipya.home.drawer.normal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Warning
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import de.drick.compose.hotpreview.HotPreview
+import eu.codlab.blipya.config.SharedConfig
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.decks_title
+import eu.codlab.blipya.res.licenses_title
+import eu.codlab.blipya.res.menu_title_main
+import eu.codlab.blipya.res.menu_title_others
 import eu.codlab.compose.theme.LocalDarkTheme
+import eu.codlab.compose.widgets.spacers.BottomSpacer
 import eu.codlab.compose.widgets.spacers.TopSpacer
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
-import eu.codlab.lorcana.blipya.home.LocalApp
 import eu.codlab.lorcana.blipya.home.drawer.DrawerItem
+import eu.codlab.lorcana.blipya.home.drawer.DrawerSeparator
 import eu.codlab.lorcana.blipya.home.drawer.DrawerTitle
 import eu.codlab.lorcana.blipya.home.drawer.systemBackground
 import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
+import eu.codlab.lorcana.blipya.icons.GridView
 import eu.codlab.lorcana.blipya.theme.AppColor
-import org.jetbrains.compose.resources.stringResource
-
+import eu.codlab.lorcana.blipya.utils.localized
 
 @Suppress("LongMethod", "UnusedPrivateMember")
 @Composable
@@ -36,53 +42,70 @@ fun DrawerContentNormal(
     val dark = LocalDarkTheme.current
 
     println("showing tiny ? $tiny")
-
-    Column(modifier = modifier) {
-        Card(
-            elevation = 2.dp,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    color = if (dark) {
-                        AppColor.BackgroundBlue
-                    } else {
-                        AppColor.White
-                    }
-                )
-        ) {
-            Column(
-                modifier = Modifier
-                    .systemBackground()
-                    .verticalScroll(rememberScrollState())
-                    .background(
-                        color = if (dark) {
-                            AppColor.BackgroundBlue
-                        } else {
-                            AppColor.White
-                        }
-                    )
-            ) {
-                TopSpacer()
-
-                if (!tiny) {
-                    DrawerTitle(text = "nothing for now")
+    Column(
+        modifier = modifier
+            .systemBackground()
+            .verticalScroll(rememberScrollState())
+            .background(
+                color = if (dark) {
+                    AppColor.BackgroundBlue
                 } else {
-                    // nothing
+                    AppColor.White
                 }
+            )
+    ) {
+        TopSpacer()
 
-                DrawerItem(
-                    text = stringResource(Res.string.decks_title),
-                    currentRoute = currentRoute,
-                    key = NavigateTo.Main(),
-                    image = Icons.Rounded.Warning,
-                    onClick = onMenuItemSelected,
-                    tiny = tiny
-                )
-            }
+        if (!tiny) {
+            DrawerTitle(text = Res.string.menu_title_main.localized())
+        } else {
+            // nothing
         }
+
+        DrawerItem(
+            text = Res.string.decks_title.localized(),
+            currentRoute = currentRoute,
+            key = NavigateTo.Main(),
+            image = Icons.Rounded.GridView,
+            onClick = onMenuItemSelected,
+            tiny = tiny
+        )
+
+        Column(Modifier.weight(1.0f)) { }
+
+        DrawerSeparator()
+
+        if (!tiny) {
+            DrawerTitle(text = Res.string.menu_title_others.localized())
+        } else {
+            // nothing
+        }
+
+        DrawerItem(
+            text = Res.string.licenses_title.localized(),
+            currentRoute = currentRoute,
+            key = NavigateTo.Licenses(),
+            image = Icons.Rounded.Info,
+            onClick = onMenuItemSelected,
+            tiny = tiny
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        if (!tiny) {
+            DrawerTitle(
+                text = "v${SharedConfig.version}"
+            )
+
+            Spacer(Modifier.height(8.dp))
+        }
+
+        BottomSpacer()
     }
 }
 
+@HotPreview(widthDp = 300, heightDp = 900, darkMode = true)
+@HotPreview(widthDp = 300, heightDp = 900, darkMode = false)
 @Composable
 private fun PreviewDrawerContent() {
     HotPreviewApp {

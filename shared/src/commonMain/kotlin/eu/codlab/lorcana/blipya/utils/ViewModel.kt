@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 
 fun ViewModel.safeLaunch(
     onError: (Throwable) -> Unit = {
-        if(it !is CancellationException) {
+        if (it !is CancellationException) {
             Sentry.captureException(it)
         }
     },

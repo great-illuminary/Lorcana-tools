@@ -1,6 +1,5 @@
 package eu.codlab.lorcana.blipya.licenses.file
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -100,6 +99,7 @@ class KotlinVersion(val major: Int, val minor: Int, val patch: Int, val sub: Int
 
     private val version = versionOf(major, minor, patch)
 
+    @Suppress("MagicNumber")
     private fun versionOf(major: Int, minor: Int, patch: Int): Int {
         require(major in 0..Int.MAX_VALUE && minor in 0..Int.MAX_VALUE && patch in 0..Int.MAX_VALUE) {
             "Version components are out of range: $major.$minor.$patch"
@@ -128,8 +128,10 @@ class KotlinVersion(val major: Int, val minor: Int, val patch: Int, val sub: Int
      */
     fun isAtLeast(major: Int, minor: Int): Boolean =
         // this.version >= versionOf(major, minor, 0)
-        this.major > major || (this.major == major &&
-                this.minor >= minor)
+        this.major > major || (
+                this.major == major &&
+                        this.minor >= minor
+                )
 
     /**
      * Returns `true` if this version is not less than the version specified
@@ -137,14 +139,20 @@ class KotlinVersion(val major: Int, val minor: Int, val patch: Int, val sub: Int
      */
     fun isAtLeast(major: Int, minor: Int, patch: Int): Boolean =
         // this.version >= versionOf(major, minor, patch)
-        this.major > major || (this.major == major &&
-                (this.minor > minor || this.minor == minor &&
-                        this.patch >= patch))
+        this.major > major || (
+                this.major == major && (
+                        this.minor > minor || (
+                                this.minor == minor &&
+                                        this.patch >= patch
+                                )
+                        )
+                )
 
     /**
      * Returns `true` if this version is not less than the version specified
      * with the provided [major], [minor] and [patch] components.
      */
+    @Suppress("ReturnCount")
     fun isAtLeast(major: Int, minor: Int, patch: Int, sub: Int? = 0): Boolean {
         listOf(
             this.major to major,

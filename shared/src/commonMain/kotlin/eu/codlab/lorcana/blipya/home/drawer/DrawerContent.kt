@@ -10,16 +10,18 @@ import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 @Composable
 fun DrawerContent(
     modifier: Modifier = Modifier,
+    tiny: Boolean = false,
     onMenuItemSelected: (title: String, navigateTo: NavigateTo) -> Unit
 ) {
     DrawerContentNormal(
         modifier,
+        tiny = tiny,
         onMenuItemSelected = onMenuItemSelected
     )
 }
 
-@HotPreview(widthDp = 400, heightDp = 800, darkMode = true)
-@HotPreview(widthDp = 400, heightDp = 800, darkMode = false)
+@HotPreview(widthDp = 200, heightDp = 800, darkMode = true)
+@HotPreview(widthDp = 200, heightDp = 800, darkMode = false)
 @Composable
 private fun PreviewDrawerContent() {
     HotPreviewApp {

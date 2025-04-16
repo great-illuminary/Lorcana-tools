@@ -5,7 +5,6 @@ import eu.codlab.lorcana.blipya.licenses.file.LicenseFile
 import eu.codlab.lorcana.blipya.licenses.file.LicenseProject
 import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.viewmodel.StateViewModel
-import eu.codlab.viewmodel.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 data class LicenseState(

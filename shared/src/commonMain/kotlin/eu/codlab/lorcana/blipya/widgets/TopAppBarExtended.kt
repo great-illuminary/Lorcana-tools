@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,7 +29,7 @@ fun TopAppBarExtended(
     title: String,
     topSpacer: Boolean,
     canGoBack: Boolean,
-    // isScreenExpanded: Boolean, // unused for now in the app
+    isScreenExpanded: Boolean,
     appModel: AppModel,
     onNavigationClick: () -> Unit
 ) {
@@ -39,8 +40,8 @@ fun TopAppBarExtended(
 
     val menu = if (canGoBack) {
         Icons.AutoMirrored.Filled.ArrowBack
-        // } else if (!isScreenExpanded) {
-        //    Icons.Filled.Menu
+    } else if (!isScreenExpanded) {
+        Icons.Filled.Menu
     } else {
         null
     }

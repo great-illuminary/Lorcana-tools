@@ -14,7 +14,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import eu.codlab.lorcana.blipya.theme.AppColor
 
-val LocalWindow = compositionLocalOf { WindowType.TABLET }
+val LocalWindow = compositionLocalOf<WindowType> { error("No LocalWindow set") }
 val LocalFrame = compositionLocalOf { WindowType.TABLET }
 
 @Composable

@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.rounded.Folder
+import androidx.compose.material.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +28,7 @@ import eu.codlab.compose.widgets.CustomOutlinedButton
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
 import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
+import eu.codlab.lorcana.blipya.icons.Folder
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
 
 @Suppress("MagicNumber")
@@ -37,6 +38,7 @@ fun DrawerSeparator(
 ) {
     Row(
         modifier = modifier
+            .height(8.dp)
             .fillMaxWidth()
             .systemBackground()
             .padding(start = 12.dp, end = 12.dp),
@@ -117,12 +119,13 @@ fun DrawerItem(
             .height(32.dp)
             .fillMaxWidth()
             .systemBackground(selected = selected)
-            .padding(start = 32.dp)
             .clickable(
                 interactionSource = MutableInteractionSource(),
-                indication = null,
+                indication = ripple(),
                 onClick = { onClick(text, key) }
-            ),
+            )
+            .padding(0.dp)
+            .padding(start = 32.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -233,6 +236,8 @@ fun Modifier.systemBackground(selected: Boolean = false): Modifier {
     }
 }
 
+@HotPreview(widthDp = 200, heightDp = 50, darkMode = true)
+@HotPreview(widthDp = 200, heightDp = 50, darkMode = false)
 @Composable
 private fun DrawerItemPreviewDark() {
     HotPreviewApp {

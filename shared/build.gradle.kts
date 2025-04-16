@@ -62,7 +62,6 @@ kotlin {
                 implementation(compose.ui)
                 implementation(compose.material)
                 implementation(compose.material3)
-                implementation(compose.materialIconsExtended)
                 api(compose.components.resources)
                 api(libs.kotlinx.serialization.json)
 
@@ -118,6 +117,9 @@ kotlin {
                 api(additionals.androidx.core)
                 api(additionals.androidx.appcompat)
                 api(additionals.androidx.activity.compose)
+
+                implementation(libs.androidx.window)
+                implementation(libs.androidx.ui.android)
             }
         }
 

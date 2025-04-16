@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ManageAccounts
+import androidx.compose.material3.DrawerDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -15,17 +15,23 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import eu.codlab.compose.widgets.StatusBarAndNavigation
 import eu.codlab.lorcana.blipya.deck.PromptForNewScenarioOrMulligan
 import eu.codlab.lorcana.blipya.decks.PromptForNewDeck
+import eu.codlab.lorcana.blipya.home.drawer.DrawerContent
+import eu.codlab.lorcana.blipya.home.drawer.DrawerSizeShape
 import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
 import eu.codlab.lorcana.blipya.home.scaffold.FloatingActionButtonWrapper
 import eu.codlab.lorcana.blipya.home.scaffold.ScaffoldContentWrapper
 import eu.codlab.lorcana.blipya.home.scaffold.TopBarWrapper
+import eu.codlab.lorcana.blipya.icons.ManageAccounts
 import eu.codlab.lorcana.blipya.init.InitializeScreen
 import eu.codlab.lorcana.blipya.login.LoginScreen
 import eu.codlab.lorcana.blipya.theme.AppSizes
+import eu.codlab.lorcana.blipya.utils.LocalWindow
+import eu.codlab.lorcana.blipya.utils.isScreenExpanded
 import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.rememberSizeAwareScaffoldState
 import eu.codlab.safearea.views.SafeArea
@@ -59,6 +65,7 @@ fun AppContent() {
 
     val currentState by model.states.collectAsState()
 
+    val canGoBack by navigator.canGoBack.collectAsState(initial = false)
     val currentEntry by navigator.currentEntry.collectAsState(null)
     val backStackCount by navigator.backStackCount.collectAsState(0)
 
@@ -84,6 +91,12 @@ fun AppContent() {
             )
         }
     )
+
+    val isScreenExpanded = LocalWindow.current.isScreenExpanded()
+
+    val onMenuItemSelected: (String, NavigateTo) -> Unit = { newTitle, path ->
+        model.show(path)
+    }
 
     LaunchedEffect(currentEntry) {
         val entry = currentEntry ?: return@LaunchedEffect
@@ -119,9 +132,26 @@ fun AppContent() {
             Column {
                 Scaffold(
                     scaffoldState = scaffoldState,
+                    drawerScrimColor = if (!isScreenExpanded) {
+                        DrawerDefaults.scrimColor
+                    } else {
+                        Color.Transparent
+                    },
+                    drawerContent = {
+                        DrawerContent(
+                            modifier = Modifier.fillMaxSize(),
+                            onMenuItemSelected = onMenuItemSelected
+                        )
+                    },
+                    drawerGesturesEnabled = !canGoBack && !isScreenExpanded, // Gestures are enabled only on smaller and medium screens
+                    drawerShape = DrawerSizeShape(),
                     topBar = { TopBarWrapper() },
                     floatingActionButton = { FloatingActionButtonWrapper() },
-                    content = { ScaffoldContentWrapper() }
+                    content = {
+                        ScaffoldContentWrapper(
+                            onMenuItemSelected = onMenuItemSelected
+                        )
+                    }
                 )
             }
         }

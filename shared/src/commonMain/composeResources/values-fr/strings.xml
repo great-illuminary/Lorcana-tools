@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <!-- non automatically generated -->
+    <string name="menu_title_main">Principal</string>
+    <string name="menu_title_others">Autres</string>
+
     <string name="deck_configuration_deck_name">Nom Du Deck</string>
     <string name="deck_configuration_deck_size">Nombre De Cartes</string>
     <string name="deck_configuration_hand_size">Cartes En Main</string>
@@ -14,6 +17,8 @@
 
     <string name="show_scenario_delete_title">Effacer le scénario</string>
     <string name="show_scenario_delete_text">Etes-vous sûr d'effacer le scénario ?</string>
+
+    <string name="licenses_title">Licences</string>
 
     <string name="decks_title">Decks</string>
     <string name="decks_no_decks">Pas de decks actuellement</string>

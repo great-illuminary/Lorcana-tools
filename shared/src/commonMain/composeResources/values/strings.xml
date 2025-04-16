@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
 <!-- non automatically generated -->
+    <string name="menu_title_main">Main</string>
+    <string name="menu_title_others">Others</string>
+
     <string name="deck_configuration_deck_name">Deck Name</string>
     <string name="deck_configuration_deck_size">Deck Size</string>
     <string name="deck_configuration_hand_size">Hand Size</string>
@@ -14,6 +17,8 @@
 
     <string name="show_scenario_delete_title">Delete the scenario</string>
     <string name="show_scenario_delete_text">Are you sure to delete this scenario ?</string>
+
+    <string name="licenses_title">Licenses</string>
 
     <string name="decks_title">Decks</string>
     <string name="decks_no_decks">No decks for now</string>

@@ -9,6 +9,8 @@ import androidx.compose.ui.unit.dp
 import eu.codlab.lorcana.blipya.home.LocalApp
 import eu.codlab.lorcana.blipya.home.LocalMenuState
 import eu.codlab.lorcana.blipya.home.LocalNavigator
+import eu.codlab.lorcana.blipya.utils.LocalWindow
+import eu.codlab.lorcana.blipya.utils.isScreenExpanded
 import eu.codlab.lorcana.blipya.widgets.TopAppBarExtended
 import kotlinx.coroutines.launch
 
@@ -23,19 +25,14 @@ fun TopBarWrapper() {
     val state by appModel.states.collectAsState()
     val canGoBack by navigator.canGoBack.collectAsState(initial = false)
 
-    /*val isScreenExpanded = when (LocalWindow.current) {
-        WindowType.SMARTPHONE_TINY -> false
-        WindowType.SMARTPHONE -> false
-        WindowType.PHABLET -> true
-        WindowType.TABLET -> true
-    }*/
+    val isScreenExpanded = LocalWindow.current.isScreenExpanded()
 
     Surface(elevation = 8.dp) {
         TopAppBarExtended(
             title = state.appBarState.showTitle(),
             topSpacer = true,
             canGoBack = canGoBack,
-            // isScreenExpanded = isScreenExpanded,
+            isScreenExpanded = isScreenExpanded,
             appModel = appModel
         ) {
             if (canGoBack) {

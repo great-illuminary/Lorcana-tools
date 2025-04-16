@@ -1,7 +1,5 @@
 package eu.codlab.lorcana.blipya.licenses
 
-
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -52,14 +50,6 @@ internal val fakeLicense = LicenseProject(
     licenses = listOf(
         "MIT",
         "Apache"
-        /*
-        LicenseSubLicense(
-            license = "MIT"
-        ),
-        LicenseSubLicense(
-            license = "Apache"
-        )
-        */
     ),
     description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod " +
             "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis " +
