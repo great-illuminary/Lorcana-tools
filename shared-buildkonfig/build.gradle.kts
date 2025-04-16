@@ -56,7 +56,8 @@ buildkonfig {
     defaultConfigs {
         listOf(
             "googleAuthServerId" to "GOOGLE_AUTH_SERVER_ID",
-            "sentryDsn" to "SENTRY_LORCANA_BLIPYA"
+            "sentryDsn" to "SENTRY_LORCANA_BLIPYA",
+            "version" to "originalVersion"
         ).forEach {
             buildConfigField(
                 FieldSpec.Type.STRING,
