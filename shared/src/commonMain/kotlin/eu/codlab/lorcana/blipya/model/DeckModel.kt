@@ -97,17 +97,11 @@ fun SavedDeckModel.toDeck(): DeckModel {
         defaultHand = this.hand,
     ).let { newDeck ->
         mulligans.forEach { mull ->
-            val mulligan = newDeck.appendNewMulligan(
+            newDeck.appendNewMulligan(
                 id = mull.id,
-                name = mull.name
+                name = mull.name,
+                cards = mull.cards.map { Triple(it.id, it.name, it.amount) }
             )
-            mull.cards.forEach { holder ->
-                mulligan.add(
-                    holder.id,
-                    amount = holder.amount
-                )
-                mulligan.update(holder.id, holder.name)
-            }
         }
         scenarii.forEach { scenar ->
             val scenario = newDeck.appendNewScenario(

@@ -62,9 +62,11 @@ class Deck(
         }
     }
 
-    fun appendNewMulligan(id: String, name: String) =
-        MulliganScenario(id, name, this.state.value)
-            .also { this.addMulligan(it) }
+    fun appendNewMulligan(
+        id: String,
+        name: String,
+        cards: List<Triple<String, String, Long>> = emptyList()
+    ) = MulliganScenario(id, name, this.state.value, cards).also { this.addMulligan(it) }
 
     fun addMulligan(mulligan: MulliganScenario) {
         if (_mulligans.value.contains(mulligan)) {

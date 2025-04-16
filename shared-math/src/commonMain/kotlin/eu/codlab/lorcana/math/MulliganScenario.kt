@@ -12,11 +12,14 @@ import kotlinx.coroutines.flow.update
 class MulliganScenario internal constructor(
     val id: String,
     var name: String,
-    defaultDeckState: DeckState
+    defaultDeckState: DeckState,
+    savedCards: List<Triple<String, String, Long>> = emptyList()
 ) {
     // todo : another context
     private val context = CoroutineScope(DefaultDispatcher)
-    private val mutableCards: MutableList<MulliganCard> = mutableListOf()
+    private val mutableCards: MutableList<MulliganCard> = savedCards
+        .map { (id, name, amount) -> MulliganCard(id, name, amount) }
+        .toMutableList()
 
     private var parentState: DeckState = defaultDeckState
 
