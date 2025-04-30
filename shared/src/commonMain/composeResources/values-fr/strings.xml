@@ -34,6 +34,14 @@
     <string name="new_scenario_option_mulligan">Mulligan</string>
     <string name="new_scenario_option_draws">Pioche(s)</string>
 
+    <string name="title_scenario_mulligan">Mulligan</string>
+    <string name="title_scenario_draw">Pioche(s)</string>
+    <string name="title_scenario_deck_dreamborn">Cartes du deck</string>
+
+    <string name="deck_section_empty_mulligan">Aucun scénario de mulligan enregistré</string>
+    <string name="deck_section_empty_draw">Aucun scénario de pioche enregistré</string>
+    <string name="deck_section_empty_deck">Pas de carte dans le deck (configurez le lien dreamborn)</string>
+
     <string name="result">Résultat</string>
     <string name="invalid">Invalide</string>
     <string name="cancel">Annuler</string>

@@ -34,6 +34,14 @@
     <string name="new_scenario_option_mulligan">Mulligan</string>
     <string name="new_scenario_option_draws">Draw(s)</string>
 
+    <string name="title_scenario_mulligan">Mulligan</string>
+    <string name="title_scenario_draw">Draw(s)</string>
+    <string name="title_scenario_deck_dreamborn">Cards in the deck</string>
+
+    <string name="deck_section_empty_mulligan">No mulligan scenario defined</string>
+    <string name="deck_section_empty_draw">No draw scenario defined</string>
+    <string name="deck_section_empty_deck">No cards in the deck (configure the dreamborn link)</string>
+
     <string name="result">Result</string>
     <string name="invalid">Invalid</string>
     <string name="cancel">Cancel</string>

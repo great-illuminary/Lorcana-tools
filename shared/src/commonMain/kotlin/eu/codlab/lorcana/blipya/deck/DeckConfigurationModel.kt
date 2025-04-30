@@ -4,17 +4,22 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.input.TextFieldValue
 import eu.codlab.http.Configuration
 import eu.codlab.http.createClient
+import eu.codlab.lorcana.blipya.deck.card.DeckMap
+import eu.codlab.lorcana.blipya.deck.card.VirtualCardNumber
 import eu.codlab.lorcana.blipya.dreamborn.CardNumber
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.save.Dreamborn
 import eu.codlab.lorcana.blipya.utils.asLongOrNull
 import eu.codlab.lorcana.blipya.utils.safeLaunch
+import eu.codlab.lorcana.cards.CardType
+import eu.codlab.lorcana.cards.Classification
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.MulliganScenario
 import eu.codlab.lorcana.math.Scenario
 import eu.codlab.lorcana.raw.VariantClassification
 import eu.codlab.viewmodel.StateViewModel
+import eu.codlab.viewmodel.launch
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.isSuccess
@@ -30,7 +35,7 @@ data class DeckConfigurationModelState(
     val mulligans: List<MulliganScenario>,
     val updatedAt: DateTime = DateTime.now(),
     val loadingDreamborn: Boolean = false,
-    val deckContent: List<CardNumber> = emptyList()
+    val deckContent: DeckMap? = null
 )
 
 @Suppress("TooManyFunctions")
@@ -43,7 +48,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             handSize = TextFieldValue("${deck.hand}"),
             scenarii = deck.scenarios,
             mulligans = deck.mulligans,
-            deckContent = deck.dreamborn?.data?.list ?: emptyList()
+            deckContent = null
         )
     ) {
     private val client = createClient(
@@ -53,6 +58,51 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             requestTimeoutMillis = 30000
         )
     )
+
+    private fun generateDeck(cardNumbers: List<CardNumber>): DeckMap {
+        val characters = mutableListOf<VirtualCardNumber>()
+        val actions = mutableListOf<VirtualCardNumber>()
+        val songs = mutableListOf<VirtualCardNumber>()
+        val objects = mutableListOf<VirtualCardNumber>()
+        val locations = mutableListOf<VirtualCardNumber>()
+
+        cardNumbers.forEach {
+            val (card, variant) = appModel.cardFromDreamborn(it.card) ?: return@forEach
+
+            val hasSong = null != card.classifications.find { c -> c.slug == Classification.Song }
+
+            when (card.type) {
+                CardType.Glimmer -> characters
+                CardType.Item -> objects
+                CardType.Location -> locations
+                CardType.Action -> if (hasSong) {
+                    songs
+                } else {
+                    actions
+                }
+            }.add(VirtualCardNumber(card, variant, it.number))
+        }
+
+        return DeckMap(
+            characters = characters.sortedBy { it.card.cost },
+            actions = actions.sortedBy { it.card.cost },
+            songs = songs.sortedBy { it.card.cost },
+            objects = objects.sortedBy { it.card.cost },
+            locations = locations.sortedBy { it.card.cost }
+        )
+    }
+
+    init {
+        launch {
+            val list = deck.dreamborn?.data?.list ?: return@launch
+
+            updateState {
+                copy(
+                    deckContent = generateDeck(list)
+                )
+            }
+        }
+    }
 
     private suspend fun dreamborn(id: String): eu.codlab.lorcana.blipya.dreamborn.Deck {
         val dreamborn = id.split("?").first().let { intermediate ->
@@ -90,11 +140,14 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             )
 
             states.value.deck.dreamborn = dreambornDeck
+            val list = dreamborn.list
+
+            val generated = generateDeck(list)
 
             updateState {
                 copy(
                     loadingDreamborn = false,
-                    deckContent = dreambornDeck.data?.list ?: emptyList()
+                    deckContent = generated
                 )
             }
 

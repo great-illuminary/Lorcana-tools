@@ -49,6 +49,7 @@ data class AppModelState(
     val showPromptNewDeck: Boolean = false,
     val showPromptNewScenario: Boolean = false,
     val lorcana: LorcanaLoaded? = null,
+    val mapDreamborn: Map<String, Pair<VirtualCard, VariantClassification>> = mutableMapOf(),
     val authentication: SavedAuthentication? = null,
     val requestForGoogleAuthenticationState: String? = null
 )
@@ -104,11 +105,20 @@ data class AppModel(
                 accountClient.checkAccount(it.token)
             } == true
 
+            val mapDreamborn = mutableMapOf<String, Pair<VirtualCard, VariantClassification>>()
+
+            lorcana?.cards?.forEach { card ->
+                card.variants.forEach {
+                    mapDreamborn.put(it.dreamborn, card to it)
+                }
+            }
+
             updateState {
                 copy(
                     initialized = true,
                     decks = decks,
                     lorcana = lorcana,
+                    mapDreamborn = mapDreamborn,
                     authentication = if (validAuthent) authentication else null
                 )
             }
@@ -269,6 +279,10 @@ data class AppModel(
     }
 
     fun cardFromDreamborn(dreambornId: String): Pair<VirtualCard, VariantClassification>? {
+        val pair = states.value.mapDreamborn[dreambornId]
+
+        if (null != pair) return pair
+
         var foundVariant: VariantClassification? = null
         val card = states.value.lorcana?.cards?.find { card ->
             val variant = card.variants.firstOrNull { variant -> variant.dreamborn == dreambornId }

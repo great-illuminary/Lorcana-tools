@@ -7,8 +7,14 @@ import eu.codlab.platform.currentPlatform
 
 data class FontSizes(
     val menu: MenuSize = MenuSize(),
+    val deckInfo: DeckInfo = DeckInfo(),
     val popup: PopupSize = PopupSize(),
     val actionBar: ActionBar = ActionBar(),
+)
+
+data class DeckInfo(
+    val section: TextUnit = 16.sp,
+    val textEmpty: TextUnit = 12.sp,
 )
 
 data class MenuSize(
@@ -34,6 +40,10 @@ private val jvmFontSizes = FontSizes(
         title = 12.sp,
         item = 12.sp,
         switch = 10.sp,
+    ),
+    deckInfo = DeckInfo(
+        section = 14.sp,
+        textEmpty = 12.sp,
     ),
     popup = PopupSize(
         title = 20.sp,

@@ -147,6 +147,8 @@ class MulliganUtils(
         }
 
         val remaining = deckSize - DefaultHandSize - cardsToAdjust
+
+        // we returned early if we had more than "recoverableKey" to recover potentially
         result.onDraw += adjustedProb * listOfCardsInTheDeck[recoverableKey]!! / remaining
     }
 

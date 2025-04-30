@@ -39,24 +39,21 @@ const val Ratio = 734.0f / 1024.0f
 fun ShowCard(
     modifier: Modifier,
     deck: Deck,
-    number: CardNumber
+    virtualCardNumber: VirtualCardNumber
 ) {
-    // nothing for now
-    val model = LocalApp.current
-    val found = model.cardFromDreamborn(number.card) ?: return
-    val (card, variant) = found
+    val variant = virtualCardNumber.variant
 
     val showCardModel by remember {
         mutableStateOf(
             ShowCardModelImpl(
                 deck,
-                number.number.toLong()
+                virtualCardNumber.number.toLong()
             )
         )
     }
 
-    LaunchedEffect(number.number) {
-        showCardModel.setCardNumber(number.number.toLong())
+    LaunchedEffect(virtualCardNumber.number) {
+        showCardModel.setCardNumber(virtualCardNumber.number.toLong())
     }
 
     ShowCardInternal(modifier, showCardModel, variant)

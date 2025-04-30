@@ -68,7 +68,9 @@ fun ColumnScope.ScaffoldContentWrapper(
                     interactionSource = interactionSource,
                     indication = null // this gets rid of the ripple effect
                 ) {
-                    if (currentPlatform != Platform.JVM) {
+                    if (currentPlatform == Platform.ANDROID ||
+                        currentPlatform == Platform.IOS
+                    ) {
                         keyboardController?.hide()
                         focusManager.clearFocus(true)
                     }
