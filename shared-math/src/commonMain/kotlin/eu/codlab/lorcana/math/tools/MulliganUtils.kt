@@ -57,6 +57,10 @@ class MulliganUtils(
         val inHand = hand.values.sum()
         val containsAtLeast1OfEach = null == hand.values.find { it < 1L }
 
+        if (othersInTheDeck < 0) {
+            return
+        }
+
         val othersInHand = DefaultHandSize - inHand
         val initialOpeningHandProb = multivariateHyperGeometric(
             listInDeck = listOfCardsInTheDeck,
@@ -149,7 +153,9 @@ class MulliganUtils(
         val remaining = deckSize - DefaultHandSize - cardsToAdjust
 
         // we returned early if we had more than "recoverableKey" to recover potentially
-        result.onDraw += adjustedProb * listOfCardsInTheDeck[recoverableKey]!! / remaining
+        if (remaining > 0) {
+            result.onDraw += adjustedProb * listOfCardsInTheDeck[recoverableKey]!! / remaining
+        }
     }
 
     private fun prepareMap(

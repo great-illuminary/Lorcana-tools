@@ -57,7 +57,7 @@ class ShowCardModelImpl(
                 val cardNumber = states.value.cardNumber
                 val others = deck.size - cardNumber
 
-                if (cardNumber > DefaultHandSize) {
+                if (cardNumber > DefaultHandSize || cardNumber > deck.size) {
                     triggerProbability(0.0)
                     return@collect
                 }
