@@ -14,8 +14,14 @@ object BinomialCoefficient {
         return (startAt..x).map { it }
     }
 
+    private val binomialCache: MutableMap<Long, MutableMap<Long, Long>> = mutableMapOf()
+
     fun binomial(k: Long, n: Long): Long {
         if (k == n) return 1
+
+        val cache = binomialCache.getOrPut(k) { mutableMapOf() }
+
+        cache[n]?.let { return it }
 
         // we normally do n!/(k! * (n - k)!)
         // meaning that it's 1*...*n / ( (1*...*k) * (1*...*(n-k))!
@@ -36,6 +42,8 @@ object BinomialCoefficient {
         var numerator = BigInteger(1)
         (1..max).forEach { i -> numerator *= ((n + 1 - i)) }
 
-        return (numerator / denominator).longValue(true)
+        return (numerator / denominator).longValue(true).also {
+            cache[n] = it
+        }
     }
 }
