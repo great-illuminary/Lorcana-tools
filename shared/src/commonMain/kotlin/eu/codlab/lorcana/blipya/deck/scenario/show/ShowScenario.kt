@@ -82,6 +82,7 @@ fun ShowScenario(
             MenuItemOverflowMenu(
                 tint = Color.White,
                 imageVector = Icons.Outlined.MoreVert,
+                id = scenario.id,
                 contentDescription = "Manage"
             ) {
                 // show the actions to edit & delete the current scenario

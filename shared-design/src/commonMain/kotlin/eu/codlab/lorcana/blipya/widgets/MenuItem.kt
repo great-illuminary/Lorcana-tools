@@ -9,6 +9,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,7 +50,13 @@ sealed class MenuItem {
     ) : MenuItem() {
         @Composable
         override fun Draw(scope: RowScope, tint: Color) {
-            scope.MenuItemOverflowMenu(tint, imageVector, contentDescription, content)
+            scope.MenuItemOverflowMenu(
+                tint,
+                imageVector,
+                contentDescription,
+                "id: not used here",
+                content
+            )
         }
     }
 }
@@ -59,6 +66,7 @@ fun RowScope.MenuItemOverflowMenu(
     tint: Color,
     imageVector: ImageVector,
     contentDescription: String = "",
+    id: String,
     content: @Composable RowScope.(
         dismiss: () -> Unit
     ) -> Unit
@@ -66,6 +74,12 @@ fun RowScope.MenuItemOverflowMenu(
     val localThis = this
     val isDark = LocalDarkTheme.current
     var showMenu by remember { mutableStateOf(false) }
+
+    // whenever the id changes, it means we need to hide it
+    LaunchedEffect(id) {
+        showMenu = false
+    }
+
     Box {
         IconButton(
             modifier = Modifier.size(24.dp),
