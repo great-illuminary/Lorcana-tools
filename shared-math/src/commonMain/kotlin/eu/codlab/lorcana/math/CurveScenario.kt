@@ -9,7 +9,10 @@ class CurveScenario(
     val expectedTresholdSuccess: Double,
     val originalCardsSeen: Long = 7,
     val knownUninkablesInDeck: Long? = null,
+    val numberOfInkableKeptInCurve: List<Long> = emptyList(),
 ) {
+    private val overrideNumberOfUninkableKeptInCurve = numberOfInkableKeptInCurve.sum()
+
     private val totalCards = numberOfCardsInCurve.sum()
     private val maxInk = numberOfCardsInCurve.indexOfLast { it > 0 }
     private val utils = CurveUtils()
@@ -23,7 +26,8 @@ class CurveScenario(
         }
 
         val cardsSeen = originalCardsSeen + maxInk
-        val uninkables = knownUninkablesInDeck ?: calculateExpectedMaxUninkables(cardsSeen)
+        val uninkablesInDeck = knownUninkablesInDeck ?: calculateExpectedMaxUninkables(cardsSeen)
+        val uninkables = uninkablesInDeck + overrideNumberOfUninkableKeptInCurve
 
         if (uninkables < 0 || uninkables > totalCards) {
             throw IllegalStateException("Uninkable count is invalid")
@@ -54,7 +58,7 @@ class CurveScenario(
             maxInk = maxInk,
             cardsSeen = cardsSeen,
             inkablesInDeck = inkablesInDeck,
-            uninkablesInDeck = uninkables,
+            uninkablesInDeck = uninkablesInDeck,
             probability = overallProbability,
             totalCards = totalCards,
             turnsInfo = turnsProbability

@@ -14,6 +14,8 @@ import eu.codlab.lorcana.blipya.utils.asLongOrNull
 import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.lorcana.cards.CardType
 import eu.codlab.lorcana.cards.Classification
+import eu.codlab.lorcana.math.CurveInfo
+import eu.codlab.lorcana.math.CurveScenario
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.MulliganScenario
 import eu.codlab.lorcana.math.Scenario
@@ -23,6 +25,7 @@ import eu.codlab.viewmodel.launch
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.isSuccess
+import korlibs.datastructure.keep
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
 
@@ -35,7 +38,14 @@ data class DeckConfigurationModelState(
     val mulligans: List<MulliganScenario>,
     val updatedAt: DateTime = DateTime.now(),
     val loadingDreamborn: Boolean = false,
-    val deckContent: DeckMap? = null
+    val deckContent: DeckMap? = null,
+    val calculateDeckCurve: CalculatedDeckCurve? = null
+)
+
+data class CalculatedDeckCurve(
+    val original: CurveInfo,
+    val withKeeping4OfEach: CurveInfo,
+    val withKeeping2OfEach: CurveInfo,
 )
 
 @Suppress("TooManyFunctions")
@@ -96,9 +106,17 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         launch {
             val list = deck.dreamborn?.data?.list ?: return@launch
 
+            val deckContent = generateDeck(list)
+            val calculateDeckCurve = try {
+                calculateDeckCurve(deckContent)
+            } catch (err: Throwable) {
+                null
+            }
+
             updateState {
                 copy(
-                    deckContent = generateDeck(list)
+                    deckContent = deckContent,
+                    calculateDeckCurve = calculateDeckCurve
                 )
             }
         }
@@ -123,11 +141,6 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         updateState { copy(loadingDreamborn = true) }
 
         try {
-            // TODO set to model as well ?
-            // states.value.deck.dreamborn = states.value.deck.dreamborn?.copy(
-            //    url = url, data = null
-            // ) ?: Dreamborn(url = url)
-
             val dreamborn = dreamborn(url)
 
             // TODO set to model as well ?
@@ -142,12 +155,18 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             states.value.deck.dreamborn = dreambornDeck
             val list = dreamborn.list
 
-            val generated = generateDeck(list)
+            val deckContent = generateDeck(list)
+            val calculateDeckCurve = try {
+                calculateDeckCurve(deckContent)
+            } catch (err: Throwable) {
+                null
+            }
 
             updateState {
                 copy(
                     loadingDreamborn = false,
-                    deckContent = generated
+                    deckContent = deckContent,
+                    calculateDeckCurve = calculateDeckCurve
                 )
             }
 
@@ -289,6 +308,35 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             AppModel.fake(),
             DeckModel(Deck(UUID.randomUUID().toString(), "", 0, 0))
         )
+    }
+
+    @Throws(IllegalStateException::class)
+    private fun calculateDeckCurve(deck: DeckMap): CalculatedDeckCurve {
+        val computes = listOf(0L, 2L, 4L).map { removeAtLeast ->
+            CurveScenario(
+                "",
+                "",
+                deck.curved(),
+                expectedTresholdSuccess = 95.0,
+                knownUninkablesInDeck = deck.uninkables().toLong(),
+                numberOfInkableKeptInCurve = deck.curvedInkables().map { value ->
+                    if (value > removeAtLeast) {
+                        removeAtLeast
+                    } else {
+                        value
+                    }
+                },
+            )
+        }
+        return CalculatedDeckCurve(
+            original = computes[0].calculate(),
+            withKeeping2OfEach = computes[1].calculate(),
+            withKeeping4OfEach = computes[2].calculate()
+        ).also {
+            println(it.original)
+            println(it.withKeeping2OfEach)
+            println(it.withKeeping4OfEach)
+        }
     }
 }
 

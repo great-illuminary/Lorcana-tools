@@ -18,13 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.deck_section_empty_deck
@@ -35,6 +31,7 @@ import eu.codlab.blipya.res.title_scenario_draw
 import eu.codlab.blipya.res.title_scenario_mulligan
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.card.ShowCard
+import eu.codlab.lorcana.blipya.deck.curve.ShowCurveInformation
 import eu.codlab.lorcana.blipya.deck.dreamborn.ShowDreambornInformation
 import eu.codlab.lorcana.blipya.deck.main.ShowDeckInformation
 import eu.codlab.lorcana.blipya.deck.mulligan.show.ShowMulligan
@@ -91,6 +88,13 @@ fun DeckConfiguration(
 
         item {
             ShowDreambornInformation(
+                Modifier.fillMaxSize(),
+                model
+            )
+        }
+
+        item {
+            ShowCurveInformation(
                 Modifier.fillMaxSize(),
                 model
             )
