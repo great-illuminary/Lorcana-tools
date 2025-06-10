@@ -11,6 +11,7 @@ class CurveScenario(
     val knownUninkablesInDeck: Long? = null,
     val numberOfInkableKeptInCurve: List<Long> = emptyList(),
 ) {
+    private val max = 100
     private val overrideNumberOfUninkableKeptInCurve = numberOfInkableKeptInCurve.sum()
 
     private val totalCards = numberOfCardsInCurve.sum()
@@ -37,7 +38,7 @@ class CurveScenario(
 
         val overallProbability = (maxInk..cardsSeen).map { seen ->
             utils.hyperGeometric(seen, totalCards, inkablesInDeck, cardsSeen)
-        }.sum() * 100
+        }.sum() * max
 
         val turnsProbability = numberOfCardsInCurve.mapIndexed { turnTreshold, _ ->
             val cardsSeen = originalCardsSeen + turnTreshold
@@ -49,7 +50,7 @@ class CurveScenario(
 
             CurveTurnInfo(
                 turn,
-                probability * 100.0
+                probability * max
             )
         }
 
@@ -73,7 +74,7 @@ class CurveScenario(
                 utils.hyperGeometric(fill, totalCards, remainingCards, cardsSeen)
             }
 
-            if (100 * prob >= expectedTresholdSuccess) {
+            if (max * prob >= expectedTresholdSuccess) {
                 uninkables = seen
             }
         }

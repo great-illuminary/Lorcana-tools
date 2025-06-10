@@ -24,7 +24,6 @@ data class DeckMap(
         return map.keys.sorted().map { map[it] ?: 0 }
     }
 
-
     fun curvedInkables(): List<Long> {
         val map = mutableMapOf<Int, Long>()
 

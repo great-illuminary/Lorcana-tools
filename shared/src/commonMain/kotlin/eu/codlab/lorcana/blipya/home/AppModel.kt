@@ -294,7 +294,7 @@ data class AppModel(
         return if (null != card && null != foundVariant) {
             card to foundVariant!!
         } else {
-            return null
+            null
         }
     }
 

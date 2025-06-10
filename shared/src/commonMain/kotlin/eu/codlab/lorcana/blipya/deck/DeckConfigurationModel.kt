@@ -25,7 +25,6 @@ import eu.codlab.viewmodel.launch
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.isSuccess
-import korlibs.datastructure.keep
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
 
@@ -103,6 +102,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
     }
 
     init {
+        @Suppress("TooGenericExceptionCaught", "SwallowedException")
         launch {
             val list = deck.dreamborn?.data?.list ?: return@launch
 
@@ -134,7 +134,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         throw IllegalStateException("Error while loading $url")
     }
 
-    @Suppress("TooGenericExceptionCaught")
+    @Suppress("TooGenericExceptionCaught", "SwallowedException")
     fun loadDreamborn(url: String) = safeLaunch {
         if (states.value.loadingDreamborn) return@safeLaunch
 
@@ -310,14 +310,17 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
         )
     }
 
-    @Throws(IllegalStateException::class)
+    @Suppress("MagicNumber")
     private fun calculateDeckCurve(deck: DeckMap): CalculatedDeckCurve {
+        // we will compute the cards with no modifications,
+        // then 2 cards of each "turn" will be at least kept
+        // then 4 cards of each "turn"
         val computes = listOf(0L, 2L, 4L).map { removeAtLeast ->
             CurveScenario(
                 "",
                 "",
                 deck.curved(),
-                expectedTresholdSuccess = 95.0,
+                expectedTresholdSuccess = 90.0,
                 knownUninkablesInDeck = deck.uninkables().toLong(),
                 numberOfInkableKeptInCurve = deck.curvedInkables().map { value ->
                     if (value > removeAtLeast) {

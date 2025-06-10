@@ -65,4 +65,12 @@
     <string name="delete_account_title">Delete Account</string>
     <string name="delete_account_text">Do you want to delete your account ? You will lose the data synced on the backend but will keep your data locally.</string>
     <string name="delete_account_done">Your account has been deleted on the backend</string>
+
+    <string name="title_deck_info">Deck Info</string>
+    <string name="title_deck_info_no_info">No curve information have been calculated, check your deck's dreamborn information</string>
+    <string name="curve_information_title">Curve Info</string>
+    <string name="curve_information_original">Original</string>
+    <string name="curve_information_keep_2">Keep 2</string>
+    <string name="curve_information_keep_4">Keep 4</string>
+    <string name="curve_information_turn">Turn</string>
 </resources>

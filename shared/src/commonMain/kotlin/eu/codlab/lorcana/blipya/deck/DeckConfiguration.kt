@@ -26,6 +26,7 @@ import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.deck_section_empty_deck
 import eu.codlab.blipya.res.deck_section_empty_draw
 import eu.codlab.blipya.res.deck_section_empty_mulligan
+import eu.codlab.blipya.res.title_deck_info
 import eu.codlab.blipya.res.title_scenario_deck_dreamborn
 import eu.codlab.blipya.res.title_scenario_draw
 import eu.codlab.blipya.res.title_scenario_mulligan
@@ -68,7 +69,6 @@ fun DeckConfiguration(
     }
 
     val color = defaultCardBackground()
-    val maxWidth = 100.dp
     val numberOfColumnsForMainItem = 2
     val columns = expectedNumberOfColumns()
 
@@ -93,7 +93,15 @@ fun DeckConfiguration(
             )
         }
 
-        item {
+        item(span = { GridItemSpan(columns) }) {
+            TextNormal(
+                text = Res.string.title_deck_info.localized(),
+                fontSize = LocalFontSizes.current.deckInfo.section,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        item(span = { GridItemSpan(numberOfColumnsForMainItem) }) {
             ShowCurveInformation(
                 Modifier.fillMaxSize(),
                 model
@@ -108,7 +116,7 @@ fun DeckConfiguration(
             )
         }
 
-        ShowEmptySectionIfRequired(
+        showEmptySectionIfRequired(
             Res.string.deck_section_empty_mulligan,
             columns,
             state.mulligans.isEmpty()
@@ -138,7 +146,7 @@ fun DeckConfiguration(
             )
         }
 
-        ShowEmptySectionIfRequired(
+        showEmptySectionIfRequired(
             Res.string.deck_section_empty_draw,
             columns,
             state.scenarii.isEmpty()
@@ -168,7 +176,7 @@ fun DeckConfiguration(
             )
         }
 
-        ShowEmptySectionIfRequired(
+        showEmptySectionIfRequired(
             Res.string.deck_section_empty_deck,
             columns,
             show = null != state.deckContent
@@ -194,7 +202,7 @@ fun DeckConfiguration(
     }
 }
 
-private fun LazyGridScope.ShowEmptySectionIfRequired(
+private fun LazyGridScope.showEmptySectionIfRequired(
     text: StringResource,
     columns: Int,
     show: Boolean

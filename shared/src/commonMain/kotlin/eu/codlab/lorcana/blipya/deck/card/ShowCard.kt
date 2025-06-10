@@ -19,9 +19,7 @@ import androidx.compose.ui.draw.clip
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.scenario.show.round
-import eu.codlab.lorcana.blipya.dreamborn.CardNumber
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
-import eu.codlab.lorcana.blipya.home.LocalApp
 import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground

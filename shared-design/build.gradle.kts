@@ -46,6 +46,8 @@ kotlin {
                 api(additionals.multiplatform.file.access)
 
                 implementation(libs.hotpreview)
+
+                api(libs.koalaplot)
             }
         }
         commonTest {

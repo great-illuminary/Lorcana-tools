@@ -16,6 +16,7 @@ object BinomialCoefficient {
 
     private val binomialCache: MutableMap<Long, MutableMap<Long, Long>> = mutableMapOf()
 
+    @Suppress("ReturnCount")
     fun binomial(k: Long, n: Long): Long {
         if (k == n) return 1
 
