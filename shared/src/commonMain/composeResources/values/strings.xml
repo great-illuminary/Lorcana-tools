@@ -68,9 +68,15 @@
 
     <string name="title_deck_info">Deck Info</string>
     <string name="title_deck_info_no_info">No curve information have been calculated, check your deck's dreamborn information</string>
+    <string name="curve_information_title_graph">Curve Graph Info</string>
     <string name="curve_information_title">Curve Info</string>
     <string name="curve_information_original">Original</string>
     <string name="curve_information_keep_2">Keep 2</string>
     <string name="curve_information_keep_4">Keep 4</string>
     <string name="curve_information_turn">Turn</string>
+    <string name="curve_information_probability">Probability</string>
+    <string name="curve_information_max_ink">Max Ink</string>
+    <string name="curve_information_average_cost">Average Cost</string>
+    <string name="curve_information_inkables_in_deck">Inkables</string>
+    <string name="curve_information_uninkables_in_deck">Uninkables</string>
 </resources>

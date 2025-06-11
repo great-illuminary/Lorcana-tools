@@ -33,6 +33,7 @@ import eu.codlab.blipya.res.title_scenario_mulligan
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.card.ShowCard
 import eu.codlab.lorcana.blipya.deck.curve.ShowCurveInformation
+import eu.codlab.lorcana.blipya.deck.curve.ShowCurveInformationGraph
 import eu.codlab.lorcana.blipya.deck.dreamborn.ShowDreambornInformation
 import eu.codlab.lorcana.blipya.deck.main.ShowDeckInformation
 import eu.codlab.lorcana.blipya.deck.mulligan.show.ShowMulligan
@@ -71,6 +72,8 @@ fun DeckConfiguration(
     val color = defaultCardBackground()
     val numberOfColumnsForMainItem = 2
     val columns = expectedNumberOfColumns()
+    val expectedSpanForRegularTiles = expectedSpanForRegularTiles()
+    val (curveGraph, curveInfo) = expectedSpanForGraphTiles()
 
     LazyVerticalGrid(
         modifier = modifier.imePadding(),
@@ -86,7 +89,7 @@ fun DeckConfiguration(
             )
         }
 
-        item {
+        item(span = { GridItemSpan(expectedSpanForRegularTiles) }) {
             ShowDreambornInformation(
                 Modifier.fillMaxSize(),
                 model
@@ -101,7 +104,14 @@ fun DeckConfiguration(
             )
         }
 
-        item(span = { GridItemSpan(numberOfColumnsForMainItem) }) {
+        item(span = { GridItemSpan(curveGraph) }) {
+            ShowCurveInformationGraph(
+                Modifier.fillMaxSize(),
+                model
+            )
+        }
+
+        item(span = { GridItemSpan(curveInfo) }) {
             ShowCurveInformation(
                 Modifier.fillMaxSize(),
                 model
@@ -236,6 +246,30 @@ private fun expectedNumberOfColumns(): Int {
         WindowType.SMARTPHONE -> columnsForReducedScreens
         WindowType.PHABLET -> 3
         WindowType.TABLET -> columnsForExpandedScreens
+    }
+}
+
+@Suppress("MagicNumber")
+@Composable
+private fun expectedSpanForGraphTiles(): Pair<Int, Int> {
+    return when (LocalFrame.current) {
+        WindowType.SMARTPHONE_TINY -> 2 to 2
+        WindowType.SMARTPHONE -> 2 to 2
+        WindowType.PHABLET -> 3 to 2
+        WindowType.TABLET -> 3 to 2
+    }
+}
+
+@Suppress("MagicNumber")
+@Composable
+private fun expectedSpanForRegularTiles(): Int {
+    val columnsForReducedScreens = 2
+
+    return when (LocalFrame.current) {
+        WindowType.SMARTPHONE_TINY -> columnsForReducedScreens
+        WindowType.SMARTPHONE -> columnsForReducedScreens
+        WindowType.PHABLET -> 1
+        WindowType.TABLET -> 1
     }
 }
 

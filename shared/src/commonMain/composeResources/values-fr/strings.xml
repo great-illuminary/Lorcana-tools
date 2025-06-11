@@ -68,9 +68,15 @@
 
     <string name="title_deck_info">Deck Info</string>
     <string name="title_deck_info_no_info">Pas d'information de curve n'a pu être calculée. Vérifiez vos informations dreamborn</string>
+    <string name="curve_information_title_graph">Graphique de Curve</string>
     <string name="curve_information_title">Information de Curve</string>
     <string name="curve_information_original">Originel</string>
     <string name="curve_information_keep_2">Garde 2</string>
     <string name="curve_information_keep_4">Garde 4</string>
     <string name="curve_information_turn">Tour</string>
+    <string name="curve_information_probability">Probabilité</string>
+    <string name="curve_information_max_ink">Encre Maximale</string>
+    <string name="curve_information_average_cost">Coût Moyen</string>
+    <string name="curve_information_inkables_in_deck">Encrables</string>
+    <string name="curve_information_uninkables_in_deck">Non Encrables</string>
 </resources>
