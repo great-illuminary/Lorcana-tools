@@ -48,6 +48,7 @@ kotlin {
                 implementation(libs.hotpreview)
 
                 api(libs.koalaplot)
+                api(project(":shared-icons"))
             }
         }
         commonTest {

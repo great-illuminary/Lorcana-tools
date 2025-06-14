@@ -17,6 +17,8 @@ class CurveUtils {
         val remainingInTotal = totalPopulationSize - totalSuccessesInThePopulation
         val others = numberOfDraws - successesDraws
 
+        if (0L == totalSuccessesInThePopulation) return 0.0
+
         return BigDecimal.fromLong(binomial(successesDraws, totalSuccessesInThePopulation), mode)
             .multiply(BigDecimal.fromLong(binomial(others, remainingInTotal), mode))
             .div(BigDecimal.fromLong(binomial(numberOfDraws, totalPopulationSize), mode))

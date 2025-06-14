@@ -6,6 +6,7 @@ enum class PossibleRoutes(val impl: Route) {
     DeckMulligan(RouteDeckMulligan()),
     DeckScenario(RouteDeckScenario()),
     RouteLicenses(RouteLicenses()),
+    RouteCurve(RouteCurve())
     ;
 
     companion object {

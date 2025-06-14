@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -89,6 +90,7 @@ fun DrawerItem(
     onClick: (title: String, key: NavigateTo) -> Unit
 ) {
     val selected = currentRoute == key
+    val imageSize = 18.dp
 
     if (tiny) {
         Row(
@@ -106,6 +108,7 @@ fun DrawerItem(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Image(
+                modifier = Modifier.width(imageSize).height(imageSize),
                 imageVector = image,
                 contentDescription = text,
                 colorFilter = ColorFilter.tint(color(selected))
@@ -130,6 +133,7 @@ fun DrawerItem(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Image(
+            modifier = Modifier.width(imageSize).height(imageSize),
             imageVector = image,
             contentDescription = text,
             colorFilter = ColorFilter.tint(color(selected))
@@ -246,15 +250,15 @@ private fun DrawerItemPreviewDark() {
             DrawerSeparator()
             DrawerItem(
                 text = "Item",
-                key = NavigateTo.Main(),
+                key = NavigateTo.Main,
                 image = Icons.Rounded.Folder
             ) { _, _ ->
                 // nothing
             }
             DrawerItem(
                 text = "Item",
-                currentRoute = NavigateTo.Main(),
-                key = NavigateTo.Main(),
+                currentRoute = NavigateTo.Main,
+                key = NavigateTo.Main,
                 image = Icons.Rounded.Folder
             ) { _, _ ->
                 // nothing
@@ -262,8 +266,8 @@ private fun DrawerItemPreviewDark() {
 
             DrawerItem(
                 text = "Item",
-                currentRoute = NavigateTo.Main(),
-                key = NavigateTo.Main(),
+                currentRoute = NavigateTo.Main,
+                key = NavigateTo.Main,
                 tiny = true,
                 image = Icons.Rounded.Folder
             ) { _, _ ->

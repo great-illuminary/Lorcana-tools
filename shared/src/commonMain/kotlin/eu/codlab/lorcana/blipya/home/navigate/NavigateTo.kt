@@ -11,7 +11,7 @@ sealed class NavigateTo {
     abstract val popBackStack: Boolean
     abstract val options: NavOptions
 
-    class Main : NavigateTo() {
+    object Main : NavigateTo() {
         override val route = "/main"
         override val popBackStack = true
 
@@ -21,7 +21,7 @@ sealed class NavigateTo {
         )
     }
 
-    class Licenses : NavigateTo() {
+    object Licenses : NavigateTo() {
         override val route = "/licenses"
         override val popBackStack = true
 
@@ -58,6 +58,16 @@ sealed class NavigateTo {
         override val options = NavOptions(
             launchSingleTop = false,
             popUpTo = PopUpTo.None
+        )
+    }
+
+    object CurveInformation : NavigateTo() {
+        override val route = "/curve"
+        override val popBackStack = true
+
+        override val options = NavOptions(
+            launchSingleTop = false,
+            popUpTo = PopUpTo.First(true)
         )
     }
 }

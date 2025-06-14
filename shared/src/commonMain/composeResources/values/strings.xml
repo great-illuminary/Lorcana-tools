@@ -79,4 +79,11 @@
     <string name="curve_information_average_cost">Average Cost</string>
     <string name="curve_information_inkables_in_deck">Inkables</string>
     <string name="curve_information_uninkables_in_deck">Uninkables</string>
+
+    <string name="curve_title">Curve Information</string>
+    <string name="curve_info_deck_related_info">Information related to the deck</string>
+    <string name="curve_info_deck_related_uninkables_known">Override non inkables ?</string>
+    <string name="curve_info_deck_related_uninkables_number">Number of non inkables</string>
+    <string name="curve_info_cost_title">Number of cards for each possible costs</string>
+    <string name="curve_info_cost_input">Cost {cost}</string>
 </resources>

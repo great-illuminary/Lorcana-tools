@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -23,25 +21,22 @@ import eu.codlab.blipya.res.curve_information_inkables_in_deck
 import eu.codlab.blipya.res.curve_information_max_ink
 import eu.codlab.blipya.res.curve_information_probability
 import eu.codlab.blipya.res.curve_information_title
-import eu.codlab.blipya.res.curve_information_turn
 import eu.codlab.blipya.res.curve_information_uninkables_in_deck
 import eu.codlab.blipya.res.title_deck_info_no_info
 import eu.codlab.compose.widgets.TextNormal
-import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
 import eu.codlab.lorcana.blipya.deck.edit.showProbability
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
 import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
+import eu.codlab.lorcana.math.CurveInfo
 
 @Suppress("LongMethod")
 @Composable
 fun ShowCurveInformation(
     modifier: Modifier,
-    model: DeckConfigurationModel
+    curveInformation: CurveInfo?
 ) {
-    val state by model.states.collectAsState()
-
     DefaultCard(
         modifier = modifier,
         backgroundColor = defaultCardBackground()
@@ -58,9 +53,7 @@ fun ShowCurveInformation(
             Divider(modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(16.dp))
 
-            val turn = Res.string.curve_information_turn.localized()
-
-            if (null == state.calculateDeckCurve) {
+            if (null == curveInformation) {
                 Column(
                     modifier = Modifier.fillMaxWidth().height(100.dp),
                     verticalArrangement = Arrangement.Center,
@@ -74,26 +67,32 @@ fun ShowCurveInformation(
                 }
             }
 
-            state.calculateDeckCurve?.let { curveHolder ->
+            curveInformation?.let { curveHolder ->
                 Column(modifier) {
                     Row(modifier) {
-                        TextNormal("${Res.string.curve_information_probability.localized()} : ${curveHolder.original.probability.showProbability()}")
+                        TextNormal(
+                            "${Res.string.curve_information_probability.localized()} : " +
+                                    curveHolder.probability.showProbability()
+                        )
                     }
 
                     Row(modifier) {
-                        TextNormal("${Res.string.curve_information_max_ink.localized()} : ${curveHolder.original.maxInk}")
+                        TextNormal("${Res.string.curve_information_max_ink.localized()} : ${curveHolder.maxInk}")
                     }
 
                     Row(modifier) {
-                        TextNormal("${Res.string.curve_information_average_cost.localized()} : ${curveHolder.original.averageCost.showProbability()}")
+                        TextNormal(
+                            "${Res.string.curve_information_average_cost.localized()} :" +
+                                    curveHolder.averageCost.showProbability()
+                        )
                     }
 
                     Row(modifier) {
-                        TextNormal("${Res.string.curve_information_inkables_in_deck.localized()} : ${curveHolder.original.inkablesInDeck}")
+                        TextNormal("${Res.string.curve_information_inkables_in_deck.localized()} : ${curveHolder.inkablesInDeck}")
                     }
 
                     Row(modifier) {
-                        TextNormal("${Res.string.curve_information_uninkables_in_deck.localized()} : ${curveHolder.original.uninkablesInDeck}")
+                        TextNormal("${Res.string.curve_information_uninkables_in_deck.localized()} : ${curveHolder.uninkablesInDeck}")
                     }
                 }
             }

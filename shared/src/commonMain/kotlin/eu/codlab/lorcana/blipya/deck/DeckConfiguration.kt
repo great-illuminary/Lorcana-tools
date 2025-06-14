@@ -107,14 +107,14 @@ fun DeckConfiguration(
         item(span = { GridItemSpan(curveGraph) }) {
             ShowCurveInformationGraph(
                 Modifier.fillMaxSize(),
-                model
+                state.calculateDeckCurve
             )
         }
 
         item(span = { GridItemSpan(curveInfo) }) {
             ShowCurveInformation(
                 Modifier.fillMaxSize(),
-                model
+                state.calculateDeckCurve?.original
             )
         }
 
@@ -235,7 +235,7 @@ private fun LazyGridScope.showEmptySectionIfRequired(
 
 @Suppress("MagicNumber")
 @Composable
-private fun expectedNumberOfColumns(): Int {
+fun expectedNumberOfColumns(): Int {
     val columnsForReducedScreens = 2
     val columnsForExpandedScreens = 5
 
@@ -251,7 +251,7 @@ private fun expectedNumberOfColumns(): Int {
 
 @Suppress("MagicNumber")
 @Composable
-private fun expectedSpanForGraphTiles(): Pair<Int, Int> {
+fun expectedSpanForGraphTiles(): Pair<Int, Int> {
     return when (LocalFrame.current) {
         WindowType.SMARTPHONE_TINY -> 2 to 2
         WindowType.SMARTPHONE -> 2 to 2
@@ -262,14 +262,14 @@ private fun expectedSpanForGraphTiles(): Pair<Int, Int> {
 
 @Suppress("MagicNumber")
 @Composable
-private fun expectedSpanForRegularTiles(): Int {
+fun expectedSpanForRegularTiles(): Int {
     val columnsForReducedScreens = 2
 
     return when (LocalFrame.current) {
         WindowType.SMARTPHONE_TINY -> columnsForReducedScreens
         WindowType.SMARTPHONE -> columnsForReducedScreens
-        WindowType.PHABLET -> 1
-        WindowType.TABLET -> 1
+        WindowType.PHABLET -> 2
+        WindowType.TABLET -> 2
     }
 }
 

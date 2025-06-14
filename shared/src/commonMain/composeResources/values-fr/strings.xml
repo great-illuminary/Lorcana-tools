@@ -79,4 +79,11 @@
     <string name="curve_information_average_cost">Coût Moyen</string>
     <string name="curve_information_inkables_in_deck">Encrables</string>
     <string name="curve_information_uninkables_in_deck">Non Encrables</string>
+
+    <string name="curve_title">Information de Curve</string>
+    <string name="curve_info_deck_related_info">Informations relatives au deck</string>
+    <string name="curve_info_deck_related_uninkables_known">Forcer les non encrables ?</string>
+    <string name="curve_info_deck_related_uninkables_number">Nombre de non encrables</string>
+    <string name="curve_info_cost_title">Nombre de cartes pour chaque coûts possibles</string>
+    <string name="curve_info_cost_input">{cost} Encres</string>
 </resources>

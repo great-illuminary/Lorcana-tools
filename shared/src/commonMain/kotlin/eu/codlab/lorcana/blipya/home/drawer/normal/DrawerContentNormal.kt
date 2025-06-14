@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.blipya.config.SharedConfig
 import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.curve_title
 import eu.codlab.blipya.res.decks_title
 import eu.codlab.blipya.res.licenses_title
 import eu.codlab.blipya.res.menu_title_main
@@ -28,6 +29,7 @@ import eu.codlab.lorcana.blipya.home.drawer.DrawerTitle
 import eu.codlab.lorcana.blipya.home.drawer.systemBackground
 import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 import eu.codlab.lorcana.blipya.icons.GridView
+import eu.codlab.lorcana.blipya.icons.PieChart
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.utils.localized
 
@@ -65,8 +67,17 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.decks_title.localized(),
             currentRoute = currentRoute,
-            key = NavigateTo.Main(),
+            key = NavigateTo.Main,
             image = Icons.Rounded.GridView,
+            onClick = onMenuItemSelected,
+            tiny = tiny
+        )
+
+        DrawerItem(
+            text = Res.string.curve_title.localized(),
+            currentRoute = currentRoute,
+            key = NavigateTo.CurveInformation,
+            image = Icons.Rounded.PieChart,
             onClick = onMenuItemSelected,
             tiny = tiny
         )
@@ -84,7 +95,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.licenses_title.localized(),
             currentRoute = currentRoute,
-            key = NavigateTo.Licenses(),
+            key = NavigateTo.Licenses,
             image = Icons.Rounded.Info,
             onClick = onMenuItemSelected,
             tiny = tiny
