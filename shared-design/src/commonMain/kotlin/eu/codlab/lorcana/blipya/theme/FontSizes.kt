@@ -10,6 +10,7 @@ data class FontSizes(
     val deckInfo: DeckInfo = DeckInfo(),
     val popup: PopupSize = PopupSize(),
     val actionBar: ActionBar = ActionBar(),
+    val map: Map = Map()
 )
 
 data class DeckInfo(
@@ -27,6 +28,15 @@ data class PopupSize(
     val title: TextUnit = 24.sp,
     val text: TextUnit = 16.sp,
     val button: TextUnit = 14.sp
+)
+
+data class Map(
+    val activityLightning: TextUnit = 12.sp,
+    val alertBannerSub: TextUnit = 18.sp,
+    val alertBannerETA: TextUnit = 28.sp,
+    val alertBannerTitle: TextUnit = 24.sp,
+    val callOutBig: TextUnit = 22.sp,
+    val callOutNormal: TextUnit = 12.sp,
 )
 
 data class ActionBar(

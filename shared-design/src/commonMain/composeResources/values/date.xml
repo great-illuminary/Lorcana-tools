@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <!-- non automatically generated -->
+    <string name="day_of_week0">Monday</string>
+    <string name="day_of_week1">Tuesday</string>
+    <string name="day_of_week2">Wednesday</string>
+    <string name="day_of_week3">Thursday</string>
+    <string name="day_of_week4">Friday</string>
+    <string name="day_of_week5">Saturday</string>
+    <string name="day_of_week6">Sunday</string>
+    <string name="january">January</string>
+    <string name="february">February</string>
+    <string name="march">March</string>
+    <string name="april">April</string>
+    <string name="may">May</string>
+    <string name="june">June</string>
+    <string name="july">July</string>
+    <string name="august">August</string>
+    <string name="september">September</string>
+    <string name="october">October</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+    <string name="date_day_of_week_format">EEE, dd MMM yyyy</string>
+</resources>

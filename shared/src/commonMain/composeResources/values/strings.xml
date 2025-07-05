@@ -86,4 +86,6 @@
     <string name="curve_info_deck_related_uninkables_number">Number of non inkables</string>
     <string name="curve_info_cost_title">Number of cards for each possible costs</string>
     <string name="curve_info_cost_input">Cost {cost}</string>
+
+    <string name="rph_map_title">PlayHub's Map</string>
 </resources>

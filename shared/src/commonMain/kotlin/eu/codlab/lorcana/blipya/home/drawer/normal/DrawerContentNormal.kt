@@ -19,6 +19,7 @@ import eu.codlab.blipya.res.decks_title
 import eu.codlab.blipya.res.licenses_title
 import eu.codlab.blipya.res.menu_title_main
 import eu.codlab.blipya.res.menu_title_others
+import eu.codlab.blipya.res.rph_map_title
 import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.spacers.BottomSpacer
 import eu.codlab.compose.widgets.spacers.TopSpacer
@@ -29,6 +30,7 @@ import eu.codlab.lorcana.blipya.home.drawer.DrawerTitle
 import eu.codlab.lorcana.blipya.home.drawer.systemBackground
 import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 import eu.codlab.lorcana.blipya.icons.GridView
+import eu.codlab.lorcana.blipya.icons.MapLocation
 import eu.codlab.lorcana.blipya.icons.PieChart
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.utils.localized
@@ -78,6 +80,15 @@ fun DrawerContentNormal(
             currentRoute = currentRoute,
             key = NavigateTo.CurveInformation,
             image = Icons.Rounded.PieChart,
+            onClick = onMenuItemSelected,
+            tiny = tiny
+        )
+
+        DrawerItem(
+            text = Res.string.rph_map_title.localized(),
+            currentRoute = currentRoute,
+            key = NavigateTo.PlayHubMap,
+            image = Icons.Rounded.MapLocation,
             onClick = onMenuItemSelected,
             tiny = tiny
         )

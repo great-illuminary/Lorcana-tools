@@ -48,7 +48,9 @@ kotlin {
         pod("GoogleSignIn") {
             extraOpts += listOf("-compiler-option", "-fmodules")
         }
-        pod("Sentry")
+        pod("Sentry") {
+            extraOpts += listOf("-compiler-option", "-fmodules")
+        }
         pod("FirebaseAuth") {
             extraOpts += listOf("-compiler-option", "-fmodules")
         }
@@ -98,11 +100,13 @@ kotlin {
                 api(libs.hotpreview)
 
                 api(additionals.multiplatform.sentry)
+                api(libs.mapcompose)
 
                 api(project(":shared-design"))
                 api(project(":shared-utils"))
                 api(project(":shared-buildkonfig"))
                 api(project(":shared-math"))
+                api(project(":shared-maps"))
                 api(project(":shared-dispatchers"))
             }
         }

@@ -70,4 +70,14 @@ sealed class NavigateTo {
             popUpTo = PopUpTo.First(true)
         )
     }
+
+    object PlayHubMap : NavigateTo() {
+        override val route = "/rph/map"
+        override val popBackStack = true
+
+        override val options = NavOptions(
+            launchSingleTop = false,
+            popUpTo = PopUpTo.First(true)
+        )
+    }
 }

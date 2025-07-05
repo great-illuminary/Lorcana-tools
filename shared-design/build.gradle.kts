@@ -49,6 +49,8 @@ kotlin {
 
                 api(libs.koalaplot)
                 api(project(":shared-icons"))
+                api(libs.kotlinx.datetime)
+                api("io.github.epicarchitect:epic-calendar-compose:1.0.8") // includes pager + ranges
             }
         }
         commonTest {

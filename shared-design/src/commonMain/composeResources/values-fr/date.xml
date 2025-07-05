@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <!-- non automatically generated -->
+    <string name="day_of_week0">Lundi</string>
+    <string name="day_of_week1">Mardi</string>
+    <string name="day_of_week2">Mercredi</string>
+    <string name="day_of_week3">Jeudi</string>
+    <string name="day_of_week4">Vendredi</string>
+    <string name="day_of_week5">Samedi</string>
+    <string name="day_of_week6">Dimanche</string>
+    <string name="january">Janvier</string>
+    <string name="february">Février</string>
+    <string name="march">Mars</string>
+    <string name="april">Avril</string>
+    <string name="may">Mai</string>
+    <string name="june">Juin</string>
+    <string name="july">Juillet</string>
+    <string name="august">Août</string>
+    <string name="september">Septembre</string>
+    <string name="october">Octobre</string>
+    <string name="november">Novembre</string>
+    <string name="december">Décembre</string>
+</resources>
