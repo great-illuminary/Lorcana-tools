@@ -7,7 +7,8 @@ enum class PossibleRoutes(val impl: Route) {
     DeckScenario(RouteDeckScenario()),
     RouteLicenses(RouteLicenses()),
     RouteCurve(RouteCurve()),
-    RouteRphMap(RouteRphMap())
+    RouteRphMap(RouteRphMap()),
+    RouteRphOwnRegistrations(RouteRphOwnRegistrations())
     ;
 
     companion object {

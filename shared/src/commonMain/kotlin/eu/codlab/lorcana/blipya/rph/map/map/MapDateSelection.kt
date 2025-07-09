@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.compose.widgets.CustomOutlinedButton
@@ -67,7 +68,7 @@ private fun MapDateSelection() {
     HotPreviewApp(Modifier.fillMaxSize(), isDarkTheme = isSystemInDarkTheme()) {
         MapDateSelection(
             Modifier.fillMaxSize(),
-            RphMapModel()
+            RphMapModel(LocalUriHandler.current)
         )
     }
 }

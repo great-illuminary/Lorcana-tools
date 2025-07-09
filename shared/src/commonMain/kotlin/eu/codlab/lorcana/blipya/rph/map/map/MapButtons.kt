@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.compose.theme.LocalDarkTheme
@@ -129,7 +130,7 @@ private fun MapButtonsPreview() {
     HotPreviewApp(Modifier.fillMaxSize(), isDarkTheme = isSystemInDarkTheme()) {
         MapButtons(
             Modifier.fillMaxSize(),
-            RphMapModel()
+            RphMapModel(LocalUriHandler.current)
         )
     }
 }

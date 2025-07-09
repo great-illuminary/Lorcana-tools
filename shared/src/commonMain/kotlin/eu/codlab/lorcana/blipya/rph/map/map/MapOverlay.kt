@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
 import eu.codlab.lorcana.blipya.rph.map.RphMapModel
@@ -47,7 +48,7 @@ private fun MapOverlayPreview() {
     HotPreviewApp(Modifier.fillMaxSize(), isDarkTheme = isSystemInDarkTheme()) {
         MapOverlay(
             Modifier.fillMaxSize(),
-            RphMapModel()
+            RphMapModel(LocalUriHandler.current)
         )
     }
 }

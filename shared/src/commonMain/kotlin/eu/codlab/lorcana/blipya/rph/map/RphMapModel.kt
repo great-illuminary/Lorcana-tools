@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.dp
 import eu.codlab.http.createClient
 import eu.codlab.lorcana.blipya.rph.map.map.ShowEventInfo
@@ -52,7 +53,9 @@ data class RphMapModelState(
     val selectedDate: DateTimeTz = DateTime.now().local.endOfDay,
 )
 
-class RphMapModel() : StateViewModel<RphMapModelState>(RphMapModelState()) {
+class RphMapModel(
+    private val uriHandler: UriHandler
+) : StateViewModel<RphMapModelState>(RphMapModelState()) {
     private val client = createClient { }
     private val googleApi = GoogleProvider()
 
@@ -207,9 +210,10 @@ class RphMapModel() : StateViewModel<RphMapModelState>(RphMapModelState()) {
                             ShowEventInfo(
                                 Modifier.width(150.dp).height(150.dp).padding(bottom = 10.dp),
                                 event
-                            ) {
+                            ) { (event) ->
                                 // add to state ?
                                 mapState.removeCallout(id)
+                                uriHandler.openUri("https://tcg.ravensburgerplay.com/events/${event.id}")
                             }
                         }
                     }

@@ -80,4 +80,14 @@ sealed class NavigateTo {
             popUpTo = PopUpTo.First(true)
         )
     }
+
+    object PlayHubOwnRegistrations : NavigateTo() {
+        override val route = "/rph/own_registrations"
+        override val popBackStack = true
+
+        override val options = NavOptions(
+            launchSingleTop = false,
+            popUpTo = PopUpTo.First(true)
+        )
+    }
 }

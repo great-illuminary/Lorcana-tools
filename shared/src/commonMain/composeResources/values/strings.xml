@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-<!-- non automatically generated -->
+    <!-- non automatically generated -->
     <string name="menu_title_main">Main</string>
     <string name="menu_title_others">Others</string>
 
@@ -63,11 +63,15 @@
     <string name="disconnect_done">You are now disconnected</string>
 
     <string name="delete_account_title">Delete Account</string>
-    <string name="delete_account_text">Do you want to delete your account ? You will lose the data synced on the backend but will keep your data locally.</string>
+    <string name="delete_account_text">Do you want to delete your account ? You will lose the data synced on the backend
+        but will keep your data locally.
+    </string>
     <string name="delete_account_done">Your account has been deleted on the backend</string>
 
     <string name="title_deck_info">Deck Info</string>
-    <string name="title_deck_info_no_info">No curve information have been calculated, check your deck's dreamborn information</string>
+    <string name="title_deck_info_no_info">No curve information have been calculated, check your deck's dreamborn
+        information
+    </string>
     <string name="curve_information_title_graph">Curve Graph Info</string>
     <string name="curve_information_title">Curve Info</string>
     <string name="curve_information_original">Original</string>
@@ -88,4 +92,6 @@
     <string name="curve_info_cost_input">Cost {cost}</string>
 
     <string name="rph_map_title">PlayHub's Map</string>
+    <string name="rph_own_registrations">PlayHub's Own Registrations</string>
+    <string name="open">Open</string>
 </resources>

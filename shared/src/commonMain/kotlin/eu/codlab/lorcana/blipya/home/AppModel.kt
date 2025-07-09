@@ -14,6 +14,7 @@ import eu.codlab.lorcana.blipya.login.IRequestForUrlToOpen
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.model.toDeck
 import eu.codlab.lorcana.blipya.save.ConfigurationLoader
+import eu.codlab.lorcana.blipya.save.RavensburgerPlayHubUser
 import eu.codlab.lorcana.blipya.save.SavedAuthentication
 import eu.codlab.lorcana.blipya.utils.AuthentInit
 import eu.codlab.lorcana.blipya.utils.RootPath
@@ -51,7 +52,8 @@ data class AppModelState(
     val lorcana: LorcanaLoaded? = null,
     val mapDreamborn: Map<String, Pair<VirtualCard, VariantClassification>> = mutableMapOf(),
     val authentication: SavedAuthentication? = null,
-    val requestForGoogleAuthenticationState: String? = null
+    val requestForGoogleAuthenticationState: String? = null,
+    val ravensburgerPlayHubUser: RavensburgerPlayHubUser? = null
 )
 
 @Suppress("TooManyFunctions")
@@ -119,7 +121,8 @@ data class AppModel(
                     decks = decks,
                     lorcana = lorcana,
                     mapDreamborn = mapDreamborn,
-                    authentication = if (validAuthent) authentication else null
+                    authentication = if (validAuthent) authentication else null,
+                    ravensburgerPlayHubUser = configurationLoader.configuration.rphUser
                 )
             }
 
@@ -260,6 +263,12 @@ data class AppModel(
         val authentication = configurationLoader.save(token, now.unixMillisLong)
 
         updateState { copy(authentication = authentication) }
+    }
+
+    fun saveRavensburgerPlayHubSelection(username: String, id: Long) = launch {
+        val ravensburgerPlayHubUser = configurationLoader.saveRavensburgerPlayHub(username, id)
+
+        updateState { copy(ravensburgerPlayHubUser = ravensburgerPlayHubUser) }
     }
 
     override suspend fun requestForUrlToOpen(provider: String): String? {

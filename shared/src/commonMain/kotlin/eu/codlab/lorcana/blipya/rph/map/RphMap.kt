@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.rph.map.map.MapOverlay
 import eu.codlab.viewmodel.rememberViewModel
@@ -16,7 +17,8 @@ fun RphMap(
     modifier: Modifier,
     appModel: AppModel
 ) {
-    val model = rememberViewModel { RphMapModel() }
+    val uriHandler = LocalUriHandler.current
+    val model = rememberViewModel { RphMapModel(uriHandler) }
 
     val state by model.states.collectAsState()
 

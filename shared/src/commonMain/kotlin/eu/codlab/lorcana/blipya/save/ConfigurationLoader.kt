@@ -34,6 +34,17 @@ class ConfigurationLoader(
         save()
     }
 
+    suspend fun saveRavensburgerPlayHub(username: String, id: Long) = RavensburgerPlayHubUser(
+        username,
+        id
+    ).also { rphUser ->
+        configuration = configuration.copy(
+            rphUser = rphUser
+        )
+
+        save()
+    }
+
     suspend fun save(
         authenticationToken: String,
         expiresAtMilliSeconds: Long

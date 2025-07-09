@@ -6,17 +6,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.drick.compose.hotpreview.HotPreview
+import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.open
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
 import eu.codlab.lorcana.blipya.rph.models.Event
 import eu.codlab.lorcana.blipya.rph.models.EventHolder
+import eu.codlab.lorcana.blipya.theme.AppColor
+import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
 
@@ -24,7 +29,7 @@ import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
 fun ShowEventInfo(
     modifier: Modifier,
     eventHolder: EventHolder,
-    onEventSelected: () -> Unit
+    onEventSelected: (EventHolder) -> Unit
 ) {
     val event = eventHolder.event
     val color = defaultCardBackground()
@@ -46,16 +51,15 @@ fun ShowEventInfo(
             )
 
             Column(Modifier.height(32.dp)) { }
-            /*
-                        OutlinedButton(
-                            onClick = onEventSelected
-                        ) {
-                            TextNormal(
-                                text = Res.string.select.localized(),
-                                color = AppColor.Black
-                            )
-                        }
-             */
+
+            OutlinedButton(
+                onClick = { onEventSelected(eventHolder) }
+            ) {
+                TextNormal(
+                    text = Res.string.open.localized(),
+                    color = AppColor.Black
+                )
+            }
         }
     }
 }

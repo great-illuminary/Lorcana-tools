@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import eu.codlab.blipya.res.licenses_title
 import eu.codlab.blipya.res.menu_title_main
 import eu.codlab.blipya.res.menu_title_others
 import eu.codlab.blipya.res.rph_map_title
+import eu.codlab.blipya.res.rph_own_registrations
 import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.spacers.BottomSpacer
 import eu.codlab.compose.widgets.spacers.TopSpacer
@@ -89,6 +91,15 @@ fun DrawerContentNormal(
             currentRoute = currentRoute,
             key = NavigateTo.PlayHubMap,
             image = Icons.Rounded.MapLocation,
+            onClick = onMenuItemSelected,
+            tiny = tiny
+        )
+
+        DrawerItem(
+            text = Res.string.rph_own_registrations.localized(),
+            currentRoute = currentRoute,
+            key = NavigateTo.PlayHubOwnRegistrations,
+            image = Icons.Rounded.AccountBox,
             onClick = onMenuItemSelected,
             tiny = tiny
         )
