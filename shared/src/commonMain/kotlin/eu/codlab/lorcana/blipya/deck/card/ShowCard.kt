@@ -67,7 +67,7 @@ private fun ShowCardInternal(
 
     val state by model.states.collectAsState()
     val url = "https://api-lorcana.com/public/images/" +
-            "${variant.set.name.lowercase()}/fr/${variant.id}.webp.jpeg"
+            "${variant.set.name.lowercase()}/fr/${variant.id}${variant.suffix ?: ""}.webp.jpeg"
 
     Box(cardModifier) {
         ShowCardFromUrl(cardModifier, url)
@@ -122,6 +122,7 @@ fun ShowCardPreview() {
             SetDescription.TFC,
             1,
             "",
+            dreamborn = "",
             Ravensburger(
                 "",
                 "",
