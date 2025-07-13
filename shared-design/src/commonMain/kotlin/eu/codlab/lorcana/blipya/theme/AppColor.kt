@@ -41,6 +41,9 @@ object AppColor {
     val BackgroundDarkBlue = Color(0xff122542)
     val BackgroundBlue = Color(0xff0d1a2e)
     val Transparent = Color.Transparent
+
+    val Blurple = Color(0xff383b71)
+    val BlurpleDark = Color(0xff272a53)
 }
 
 @HotPreview(widthDp = 200, heightDp = 200)
