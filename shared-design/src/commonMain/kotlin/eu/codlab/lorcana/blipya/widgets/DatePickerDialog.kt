@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SkipNext
-import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,6 +38,8 @@ import eu.codlab.blipya.design.res.october
 import eu.codlab.blipya.design.res.september
 import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.TextNormal
+import eu.codlab.lorcana.blipya.icons.SkipNext
+import eu.codlab.lorcana.blipya.icons.SkipPrevious
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.utils.localized
 import korlibs.io.async.launch
@@ -141,7 +141,7 @@ fun DatePickerDialog(
                         }
                     ) {
                         Icon(
-                            painter = rememberVectorPainter(Icons.Default.SkipPrevious),
+                            painter = rememberVectorPainter(Icons.Filled.SkipPrevious),
                             tint = AppColor.Black,
                             contentDescription = "previous"
                         )
@@ -161,7 +161,7 @@ fun DatePickerDialog(
                         }
                     ) {
                         Icon(
-                            painter = rememberVectorPainter(Icons.Default.SkipNext),
+                            painter = rememberVectorPainter(Icons.Filled.SkipNext),
                             tint = AppColor.Black,
                             contentDescription = "next"
                         )

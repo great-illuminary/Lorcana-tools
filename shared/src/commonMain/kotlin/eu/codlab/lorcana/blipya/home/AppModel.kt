@@ -31,12 +31,12 @@ import eu.codlab.viewmodel.launch
 import io.ktor.websocket.readText
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.async
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import moe.tlaster.precompose.navigation.Navigator
-import kotlin.time.Duration.Companion.seconds
 
 private const val Millis = 1000.0
 

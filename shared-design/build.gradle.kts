@@ -32,7 +32,6 @@ kotlin {
                 implementation(compose.ui)
                 implementation(compose.material)
                 implementation(compose.material3)
-                implementation(compose.materialIconsExtended)
                 api(compose.components.resources)
 
                 api(additionals.multiplatform.precompose)
