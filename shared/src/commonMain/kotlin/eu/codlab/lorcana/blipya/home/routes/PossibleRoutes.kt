@@ -13,5 +13,7 @@ enum class PossibleRoutes(val impl: Route) {
 
     companion object {
         fun fromRoute(route: String) = entries.firstOrNull { it.impl.route == route }
+
+        fun fromPath(path: String) = entries.firstOrNull { it.impl.isMatching(path) }
     }
 }

@@ -45,12 +45,12 @@ class RouteDeckMulligan : Route(
         }
     }
 
-    override fun onEntryIsActive(
+    override fun onInternalEntryIsActive(
         appModel: AppModel,
         defaultActions: List<MenuItem>,
         backStackEntry: BackStackEntry
-    ) {
-        val (_, mulligan) = backStackEntry.toHolder(appModel.states.value.decks) ?: return
+    ): String {
+        val (deck, mulligan) = backStackEntry.toHolder(appModel.states.value.decks) ?: return "/"
 
         appModel.setAppBarState(
             AppBarState.Regular(
@@ -58,6 +58,16 @@ class RouteDeckMulligan : Route(
                 defaultActions
             )
         )
+
+        return "/deck/${deck.id}/mulligan/${mulligan.id}"
+    }
+
+    override fun isMatching(path: String): Boolean {
+        val split = path.split("/")
+
+        if(split.size < 4) return false
+
+        return split[1] == "deck" && split[3] == "mulligan"
     }
 
     private fun BackStackEntry.toHolder(decks: List<DeckModel>) = safeExecute {

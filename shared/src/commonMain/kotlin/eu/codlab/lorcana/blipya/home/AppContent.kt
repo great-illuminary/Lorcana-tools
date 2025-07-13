@@ -34,6 +34,7 @@ import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.isScreenExpanded
 import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.rememberSizeAwareScaffoldState
+import eu.codlab.navigation.Navigation
 import eu.codlab.safearea.views.SafeArea
 import eu.codlab.safearea.views.SafeAreaBehavior
 import moe.tlaster.precompose.navigation.Navigator

@@ -104,6 +104,7 @@ kotlin {
 
                 api(project(":shared-design"))
                 api(project(":shared-utils"))
+                api(project(":shared-navigation"))
                 api(project(":shared-buildkonfig"))
                 api(project(":shared-math"))
                 api(project(":shared-maps"))

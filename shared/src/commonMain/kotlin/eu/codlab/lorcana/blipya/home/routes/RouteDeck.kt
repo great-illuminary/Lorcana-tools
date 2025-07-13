@@ -42,12 +42,12 @@ class RouteDeck : Route(
         }
     }
 
-    override fun onEntryIsActive(
+    override fun onInternalEntryIsActive(
         appModel: AppModel,
         defaultActions: List<MenuItem>,
         backStackEntry: BackStackEntry
-    ) {
-        val deck = backStackEntry.toHolder(appModel.states.value.decks) ?: return
+    ): String {
+        val deck = backStackEntry.toHolder(appModel.states.value.decks) ?: return "/"
 
         appModel.setAppBarState(
             AppBarState.Regular(
@@ -65,7 +65,11 @@ class RouteDeck : Route(
                 appModel.showAddScenario(true)
             }
         )
+
+        return "/deck/${deck.id}"
     }
+
+    override fun isMatching(path: String) = path.startsWith("/deck")
 
     private fun BackStackEntry.toHolder(decks: List<DeckModel>) = safeExecute {
         decks.firstOrNull { it.id == path<String>("uuid")!! }

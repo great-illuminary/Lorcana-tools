@@ -6,15 +6,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.open
+import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
@@ -24,6 +28,7 @@ import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
+import korlibs.time.DateTime
 
 @Composable
 fun ShowEventInfo(
@@ -31,8 +36,9 @@ fun ShowEventInfo(
     eventHolder: EventHolder,
     onEventSelected: (EventHolder) -> Unit
 ) {
+//    val interactionSource = remember {  }
     val event = eventHolder.event
-    val color = defaultCardBackground()
+    val color = defaultEventCard()
 
     DefaultCard(
         modifier = modifier,
@@ -65,13 +71,35 @@ fun ShowEventInfo(
 }
 
 @Composable
-@HotPreview(widthDp = 250, heightDp = 50, darkMode = true)
-@HotPreview(widthDp = 250, heightDp = 50, darkMode = false)
+fun defaultEventCard(isSelected: Boolean = false): Color {
+    return if (isSelected) {
+        if (LocalDarkTheme.current) {
+            AppColor.BlurpleDark
+        } else {
+            AppColor.GrayLight
+        }
+    } else if (LocalDarkTheme.current) {
+        AppColor.Blurple
+    } else {
+        AppColor.WhiteCream
+    }
+}
+
+@Composable
+@HotPreview(darkMode = true)
+@HotPreview(darkMode = false)
 private fun ShowEventInfoPreview() {
-    HotPreviewApp(Modifier.fillMaxSize(), isDarkTheme = isSystemInDarkTheme()) {
+    val modifier = Modifier.width(250.dp).height(250.dp)
+    HotPreviewApp(modifier, isDarkTheme = isSystemInDarkTheme()) {
         ShowEventInfo(
-            Modifier.fillMaxSize(),
-            EventHolder(event = Event(0, ""))
+            modifier,
+            EventHolder(
+                event = Event(
+                    0,
+                    startDatetime = DateTime.now().unixMillisLong,
+                    name = "Faked event"
+                )
+            )
         ) {
             // nothing
         }

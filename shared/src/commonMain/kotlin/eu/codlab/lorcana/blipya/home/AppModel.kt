@@ -25,6 +25,7 @@ import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.raw.VariantClassification
 import eu.codlab.lorcana.raw.VirtualCard
+import eu.codlab.navigation.Navigation
 import eu.codlab.sentry.wrapper.Sentry
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch

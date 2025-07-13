@@ -26,6 +26,7 @@ import eu.codlab.lorcana.blipya.utils.WindowType
 import eu.codlab.lorcana.blipya.utils.isScreenExpanded
 import eu.codlab.lorcana.blipya.widgets.BottomSpacer
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
+import eu.codlab.navigation.Navigation
 import eu.codlab.platform.Platform
 import eu.codlab.platform.currentPlatform
 import moe.tlaster.precompose.navigation.NavHost
@@ -47,6 +48,10 @@ fun ColumnScope.ScaffoldContentWrapper(
     } else {
         250.dp
     }
+
+    val defaultImplementation = PossibleRoutes.fromPath(Navigation.originalPath()) ?: PossibleRoutes.Main
+
+    println("defaultImplementation = $defaultImplementation")
 
     Row(modifier = Modifier.fillMaxSize()) {
         if (LocalWindow.current.isScreenExpanded()) {
@@ -84,7 +89,7 @@ fun ColumnScope.ScaffoldContentWrapper(
                         // Navigation transition for the scenes in this NavHost, this is optional
                         navTransition = NavTransition(),
                         // The start destination
-                        initialRoute = "/main",
+                        initialRoute = defaultImplementation.impl.route,
                         /*swipeProperties = SwipeProperties(
                         //spaceToSwipe = 50.dp
                     )*/

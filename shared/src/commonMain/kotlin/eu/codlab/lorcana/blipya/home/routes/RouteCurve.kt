@@ -32,16 +32,18 @@ class RouteCurve : Route(
         }
     }
 
-    override fun onEntryIsActive(
+    override fun onInternalEntryIsActive(
         appModel: AppModel,
         defaultActions: List<MenuItem>,
         backStackEntry: BackStackEntry
-    ) {
+    ): String {
         appModel.setAppBarState(
             AppBarState.Localized(
                 title = Res.string.curve_title,
                 defaultActions
             )
         )
+
+        return route
     }
 }

@@ -33,16 +33,20 @@ class RouteRphOwnRegistrations : Route(
         }
     }
 
-    override fun onEntryIsActive(
+    override fun onInternalEntryIsActive(
         appModel: AppModel,
         defaultActions: List<MenuItem>,
         backStackEntry: BackStackEntry
-    ) {
+    ): String {
         appModel.setAppBarState(
             AppBarState.Localized(
                 title = Res.string.rph_own_registrations,
                 defaultActions
             )
         )
+
+        return route
     }
+
+    override fun isMatching(path: String) = path == "/rph/own_registrations"
 }

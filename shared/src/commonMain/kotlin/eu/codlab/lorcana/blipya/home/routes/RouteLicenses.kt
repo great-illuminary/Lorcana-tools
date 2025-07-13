@@ -36,16 +36,20 @@ class RouteLicenses : Route(
         }
     }
 
-    override fun onEntryIsActive(
+    override fun onInternalEntryIsActive(
         appModel: AppModel,
         defaultActions: List<MenuItem>,
         backStackEntry: BackStackEntry
-    ) {
+    ): String {
         appModel.setAppBarState(
             AppBarState.Localized(
                 title = Res.string.licenses_title,
                 defaultActions
             )
         )
+
+        return route
     }
+
+    override fun isMatching(path: String) = path == "/licenses"
 }

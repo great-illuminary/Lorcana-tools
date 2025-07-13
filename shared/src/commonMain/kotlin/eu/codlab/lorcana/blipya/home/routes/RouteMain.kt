@@ -40,11 +40,11 @@ class RouteMain : Route(
         }
     }
 
-    override fun onEntryIsActive(
+    override fun onInternalEntryIsActive(
         appModel: AppModel,
         defaultActions: List<MenuItem>,
         backStackEntry: BackStackEntry
-    ) {
+    ): String {
         appModel.setAppBarState(
             AppBarState.Localized(
                 title = Res.string.decks_title,
@@ -58,5 +58,9 @@ class RouteMain : Route(
                 contentDescription = "Add a new deck"
             ) { appModel.showAddDeck(true) }
         )
+
+        return "/"
     }
+
+    override fun isMatching(path: String) = path == "/"
 }
