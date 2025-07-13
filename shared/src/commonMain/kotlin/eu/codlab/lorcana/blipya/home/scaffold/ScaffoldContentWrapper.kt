@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import eu.codlab.lorcana.blipya.home.BackgroundWrapper
 import eu.codlab.lorcana.blipya.home.LocalNavigator
 import eu.codlab.lorcana.blipya.home.drawer.DrawerContent
-import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
+import eu.codlab.lorcana.blipya.home.routes.Route
 import eu.codlab.lorcana.blipya.utils.LocalFrameProvider
 import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.WindowType
@@ -34,7 +34,7 @@ import moe.tlaster.precompose.navigation.transition.NavTransition
 
 @Composable
 fun ColumnScope.ScaffoldContentWrapper(
-    onMenuItemSelected: (title: String, navigateTo: NavigateTo) -> Unit
+    onMenuItemSelected: (title: String, navigateTo: Route) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -89,17 +89,17 @@ fun ColumnScope.ScaffoldContentWrapper(
                         // Navigation transition for the scenes in this NavHost, this is optional
                         navTransition = NavTransition(),
                         // The start destination
-                        initialRoute = defaultImplementation.impl.route,
+                        initialRoute = defaultImplementation.asDefaultRoute!!.route,
                         /*swipeProperties = SwipeProperties(
                         //spaceToSwipe = 50.dp
                     )*/
                     ) {
                         PossibleRoutes.entries.forEach {
                             scene(
-                                route = it.impl.route,
-                                navTransition = it.impl.navTransition,
-                                swipeProperties = it.impl.swipeProperties
-                            ) { backStackEntry -> it.impl.scene(backStackEntry) }
+                                route = it.route,
+                                navTransition = it.navTransition,
+                                swipeProperties = it.swipeProperties
+                            ) { backStackEntry -> it.scene(backStackEntry) }
                         }
                     }
 

@@ -10,6 +10,7 @@ import eu.codlab.lorcana.LorcanaLoaded
 import eu.codlab.lorcana.blipya.account.Account
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
 import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
+import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
 import eu.codlab.lorcana.blipya.login.IRequestForUrlToOpen
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.model.toDeck
@@ -25,7 +26,6 @@ import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.raw.VariantClassification
 import eu.codlab.lorcana.raw.VirtualCard
-import eu.codlab.navigation.Navigation
 import eu.codlab.sentry.wrapper.Sentry
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
@@ -195,13 +195,13 @@ data class AppModel(
     }
 
     fun show(navigateTo: NavigateTo) {
-        if (navigateTo.popBackStack) {
+        if (navigateTo.stack.popBackStack) {
             popBackStack()
         }
 
         navigator?.navigate(
             route = navigateTo.route,
-            options = navigateTo.options
+            options = navigateTo.stack.options
         )
 
         safeLaunch(onError = { /* nothing */ }) {
@@ -232,14 +232,14 @@ data class AppModel(
     fun addScenario() {
         val id = UUID.randomUUID().toString()
         activeDeck?.add(id) { deck, scenario ->
-            show(NavigateTo.DeckScenario(deck, scenario))
+            show(PossibleRoutes.DeckScenario.navigateTo(deck, scenario))
         }
     }
 
     fun addMulligan() {
         val id = UUID.randomUUID().toString()
         activeDeck?.addMulligan(id) { deck, mulligan ->
-            show(NavigateTo.DeckMulligan(deck, mulligan))
+            show(PossibleRoutes.DeckMulligan.navigateTo(deck, mulligan))
         }
     }
 

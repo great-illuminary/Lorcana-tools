@@ -30,7 +30,8 @@ import eu.codlab.lorcana.blipya.home.drawer.DrawerItem
 import eu.codlab.lorcana.blipya.home.drawer.DrawerSeparator
 import eu.codlab.lorcana.blipya.home.drawer.DrawerTitle
 import eu.codlab.lorcana.blipya.home.drawer.systemBackground
-import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
+import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
+import eu.codlab.lorcana.blipya.home.routes.Route
 import eu.codlab.lorcana.blipya.icons.GridView
 import eu.codlab.lorcana.blipya.icons.MapLocation
 import eu.codlab.lorcana.blipya.icons.PieChart
@@ -41,9 +42,9 @@ import eu.codlab.lorcana.blipya.utils.localized
 @Composable
 fun DrawerContentNormal(
     modifier: Modifier = Modifier,
-    currentRoute: NavigateTo? = null,
+    currentRoute: Route? = null,
     tiny: Boolean = false,
-    onMenuItemSelected: (title: String, navigateTo: NavigateTo) -> Unit
+    onMenuItemSelected: (title: String, navigateTo: Route) -> Unit
 ) {
     val dark = LocalDarkTheme.current
 
@@ -71,7 +72,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.decks_title.localized(),
             currentRoute = currentRoute,
-            key = NavigateTo.Main,
+            route = PossibleRoutes.Main,
             image = Icons.Rounded.GridView,
             onClick = onMenuItemSelected,
             tiny = tiny
@@ -80,7 +81,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.curve_title.localized(),
             currentRoute = currentRoute,
-            key = NavigateTo.CurveInformation,
+            route = PossibleRoutes.RouteCurve,
             image = Icons.Rounded.PieChart,
             onClick = onMenuItemSelected,
             tiny = tiny
@@ -89,7 +90,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.rph_map_title.localized(),
             currentRoute = currentRoute,
-            key = NavigateTo.PlayHubMap,
+            route = PossibleRoutes.RouteRphMap,
             image = Icons.Rounded.MapLocation,
             onClick = onMenuItemSelected,
             tiny = tiny
@@ -98,7 +99,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.rph_own_registrations.localized(),
             currentRoute = currentRoute,
-            key = NavigateTo.PlayHubOwnRegistrations,
+            route = PossibleRoutes.RouteRphOwnRegistrations,
             image = Icons.Rounded.AccountBox,
             onClick = onMenuItemSelected,
             tiny = tiny
@@ -117,7 +118,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.licenses_title.localized(),
             currentRoute = currentRoute,
-            key = NavigateTo.Licenses,
+            route = PossibleRoutes.RouteLicenses,
             image = Icons.Rounded.Info,
             onClick = onMenuItemSelected,
             tiny = tiny

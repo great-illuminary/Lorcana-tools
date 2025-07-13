@@ -21,8 +21,8 @@ import eu.codlab.lorcana.blipya.deck.PromptForNewScenarioOrMulligan
 import eu.codlab.lorcana.blipya.decks.PromptForNewDeck
 import eu.codlab.lorcana.blipya.home.drawer.DrawerContent
 import eu.codlab.lorcana.blipya.home.drawer.DrawerSizeShape
-import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
+import eu.codlab.lorcana.blipya.home.routes.Route
 import eu.codlab.lorcana.blipya.home.scaffold.FloatingActionButtonWrapper
 import eu.codlab.lorcana.blipya.home.scaffold.ScaffoldContentWrapper
 import eu.codlab.lorcana.blipya.home.scaffold.TopBarWrapper
@@ -34,7 +34,6 @@ import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.isScreenExpanded
 import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.rememberSizeAwareScaffoldState
-import eu.codlab.navigation.Navigation
 import eu.codlab.safearea.views.SafeArea
 import eu.codlab.safearea.views.SafeAreaBehavior
 import moe.tlaster.precompose.navigation.Navigator
@@ -95,22 +94,22 @@ fun AppContent() {
 
     val isScreenExpanded = LocalWindow.current.isScreenExpanded()
 
-    val onMenuItemSelected: (String, NavigateTo) -> Unit = { newTitle, path ->
-        model.show(path)
+    val onMenuItemSelected: (String, Route) -> Unit = { newTitle, path ->
+        path.asDefaultRoute?.let { model.show(it) }
     }
 
     LaunchedEffect(currentEntry) {
         val entry = currentEntry ?: return@LaunchedEffect
 
         val route = PossibleRoutes.fromRoute(entry.route.route)
-        route?.impl?.onEntryIsActive(model, actions, entry)
+        route?.onEntryIsActive(model, actions, entry)
     }
 
     PromptForNewDeck(
         model,
         showPrompt = currentState.showPromptNewDeck,
         onDismiss = { model.showAddDeck(false) }
-    ) { model.show(NavigateTo.Deck(it)) }
+    ) { model.show(PossibleRoutes.Deck.navigateTo(it)) }
 
     println("AppContent redraw with ${currentState.showPromptNewScenario}")
     PromptForNewScenarioOrMulligan(

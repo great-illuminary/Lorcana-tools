@@ -28,7 +28,8 @@ import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.CustomOutlinedButton
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
-import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
+import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
+import eu.codlab.lorcana.blipya.home.routes.Route
 import eu.codlab.lorcana.blipya.icons.Folder
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
 
@@ -83,13 +84,13 @@ fun DrawerTitle(
 fun DrawerItem(
     modifier: Modifier = Modifier,
     text: String,
-    key: NavigateTo,
-    currentRoute: NavigateTo? = null,
+    route: Route,
+    currentRoute: Route? = null,
     image: ImageVector,
     tiny: Boolean = false,
-    onClick: (title: String, key: NavigateTo) -> Unit
+    onClick: (title: String, route: Route) -> Unit
 ) {
-    val selected = currentRoute == key
+    val selected = currentRoute == route
     val imageSize = 18.dp
 
     if (tiny) {
@@ -102,7 +103,7 @@ fun DrawerItem(
                 .clickable(
                     interactionSource = MutableInteractionSource(),
                     indication = null,
-                    onClick = { onClick(text, key) }
+                    onClick = { onClick(text, route) }
                 ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -125,7 +126,7 @@ fun DrawerItem(
             .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = ripple(),
-                onClick = { onClick(text, key) }
+                onClick = { onClick(text, route) }
             )
             .padding(0.dp)
             .padding(start = 32.dp),
@@ -250,15 +251,15 @@ private fun DrawerItemPreviewDark() {
             DrawerSeparator()
             DrawerItem(
                 text = "Item",
-                key = NavigateTo.Main,
+                route = PossibleRoutes.Main,
                 image = Icons.Rounded.Folder
             ) { _, _ ->
                 // nothing
             }
             DrawerItem(
                 text = "Item",
-                currentRoute = NavigateTo.Main,
-                key = NavigateTo.Main,
+                currentRoute = PossibleRoutes.Main,
+                route = PossibleRoutes.Main,
                 image = Icons.Rounded.Folder
             ) { _, _ ->
                 // nothing
@@ -266,8 +267,8 @@ private fun DrawerItemPreviewDark() {
 
             DrawerItem(
                 text = "Item",
-                currentRoute = NavigateTo.Main,
-                key = NavigateTo.Main,
+                currentRoute = PossibleRoutes.Main,
+                route = PossibleRoutes.Main,
                 tiny = true,
                 image = Icons.Rounded.Folder
             ) { _, _ ->

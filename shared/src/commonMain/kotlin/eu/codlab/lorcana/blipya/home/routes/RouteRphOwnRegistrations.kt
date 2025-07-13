@@ -8,11 +8,15 @@ import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.rph_own_registrations
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.home.LocalApp
+import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
+import eu.codlab.lorcana.blipya.home.navigate.NavigateToStack
 import eu.codlab.lorcana.blipya.rph.own.RphOwnRegistrations
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
 import moe.tlaster.precompose.navigation.BackStackEntry
+import moe.tlaster.precompose.navigation.NavOptions
+import moe.tlaster.precompose.navigation.PopUpTo
 import moe.tlaster.precompose.navigation.SwipeProperties
 import moe.tlaster.precompose.navigation.transition.NavTransition
 
@@ -48,5 +52,15 @@ class RouteRphOwnRegistrations : Route(
         return route
     }
 
-    override fun isMatching(path: String) = path == "/rph/own_registrations"
+    override fun navigateToStack() = NavigateToStack(
+        popBackStack = true,
+        options = NavOptions(
+            launchSingleTop = false,
+            popUpTo = PopUpTo.First(true)
+        )
+    )
+
+    override val asDefaultRoute = navigateTo()
+
+    fun navigateTo() = NavigateTo(route, navigateToStack())
 }

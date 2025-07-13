@@ -12,11 +12,14 @@ import eu.codlab.lorcana.blipya.decks.DecksScreen
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.home.LocalApp
 import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
+import eu.codlab.lorcana.blipya.home.navigate.NavigateToStack
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
 import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
 import moe.tlaster.precompose.navigation.BackStackEntry
+import moe.tlaster.precompose.navigation.NavOptions
+import moe.tlaster.precompose.navigation.PopUpTo
 import moe.tlaster.precompose.navigation.SwipeProperties
 import moe.tlaster.precompose.navigation.transition.NavTransition
 
@@ -36,7 +39,7 @@ class RouteMain : Route(
             DecksScreen(
                 Modifier.fillMaxSize(),
                 appModel
-            ) { appModel.show(NavigateTo.Deck(it)) }
+            ) { appModel.show(navigateTo()) }
         }
     }
 
@@ -63,4 +66,16 @@ class RouteMain : Route(
     }
 
     override fun isMatching(path: String) = path == "/"
+
+    override fun navigateToStack() = NavigateToStack(
+        popBackStack = true,
+        options = NavOptions(
+            launchSingleTop = false,
+            popUpTo = PopUpTo.First(true)
+        )
+    )
+
+    override val asDefaultRoute = navigateTo()
+
+    fun navigateTo() = NavigateTo(route, navigateToStack())
 }

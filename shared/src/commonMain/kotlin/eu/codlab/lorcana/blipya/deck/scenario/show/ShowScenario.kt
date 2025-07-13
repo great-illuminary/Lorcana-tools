@@ -29,7 +29,7 @@ import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
 import eu.codlab.lorcana.blipya.deck.edit.DisplayStatisticalResult
 import eu.codlab.lorcana.blipya.home.AppModel
-import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
+import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.theme.AppSizes
@@ -90,7 +90,14 @@ fun ShowScenario(
                     Triple(
                         Res.string.edit.localized(),
                         Icons.Default.Edit
-                    ) { app.show(NavigateTo.DeckScenario(state.deck, state.scenario)) },
+                    ) {
+                        app.show(
+                            PossibleRoutes.DeckScenario.navigateTo(
+                                state.deck,
+                                state.scenario
+                            )
+                        )
+                    },
                     Triple(
                         "${Res.string.delete.localized()} ${state.name}",
                         Icons.Default.Delete
