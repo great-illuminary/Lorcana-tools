@@ -5,12 +5,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import eu.codlab.blipya.res.Res
-import eu.codlab.blipya.res.rph_map_title
+import eu.codlab.blipya.res.rph_map_stores_title
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.home.LocalApp
 import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 import eu.codlab.lorcana.blipya.home.navigate.NavigateToStack
-import eu.codlab.lorcana.blipya.rph.map.events.RphMapEvents
+import eu.codlab.lorcana.blipya.rph.map.events.RphMapStores
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
@@ -20,8 +20,8 @@ import moe.tlaster.precompose.navigation.PopUpTo
 import moe.tlaster.precompose.navigation.SwipeProperties
 import moe.tlaster.precompose.navigation.transition.NavTransition
 
-class RouteRphMap : Route(
-    "/rph/map",
+class RouteRphMapStores : Route(
+    "/rph/map/stores",
     navTransition = NavTransition(),
     swipeProperties = SwipeProperties()
 ) {
@@ -33,7 +33,7 @@ class RouteRphMap : Route(
             modifier = Modifier.fillMaxSize()
                 .defaultBackground()
         ) {
-            RphMapEvents(Modifier.fillMaxSize(), appModel)
+            RphMapStores(Modifier.fillMaxSize(), appModel)
         }
     }
 
@@ -44,7 +44,7 @@ class RouteRphMap : Route(
     ): String {
         appModel.setAppBarState(
             AppBarState.Localized(
-                title = Res.string.rph_map_title,
+                title = Res.string.rph_map_stores_title,
                 defaultActions
             )
         )

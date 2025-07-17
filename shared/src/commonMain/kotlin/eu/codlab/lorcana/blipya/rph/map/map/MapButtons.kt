@@ -20,13 +20,12 @@ import androidx.compose.ui.unit.dp
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.theme.LocalThemeEnvironment
-import eu.codlab.compose.theme.ThemeEnvironment
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
-import eu.codlab.lorcana.blipya.home.LocalApp
 import eu.codlab.lorcana.blipya.icons.FixedGps
 import eu.codlab.lorcana.blipya.icons.ZoomIn
 import eu.codlab.lorcana.blipya.icons.ZoomOut
-import eu.codlab.lorcana.blipya.rph.map.RphMapModel
+import eu.codlab.lorcana.blipya.rph.map.events.RphMapModel
+import eu.codlab.lorcana.blipya.rph.map.map.interfaces.MapInterfaceZoomable
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.utils.LocalFrame
 import eu.codlab.lorcana.blipya.utils.WindowType
@@ -38,15 +37,10 @@ import eu.codlab.platform.currentPlatform
 @Composable
 fun MapButtons(
     modifier: Modifier,
-    model: RphMapModel
+    model: MapInterfaceZoomable
 ) {
-    val color = defaultCardBackground()
-    val theme = LocalThemeEnvironment.current
-
     Column(
         modifier = modifier,
-        // backgroundColor = color,
-        //columnModifier = Modifier.padding(8.dp)
     ) {
         if (LocalFrame.current == WindowType.TABLET || LocalFrame.current == WindowType.PHABLET) {
             Row(
@@ -100,7 +94,7 @@ private fun Button(
 
 @Composable
 private fun ShowActions(
-    model: RphMapModel
+    model: MapInterfaceZoomable
 ) {
     val mobile = currentPlatform == Platform.IOS || currentPlatform == Platform.ANDROID
 

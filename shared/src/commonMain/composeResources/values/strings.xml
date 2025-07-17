@@ -91,7 +91,10 @@
     <string name="curve_info_cost_title">Number of cards for each possible costs</string>
     <string name="curve_info_cost_input">Cost {cost}</string>
 
-    <string name="rph_map_title">PlayHub's Map</string>
-    <string name="rph_own_registrations">PlayHub's Own Registrations</string>
+    <string name="rph_map_title">Events Map</string>
+    <string name="rph_map_stores_title">Stores Map</string>
+    <string name="rph_own_registrations">Own Registrations</string>
     <string name="open">Open</string>
+
+    <string name="menu_playhub_title">Ravensburger PlayHub</string>
 </resources>

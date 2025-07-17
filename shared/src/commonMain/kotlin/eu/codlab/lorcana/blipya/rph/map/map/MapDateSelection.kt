@@ -16,7 +16,9 @@ import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.compose.widgets.CustomOutlinedButton
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
-import eu.codlab.lorcana.blipya.rph.map.RphMapModel
+import eu.codlab.lorcana.blipya.rph.map.events.RphMapModel
+import eu.codlab.lorcana.blipya.rph.map.map.interfaces.MapInterfaceAction
+import eu.codlab.lorcana.blipya.rph.map.map.interfaces.MapInterfaceCalendar
 import eu.codlab.lorcana.blipya.widgets.DatePickerDialog
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
@@ -26,7 +28,7 @@ import korlibs.time.DateFormat
 @Composable
 fun MapDateSelection(
     modifier: Modifier,
-    model: RphMapModel
+    model: MapInterfaceCalendar
 ) {
     var showDateSelection by remember { mutableStateOf(false) }
 

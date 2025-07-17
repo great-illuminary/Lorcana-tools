@@ -18,8 +18,10 @@ import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.curve_title
 import eu.codlab.blipya.res.decks_title
 import eu.codlab.blipya.res.licenses_title
+import eu.codlab.blipya.res.menu_playhub_title
 import eu.codlab.blipya.res.menu_title_main
 import eu.codlab.blipya.res.menu_title_others
+import eu.codlab.blipya.res.rph_map_stores_title
 import eu.codlab.blipya.res.rph_map_title
 import eu.codlab.blipya.res.rph_own_registrations
 import eu.codlab.compose.theme.LocalDarkTheme
@@ -87,10 +89,27 @@ fun DrawerContentNormal(
             tiny = tiny
         )
 
+        DrawerSeparator()
+
+        if (!tiny) {
+            DrawerTitle(text = Res.string.menu_playhub_title.localized())
+        } else {
+            // nothing
+        }
+
         DrawerItem(
             text = Res.string.rph_map_title.localized(),
             currentRoute = currentRoute,
             route = PossibleRoutes.RouteRphMap,
+            image = Icons.Rounded.MapLocation,
+            onClick = onMenuItemSelected,
+            tiny = tiny
+        )
+
+        DrawerItem(
+            text = Res.string.rph_map_stores_title.localized(),
+            currentRoute = currentRoute,
+            route = PossibleRoutes.RouteRphMapStores,
             image = Icons.Rounded.MapLocation,
             onClick = onMenuItemSelected,
             tiny = tiny
@@ -104,6 +123,7 @@ fun DrawerContentNormal(
             onClick = onMenuItemSelected,
             tiny = tiny
         )
+
 
         Column(Modifier.weight(1.0f)) { }
 

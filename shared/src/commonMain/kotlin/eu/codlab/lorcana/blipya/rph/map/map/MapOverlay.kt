@@ -12,31 +12,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
-import eu.codlab.lorcana.blipya.rph.map.RphMapModel
+import eu.codlab.lorcana.blipya.rph.map.events.RphMapModel
+import eu.codlab.lorcana.blipya.rph.map.map.interfaces.MapInterfaceAction
+import eu.codlab.lorcana.blipya.rph.map.map.interfaces.MapInterfaceCalendar
+import eu.codlab.lorcana.blipya.rph.map.map.interfaces.MapInterfaceZoomable
 import eu.codlab.lorcana.blipya.theme.AppSizes
 
 @Composable
 fun MapOverlay(
     modifier: Modifier,
-    model: RphMapModel
+    model: MapInterfaceAction
 ) {
     Box(modifier.padding(AppSizes.map.cardVerticalPadding)) {
-        MapButtons(
-            Modifier.align(Alignment.TopStart),
-            model
-        )
-
-        Column(
-            Modifier.align(Alignment.TopEnd),
-            verticalArrangement = Arrangement.spacedBy(
-                AppSizes.map.cardVerticalPadding
-            ),
-            horizontalAlignment = Alignment.End
-        ) {
-            MapDateSelection(
-                Modifier,
+        if (model is MapInterfaceZoomable) {
+            MapButtons(
+                Modifier.align(Alignment.TopStart),
                 model
             )
+        }
+
+        if (model is MapInterfaceCalendar) {
+            Column(
+                Modifier.align(Alignment.TopEnd),
+                verticalArrangement = Arrangement.spacedBy(
+                    AppSizes.map.cardVerticalPadding
+                ),
+                horizontalAlignment = Alignment.End
+            ) {
+                MapDateSelection(
+                    Modifier,
+                    model
+                )
+            }
         }
     }
 }

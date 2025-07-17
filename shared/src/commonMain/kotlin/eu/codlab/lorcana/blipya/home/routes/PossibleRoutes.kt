@@ -10,6 +10,7 @@ object PossibleRoutes {
     val RouteLicenses = RouteLicenses()
     val RouteCurve = RouteCurve()
     val RouteRphMap = RouteRphMap()
+    val RouteRphMapStores = RouteRphMapStores()
     val RouteRphOwnRegistrations = RouteRphOwnRegistrations()
 
     val entries = listOf(
@@ -20,6 +21,7 @@ object PossibleRoutes {
         RouteLicenses,
         RouteCurve,
         RouteRphMap,
+        RouteRphMapStores,
         RouteRphOwnRegistrations
     )
 

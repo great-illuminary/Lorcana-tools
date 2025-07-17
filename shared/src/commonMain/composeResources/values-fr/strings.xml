@@ -86,4 +86,10 @@
     <string name="curve_info_deck_related_uninkables_number">Nombre de non encrables</string>
     <string name="curve_info_cost_title">Nombre de cartes pour chaque coûts possibles</string>
     <string name="curve_info_cost_input">{cost} Encres</string>
+
+    <string name="rph_map_title">Carte des Tournois</string>
+    <string name="rph_map_stores_title">Carte des Magasins</string>
+    <string name="rph_own_registrations">Vos Tournois</string>
+
+    <string name="menu_playhub_title">Ravensburger PlayHub</string>
 </resources>
