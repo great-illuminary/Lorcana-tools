@@ -37,8 +37,15 @@ kotlin {
                 api(libs.kmp.auth.google)
                 api(libs.kmp.auth.firebase)
                 api(libs.kmp.auth.uihelper)
+                api(libs.gitlive.firebase.analytics)
 
                 api(project(":shared-design"))
+            }
+        }
+
+        jsMain {
+            dependencies {
+                implementation(project(":shared-utils-kmp-buildkonfig"))
             }
         }
     }

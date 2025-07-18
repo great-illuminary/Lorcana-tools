@@ -18,6 +18,7 @@ import eu.codlab.lorcana.blipya.save.ConfigurationLoader
 import eu.codlab.lorcana.blipya.save.RavensburgerPlayHubUser
 import eu.codlab.lorcana.blipya.save.SavedAuthentication
 import eu.codlab.lorcana.blipya.utils.AuthentInit
+import eu.codlab.lorcana.blipya.utils.Firebase
 import eu.codlab.lorcana.blipya.utils.RootPath
 import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.lorcana.blipya.utils.safeSuspend
@@ -97,6 +98,9 @@ data class AppModel(
             )
 
             AuthentInit.initialize()
+            Firebase.initialize()
+
+            Firebase.logEvent("app_initialized")
 
             val (decks, authentication) = configurationLoader.configuration.let { conf ->
                 conf.decks.map { it.toDeck() } to conf.authentication

@@ -37,6 +37,8 @@ hotpreview = "0.1.6"
 sentry = "0.11.0"
 mapcompose = "0.11.0"
 
+gitlive-firebase = "2.1.0"
+
 [libraries]
 
 kamel-image = { group = "media.kamel", name = "kamel-image", version.ref = "kamel-image" }
@@ -76,6 +78,8 @@ lorcana = { group = "eu.codlab", name = "lorcana-data", version.ref = "lorcana" 
 kmp-auth-google = { group = "io.github.mirzemehdi", name = "kmpauth-google", version.ref = "kmp-auth" }
 kmp-auth-firebase = { group = "io.github.mirzemehdi", name = "kmpauth-firebase", version.ref = "kmp-auth" }
 kmp-auth-uihelper = { group = "io.github.mirzemehdi", name = "kmpauth-uihelper", version.ref = "kmp-auth" }
+
+gitlive-firebase-analytics = { group = "dev.gitlive", name = "firebase-analytics", version.ref = "gitlive-firebase"}
 
 hotpreview = { group = "de.drick.compose", name = "hotpreview", version.ref = "hotpreview" }
 
