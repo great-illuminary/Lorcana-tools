@@ -20,8 +20,8 @@ import moe.tlaster.precompose.navigation.PopUpTo
 import moe.tlaster.precompose.navigation.SwipeProperties
 import moe.tlaster.precompose.navigation.transition.NavTransition
 
-class RouteRphMap : Route(
-    "/rph/map",
+class RouteRphMapEvents : Route(
+    "/rph/map/events",
     navTransition = NavTransition(),
     swipeProperties = SwipeProperties()
 ) {

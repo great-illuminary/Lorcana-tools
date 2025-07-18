@@ -9,7 +9,7 @@ object PossibleRoutes {
     val Deck = RouteDeck()
     val RouteLicenses = RouteLicenses()
     val RouteCurve = RouteCurve()
-    val RouteRphMap = RouteRphMap()
+    val RouteRphMapEvents = RouteRphMapEvents()
     val RouteRphMapStores = RouteRphMapStores()
     val RouteRphOwnRegistrations = RouteRphOwnRegistrations()
 
@@ -20,7 +20,7 @@ object PossibleRoutes {
         Deck,
         RouteLicenses,
         RouteCurve,
-        RouteRphMap,
+        RouteRphMapEvents,
         RouteRphMapStores,
         RouteRphOwnRegistrations
     )

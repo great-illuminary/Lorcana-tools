@@ -100,7 +100,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.rph_map_title.localized(),
             currentRoute = currentRoute,
-            route = PossibleRoutes.RouteRphMap,
+            route = PossibleRoutes.RouteRphMapEvents,
             image = Icons.Rounded.MapLocation,
             onClick = onMenuItemSelected,
             tiny = tiny
