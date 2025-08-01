@@ -39,7 +39,11 @@ class RouteMain : Route(
             DecksScreen(
                 Modifier.fillMaxSize(),
                 appModel
-            ) { appModel.show(navigateTo()) }
+            ) {
+                appModel.show(
+                    PossibleRoutes.Deck.navigateTo(it)
+                )
+            }
         }
     }
 

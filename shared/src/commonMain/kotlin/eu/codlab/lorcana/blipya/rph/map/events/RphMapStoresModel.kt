@@ -8,8 +8,10 @@ import eu.codlab.maps.LatLng
 import eu.codlab.maps.MapUtils
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import ovh.plrapps.mapcompose.api.ExperimentalClusteringApi
 import ovh.plrapps.mapcompose.api.addMarker
 import ovh.plrapps.mapcompose.api.removeMarker
+import ovh.plrapps.mapcompose.ui.state.markers.model.RenderingStrategy
 
 data class RphMapStoresModelState(
     override val currentCoordinates: LatLng? = null,
@@ -23,6 +25,7 @@ class RphMapStoresModel(
     initialState = RphMapStoresModelState(),
     allocateComposer = { mapState, flushCallouts -> ComposeStoreHolder(uriHandler, mapState, flushCallouts) }
 ), MapInterfaceZoomable {
+    @OptIn(ExperimentalClusteringApi::class)
     private fun startLoadingData() = safeLaunch(
         onError = {
             it.printStackTrace()
@@ -54,7 +57,13 @@ class RphMapStoresModel(
             val latLng = store.latLng()!!
             val xy = MapUtils.latLngToXY(latLng.latitude, latLng.longitude)
 
-            mapState.addMarker("store_${store.id}", xy.x, xy.y, c = composer.compose(store, xy))
+            mapState.addMarker(
+                "store_${store.id}",
+                xy.x,
+                xy.y,
+                renderingStrategy = RenderingStrategy.Clustering("default"),
+                c = composer.compose(store, xy)
+            )
         }
     }
 

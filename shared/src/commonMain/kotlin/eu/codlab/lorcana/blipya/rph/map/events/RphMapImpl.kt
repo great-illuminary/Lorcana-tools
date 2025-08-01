@@ -20,4 +20,4 @@ fun RphMapEvents(
 ) = RphMap(
     modifier,
     appModel
-) { RphMapModel(it) }
+) { RphMapEventsModel(it) }

@@ -13,20 +13,22 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import korlibs.time.DateTime
 import korlibs.time.DateTimeTz
+import ovh.plrapps.mapcompose.api.ExperimentalClusteringApi
 import ovh.plrapps.mapcompose.api.addMarker
 import ovh.plrapps.mapcompose.api.removeMarker
+import ovh.plrapps.mapcompose.ui.state.markers.model.RenderingStrategy
 
-data class RphMapModelState(
+data class RphMapEventsModelState(
     override val currentCoordinates: LatLng? = null,
     override val initialized: Boolean = false,
     val events: List<EventHolder> = emptyList(),
     override val selectedDate: DateTimeTz = DateTime.now().local.endOfDay,
 ) : MapInterfaceCalendarState, MapModelState
 
-class RphMapModel(
+class RphMapEventsModel(
     private val uriHandler: UriHandler
-) : MapModel<RphMapModelState, EventHolder>(
-    initialState = RphMapModelState(),
+) : MapModel<RphMapEventsModelState, EventHolder>(
+    initialState = RphMapEventsModelState(),
     allocateComposer = { mapState, flushCallouts -> ComposerEventHolder(uriHandler, mapState, flushCallouts) }
 ), MapInterfaceCalendar {
 
@@ -38,6 +40,7 @@ class RphMapModel(
         startLoadingData(dateTimeTz)
     }
 
+    @OptIn(ExperimentalClusteringApi::class)
     private fun startLoadingData(date: DateTimeTz) = safeLaunch {
         val url = "https://api-lorcana.com/rph/events?" +
                 "startingAt=${date.startOfDay.utc.unixMillisLong}" +
@@ -67,11 +70,17 @@ class RphMapModel(
             val latLng = event.latLng()!!
             val xy = MapUtils.latLngToXY(latLng.latitude, latLng.longitude)
 
-            mapState.addMarker("event_${event.event.id}", xy.x, xy.y, c = composer.compose(event, xy))
+            mapState.addMarker(
+                "event_${event.event.id}",
+                xy.x,
+                xy.y,
+                renderingStrategy = RenderingStrategy.Clustering("default"),
+                c = composer.compose(event, xy),
+            )
         }
     }
 
-    override suspend fun startLoadingData(state: RphMapModelState) {
+    override suspend fun startLoadingData(state: RphMapEventsModelState) {
         startLoadingData(state.selectedDate)
     }
 

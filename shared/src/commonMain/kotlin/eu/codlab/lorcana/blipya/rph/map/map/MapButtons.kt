@@ -24,7 +24,7 @@ import eu.codlab.lorcana.blipya.home.HotPreviewApp
 import eu.codlab.lorcana.blipya.icons.FixedGps
 import eu.codlab.lorcana.blipya.icons.ZoomIn
 import eu.codlab.lorcana.blipya.icons.ZoomOut
-import eu.codlab.lorcana.blipya.rph.map.events.RphMapModel
+import eu.codlab.lorcana.blipya.rph.map.events.RphMapEventsModel
 import eu.codlab.lorcana.blipya.rph.map.map.interfaces.MapInterfaceZoomable
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.utils.LocalFrame
@@ -124,7 +124,7 @@ private fun MapButtonsPreview() {
     HotPreviewApp(Modifier.fillMaxSize(), isDarkTheme = isSystemInDarkTheme()) {
         MapButtons(
             Modifier.fillMaxSize(),
-            RphMapModel(LocalUriHandler.current)
+            RphMapEventsModel(LocalUriHandler.current)
         )
     }
 }

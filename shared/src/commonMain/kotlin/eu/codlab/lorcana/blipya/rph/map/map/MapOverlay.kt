@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
-import eu.codlab.lorcana.blipya.rph.map.events.RphMapModel
+import eu.codlab.lorcana.blipya.rph.map.events.RphMapEventsModel
 import eu.codlab.lorcana.blipya.rph.map.map.interfaces.MapInterfaceAction
 import eu.codlab.lorcana.blipya.rph.map.map.interfaces.MapInterfaceCalendar
 import eu.codlab.lorcana.blipya.rph.map.map.interfaces.MapInterfaceZoomable
@@ -55,7 +55,7 @@ private fun MapOverlayPreview() {
     HotPreviewApp(Modifier.fillMaxSize(), isDarkTheme = isSystemInDarkTheme()) {
         MapOverlay(
             Modifier.fillMaxSize(),
-            RphMapModel(LocalUriHandler.current)
+            RphMapEventsModel(LocalUriHandler.current)
         )
     }
 }

@@ -11,6 +11,8 @@ import eu.codlab.viewmodel.StateViewModel
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
+import ovh.plrapps.mapcompose.api.ExperimentalClusteringApi
+import ovh.plrapps.mapcompose.api.addClusterer
 import ovh.plrapps.mapcompose.api.addLayer
 import ovh.plrapps.mapcompose.api.centroidSnapshotFlow
 import ovh.plrapps.mapcompose.api.enableRotation
@@ -43,6 +45,7 @@ abstract class MapModel<T : MapModelState, H>(
     private val levelCount = 18
     private val fullWidthOrHeight = 256 * 2.0.pow(levelCount).toInt()
 
+    @OptIn(ExperimentalClusteringApi::class)
     val mapState = MapState(
         levelCount,
         fullWidthOrHeight,
@@ -56,6 +59,10 @@ abstract class MapModel<T : MapModelState, H>(
         addLayer(tileStreamProvider)
 
         enableRotation()
+
+        addClusterer("default") { ids ->
+            { composer.cluster(size = ids.size) }
+        }
     }
 
 
