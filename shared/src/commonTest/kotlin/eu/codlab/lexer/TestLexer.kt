@@ -2,6 +2,7 @@ package eu.codlab.lexer
 
 import guru.zoroark.lixy.LixyTokenType
 import guru.zoroark.lixy.lixy
+import guru.zoroark.lixy.matchers.anyOf
 import guru.zoroark.lixy.matchers.matches
 import guru.zoroark.pangoro.PangoroNode
 import guru.zoroark.pangoro.PangoroNodeDeclaration
@@ -18,8 +19,7 @@ enum class LorcanaTokenTypes : LixyTokenType {
     Not,
     OpenParenthesis,
     CloseParenthesis,
-    Or,
-    And,
+    Comparator,
     RegularToken
 }
 
@@ -27,19 +27,16 @@ enum class LorcanaTokenTypes : LixyTokenType {
 sealed class Expression : PangoroNode {
     companion object : PangoroNodeDeclaration<Expression> {
         override fun make(args: PangoroTypeDescription): Expression {
-            if (args.arguments.containsKey("notExpr")) return Not(args["notExpr"])
+            if (args.arguments.containsKey("right")) {
+                val operator: String = args["op"]
 
-            if (args.arguments.containsKey("orRight")) return Or(
-                left = args["expr"],
-                right = args["orRight"]
-            )
+                return if (operator == "&") {
+                    And(args["expr"], args["right"])
+                } else {
+                    Or(args["expr"], args["right"])
+                }
+            }
 
-            if (args.arguments.containsKey("andRight")) return And(
-                left = args["expr"],
-                right = args["andRight"]
-            )
-
-            if (!args.arguments.containsKey("expr")) return Empty()
             return args["expr"]
         }
     }
@@ -56,21 +53,17 @@ data class Not(
 ) : Expression() {
     companion object : PangoroNodeDeclaration<Expression> {
         override fun make(args: PangoroTypeDescription): Expression {
-            if (args.arguments.containsKey("notExpr")) return Not(args["notExpr"])
+            if (args.arguments.containsKey("right")) {
+                val operator: String = args["op"]
 
-            if (args.arguments.containsKey("orRight")) return Not(
-                Or(
-                    left = args["expr"],
-                    right = args["orRight"]
+                return Not(
+                    if (operator == "&") {
+                        And(args["left"], args["right"])
+                    } else {
+                        Or(args["left"], args["right"])
+                    }
                 )
-            )
-
-            if (args.arguments.containsKey("andRight")) return Not(
-                And(
-                    left = args["expr"],
-                    right = args["andRight"]
-                )
-            )
+            }
 
             return when (val result: Expression = args["expr"]) {
                 is And -> And(Not(result.left), result.right)
@@ -84,24 +77,30 @@ data class Not(
 }
 
 @Serializable
+sealed class ComparatorExpression : Expression() {
+    companion object : PangoroNodeDeclaration<ComparatorExpression> {
+        override fun make(args: PangoroTypeDescription): ComparatorExpression {
+            val operator: String = args["op"]
+            return if (operator == "&") {
+                And(args["left"], args["right"])
+            } else {
+                Or(args["left"], args["right"])
+            }
+        }
+    }
+}
+
+@Serializable
 data class Or(
     val left: Expression,
     val right: Expression
-) : Expression() {
-    companion object : PangoroNodeDeclaration<Or> {
-        override fun make(args: PangoroTypeDescription) = Or(args["left"], args["right"])
-    }
-}
+) : ComparatorExpression()
 
 @Serializable
 data class And(
     val left: Expression,
     val right: Expression
-) : Expression() {
-    companion object : PangoroNodeDeclaration<And> {
-        override fun make(args: PangoroTypeDescription) = And(args["left"], args["right"])
-    }
-}
+) : ComparatorExpression()
 
 @Serializable
 data class Regular(
@@ -114,15 +113,15 @@ data class Regular(
             } else {
                 Regular(args["value"])
             }
-            if (args.arguments.containsKey("orRight")) return Or(
-                left = actualValue,
-                right = args["orRight"]
-            )
 
-            if (args.arguments.containsKey("andRight")) return And(
-                left = actualValue,
-                right = args["andRight"]
-            )
+            if (args.arguments.containsKey("right")) {
+                val operator: String = args["op"]
+                return if (operator == "&") {
+                    And(actualValue, args["right"])
+                } else {
+                    Or(actualValue, args["right"])
+                }
+            }
 
             return actualValue
         }
@@ -135,8 +134,7 @@ class TestLexer {
             "!" isToken LorcanaTokenTypes.Not
             "(" isToken LorcanaTokenTypes.OpenParenthesis
             ")" isToken LorcanaTokenTypes.CloseParenthesis
-            "|" isToken LorcanaTokenTypes.Or
-            "&" isToken LorcanaTokenTypes.And
+            anyOf("|", "&") isToken LorcanaTokenTypes.Comparator
             matches("[A-Za-z0-9]+") isToken LorcanaTokenTypes.RegularToken
             " ".ignore
         }
@@ -150,24 +148,14 @@ class TestLexer {
         Expression root {
             either {
                 expect(Not) storeIn "expr"
-                expect(LorcanaTokenTypes.And)
-                expect(Expression) storeIn "andRight"
-            } or {
-                expect(Not) storeIn "expr"
-                expect(LorcanaTokenTypes.Or)
-                expect(Expression) storeIn "orRight"
+                expect(LorcanaTokenTypes.Comparator) storeIn "op"
+                expect(Expression) storeIn "right"
             } or {
                 expect(LorcanaTokenTypes.OpenParenthesis)
                 expect(Expression) storeIn "expr"
                 expect(LorcanaTokenTypes.CloseParenthesis)
-                expect(LorcanaTokenTypes.And)
-                expect(Expression) storeIn "andRight"
-            } or {
-                expect(LorcanaTokenTypes.OpenParenthesis)
-                expect(Expression) storeIn "expr"
-                expect(LorcanaTokenTypes.CloseParenthesis)
-                expect(LorcanaTokenTypes.Or)
-                expect(Expression) storeIn "orRight"
+                expect(LorcanaTokenTypes.Comparator) storeIn "op"
+                expect(Expression) storeIn "right"
             } or {
                 expect(LorcanaTokenTypes.OpenParenthesis)
                 expect(Expression) storeIn "expr"
@@ -184,15 +172,8 @@ class TestLexer {
                 expect(LorcanaTokenTypes.OpenParenthesis)
                 expect(Expression) storeIn "expr"
                 expect(LorcanaTokenTypes.CloseParenthesis)
-                expect(LorcanaTokenTypes.And)
-                expect(Expression) storeIn "andRight"
-            } or {
-                expect(LorcanaTokenTypes.Not)
-                expect(LorcanaTokenTypes.OpenParenthesis)
-                expect(Expression) storeIn "expr"
-                expect(LorcanaTokenTypes.CloseParenthesis)
-                expect(LorcanaTokenTypes.Or)
-                expect(Expression) storeIn "orRight"
+                expect(LorcanaTokenTypes.Comparator) storeIn "op"
+                expect(Expression) storeIn "right"
             } or {
                 expect(LorcanaTokenTypes.Not)
                 expect(LorcanaTokenTypes.OpenParenthesis)
@@ -209,12 +190,8 @@ class TestLexer {
         Regular {
             either {
                 expect(LorcanaTokenTypes.RegularToken) storeIn "value"
-                expect(LorcanaTokenTypes.And)
-                expect(Expression) storeIn "andRight"
-            } or {
-                expect(LorcanaTokenTypes.RegularToken) storeIn "value"
-                expect(LorcanaTokenTypes.Or)
-                expect(Expression) storeIn "orRight"
+                expect(LorcanaTokenTypes.Comparator) storeIn "op"
+                expect(Expression) storeIn "right"
             } or {
                 expect(LorcanaTokenTypes.RegularToken) storeIn "value"
             }
