@@ -39,7 +39,11 @@ mapcompose = "0.11.0"
 
 gitlive-firebase = "2.1.0"
 
+kotlin-grammar = "0.0.1"
+
 [libraries]
+kotlin-grammar-lixy = { group = "eu.codlab", name = "kotlin-grammar-lixy", version.ref = "kotlin-grammar" }
+kotlin-grammar-pangoro = { group = "eu.codlab", name = "kotlin-grammar-pangoro", version.ref = "kotlin-grammar" }
 
 kamel-image = { group = "media.kamel", name = "kamel-image", version.ref = "kamel-image" }
 kamel-image-default = { group = "media.kamel", name = "kamel-image-default", version.ref = "kamel-image" }
@@ -79,7 +83,7 @@ kmp-auth-google = { group = "io.github.mirzemehdi", name = "kmpauth-google", ver
 kmp-auth-firebase = { group = "io.github.mirzemehdi", name = "kmpauth-firebase", version.ref = "kmp-auth" }
 kmp-auth-uihelper = { group = "io.github.mirzemehdi", name = "kmpauth-uihelper", version.ref = "kmp-auth" }
 
-gitlive-firebase-analytics = { group = "dev.gitlive", name = "firebase-analytics", version.ref = "gitlive-firebase"}
+gitlive-firebase-analytics = { group = "dev.gitlive", name = "firebase-analytics", version.ref = "gitlive-firebase" }
 
 hotpreview = { group = "de.drick.compose", name = "hotpreview", version.ref = "hotpreview" }
 
