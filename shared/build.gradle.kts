@@ -102,13 +102,11 @@ kotlin {
                 api(additionals.multiplatform.sentry)
                 api(libs.mapcompose)
 
-                implementation(libs.kotlin.grammar.lixy)
-                implementation(libs.kotlin.grammar.pangoro)
-
                 api(project(":shared-design"))
                 api(project(":shared-utils"))
                 api(project(":shared-navigation"))
                 api(project(":shared-buildkonfig"))
+                api(project(":shared-parser"))
                 api(project(":shared-math"))
                 api(project(":shared-maps"))
                 api(project(":shared-dispatchers"))
