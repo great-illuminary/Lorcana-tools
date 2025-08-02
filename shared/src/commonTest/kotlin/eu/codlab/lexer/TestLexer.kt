@@ -135,7 +135,7 @@ class TestLexer {
             "(" isToken LorcanaTokenTypes.OpenParenthesis
             ")" isToken LorcanaTokenTypes.CloseParenthesis
             anyOf("|", "&") isToken LorcanaTokenTypes.Comparator
-            matches("[A-Za-z0-9]+") isToken LorcanaTokenTypes.RegularToken
+            matches("(\"[^\"\\(\\)\\!&\\|]*\")|([^\"\\ \\(\\)\\!&\\|]+(\"[^\"\\(\\)\\!&\\|]*\")?)") isToken LorcanaTokenTypes.RegularToken
             " ".ignore
         }
     }
@@ -213,7 +213,8 @@ class TestLexer {
             "(1 & 2)",
             "(1 & 2) | 3",
             "((1 & 3) | (!test & (19e | oeuhd)))",
-            "(1 & 3) | (!test & (19e | oeuhd))"
+            "(1 & 3) | (!test & (19e | oeuhd))",
+            """(1 & "test" | wrong:lol) | cost:"peter pan""""
         ).forEach {
             println("managing $it ---------------------->")
             try {
