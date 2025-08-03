@@ -36,6 +36,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(additionals.kotlinx.coroutines.test)
             }
         }
     }

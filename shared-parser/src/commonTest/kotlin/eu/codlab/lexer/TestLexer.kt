@@ -28,7 +28,7 @@ class TestLexer {
                 println(
                     json.encodeToString(
                         Expression.serializer(),
-                        parser.parse(it)
+                        parser.parse(it).expression
                     )
                 )
             } catch (err: Throwable) {

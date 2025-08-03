@@ -91,5 +91,5 @@ class Parser {
         }
     }
 
-    fun parse(input: String): Expression = parser.parse(lexer.tokenize(input)) as Expression
+    fun parse(input: String) = Matcher(parser.parse(lexer.tokenize(input)) as Expression)
 }

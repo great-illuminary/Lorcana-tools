@@ -1,6 +1,11 @@
 package eu.codlab.lexer
 
 import eu.codlab.lexer.Action.Companion.toAction
+import eu.codlab.lexer.actions.FindText
+import eu.codlab.lorcana.raw.RawVirtualCard
+import eu.codlab.lorcana.raw.VariantClassification
+import eu.codlab.lorcana.raw.VariantString
+import eu.codlab.lorcana.raw.VirtualCard
 import guru.zoroark.pangoro.PangoroNode
 import guru.zoroark.pangoro.PangoroNodeDeclaration
 import guru.zoroark.pangoro.PangoroTypeDescription
@@ -8,6 +13,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Expression : PangoroNode {
+    abstract fun apply(card: VirtualCard, variant: VariantClassification): Boolean
+
+    abstract fun apply(card: RawVirtualCard, variant: VariantString): Boolean
+
     companion object : PangoroNodeDeclaration<Expression> {
         override fun make(args: PangoroTypeDescription): Expression {
             if (args.arguments.containsKey("right")) {
@@ -28,7 +37,11 @@ sealed class Expression : PangoroNode {
 @Serializable
 data class Empty(
     val empty: Boolean = true
-) : Expression()
+) : Expression() {
+    override fun apply(card: VirtualCard, variant: VariantClassification) = false
+
+    override fun apply(card: RawVirtualCard, variant: VariantString) = false
+}
 
 @Serializable
 data class Not(
@@ -58,6 +71,12 @@ data class Not(
             }
         }
     }
+
+    override fun apply(card: VirtualCard, variant: VariantClassification) =
+        !expression.apply(card, variant)
+
+    override fun apply(card: RawVirtualCard, variant: VariantString) =
+        !expression.apply(card, variant)
 }
 
 @Serializable
@@ -89,19 +108,37 @@ data class Filter(
             filter = args["filter"]
         )
     }
+
+    override fun apply(card: VirtualCard, variant: VariantClassification) =
+        (action ?: FindText).apply(card, variant, filter)
+
+    override fun apply(card: RawVirtualCard, variant: VariantString) =
+        (action ?: FindText).apply(card, variant, filter)
 }
 
 @Serializable
 data class Or(
     val left: Expression,
     val right: Expression
-) : ComparatorExpression()
+) : ComparatorExpression() {
+    override fun apply(card: VirtualCard, variant: VariantClassification) =
+        left.apply(card, variant) || right.apply(card, variant)
+
+    override fun apply(card: RawVirtualCard, variant: VariantString) =
+        left.apply(card, variant) || right.apply(card, variant)
+}
 
 @Serializable
 data class And(
     val left: Expression,
     val right: Expression
-) : ComparatorExpression()
+) : ComparatorExpression() {
+    override fun apply(card: VirtualCard, variant: VariantClassification) =
+        left.apply(card, variant) && right.apply(card, variant)
+
+    override fun apply(card: RawVirtualCard, variant: VariantString) =
+        left.apply(card, variant) && right.apply(card, variant)
+}
 
 @Serializable
 data class Regular(
@@ -121,4 +158,9 @@ data class Regular(
             return Regular(args["value"])
         }
     }
+
+    override fun apply(card: VirtualCard, variant: VariantClassification) =
+        value.apply(card, variant)
+
+    override fun apply(card: RawVirtualCard, variant: VariantString) = value.apply(card, variant)
 }
