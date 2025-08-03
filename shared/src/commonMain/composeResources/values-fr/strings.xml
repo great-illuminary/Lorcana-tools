@@ -92,4 +92,9 @@
     <string name="rph_own_registrations">Vos Tournois</string>
 
     <string name="menu_playhub_title">Ravensburger PlayHub</string>
+
+    <string name="menu_cards_title">Cartes</string>
+    <string name="title_cards_listing">Liste</string>
+    <string name="hint_research">Rechercher...</string>
+    <string name="hint_search_query_format">Aide</string>
 </resources>

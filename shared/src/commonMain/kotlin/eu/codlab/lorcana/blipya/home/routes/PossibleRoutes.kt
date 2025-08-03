@@ -12,6 +12,7 @@ object PossibleRoutes {
     val RouteRphMapEvents = RouteRphMapEvents()
     val RouteRphMapStores = RouteRphMapStores()
     val RouteRphOwnRegistrations = RouteRphOwnRegistrations()
+    val RouteCardsListing = RouteCardsListing()
 
     val entries = listOf(
         Main,
@@ -22,7 +23,8 @@ object PossibleRoutes {
         RouteCurve,
         RouteRphMapEvents,
         RouteRphMapStores,
-        RouteRphOwnRegistrations
+        RouteRphOwnRegistrations,
+        RouteCardsListing
     )
 
     fun fromRoute(route: String) = entries.firstOrNull { it.route == route }

@@ -18,12 +18,14 @@ import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.curve_title
 import eu.codlab.blipya.res.decks_title
 import eu.codlab.blipya.res.licenses_title
+import eu.codlab.blipya.res.menu_cards_title
 import eu.codlab.blipya.res.menu_playhub_title
 import eu.codlab.blipya.res.menu_title_main
 import eu.codlab.blipya.res.menu_title_others
 import eu.codlab.blipya.res.rph_map_stores_title
 import eu.codlab.blipya.res.rph_map_title
 import eu.codlab.blipya.res.rph_own_registrations
+import eu.codlab.blipya.res.title_cards_listing
 import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.spacers.BottomSpacer
 import eu.codlab.compose.widgets.spacers.TopSpacer
@@ -85,6 +87,23 @@ fun DrawerContentNormal(
             currentRoute = currentRoute,
             route = PossibleRoutes.RouteCurve,
             image = Icons.Rounded.PieChart,
+            onClick = onMenuItemSelected,
+            tiny = tiny
+        )
+
+        DrawerSeparator()
+
+        if (!tiny) {
+            DrawerTitle(text = Res.string.menu_cards_title.localized())
+        } else {
+            // nothing
+        }
+
+        DrawerItem(
+            text = Res.string.title_cards_listing.localized(),
+            currentRoute = currentRoute,
+            route = PossibleRoutes.RouteCardsListing,
+            image = Icons.Rounded.GridView,
             onClick = onMenuItemSelected,
             tiny = tiny
         )

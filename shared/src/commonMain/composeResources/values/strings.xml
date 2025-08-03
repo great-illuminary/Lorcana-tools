@@ -97,4 +97,9 @@
     <string name="open">Open</string>
 
     <string name="menu_playhub_title">Ravensburger PlayHub</string>
+
+    <string name="menu_cards_title">Cards</string>
+    <string name="title_cards_listing">Listing</string>
+    <string name="hint_research">Search...</string>
+    <string name="hint_search_query_format">Help</string>
 </resources>
