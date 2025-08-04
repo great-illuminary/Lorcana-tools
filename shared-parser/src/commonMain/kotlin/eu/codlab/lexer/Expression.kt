@@ -9,6 +9,7 @@ import eu.codlab.lorcana.raw.VirtualCard
 import guru.zoroark.pangoro.PangoroNode
 import guru.zoroark.pangoro.PangoroNodeDeclaration
 import guru.zoroark.pangoro.PangoroTypeDescription
+import korlibs.io.lang.substr
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -99,14 +100,27 @@ data class Filter(
     val filter: String
 ) : Expression() {
     companion object : PangoroNodeDeclaration<Filter> {
-        override fun make(args: PangoroTypeDescription) = Filter(
-            action = if (args.arguments.containsKey("action")) {
-                args.get<String>("action").toAction()
-            } else {
-                null
-            },
-            filter = args["filter"]
-        )
+        override fun make(args: PangoroTypeDescription): Filter {
+            val filter = args.get<String>("filter").let {
+                if (it.startsWith("\"") &&
+                    it.endsWith("\"") &&
+                    it.length > 2
+                ) {
+                    it.substr(1, it.length - 2)
+                } else {
+                    it
+                }
+            }
+
+            return Filter(
+                action = if (args.arguments.containsKey("action")) {
+                    args.get<String>("action").toAction()
+                } else {
+                    null
+                },
+                filter = filter
+            )
+        }
     }
 
     override fun apply(card: VirtualCard, variant: VariantClassification) =

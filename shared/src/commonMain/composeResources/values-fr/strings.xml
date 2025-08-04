@@ -97,4 +97,5 @@
     <string name="title_cards_listing">Liste</string>
     <string name="hint_research">Rechercher...</string>
     <string name="hint_search_query_format">Aide</string>
+    <string name="cards_list_no_result">Aucun résultats</string>
 </resources>

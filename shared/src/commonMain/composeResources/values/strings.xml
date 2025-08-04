@@ -102,4 +102,5 @@
     <string name="title_cards_listing">Listing</string>
     <string name="hint_research">Search...</string>
     <string name="hint_search_query_format">Help</string>
+    <string name="cards_list_no_result">No Results</string>
 </resources>

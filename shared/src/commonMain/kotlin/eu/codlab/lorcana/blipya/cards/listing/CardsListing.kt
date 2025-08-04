@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.blipya.cards.listing
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,22 +20,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.blipya.res.Res
-import eu.codlab.blipya.res.deck_section_empty_deck
-import eu.codlab.blipya.res.title_scenario_deck_dreamborn
+import eu.codlab.blipya.res.cards_list_no_result
+import eu.codlab.blipya.res.hint_research
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
+import eu.codlab.lorcana.blipya.deck.expectedNumberOfColumns
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
 import eu.codlab.lorcana.blipya.theme.AppSizes
-import eu.codlab.lorcana.blipya.utils.LocalFrame
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
 import eu.codlab.lorcana.blipya.utils.WindowType
 import eu.codlab.lorcana.blipya.utils.localized
+import eu.codlab.lorcana.blipya.widgets.DefaultCard
+import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
 import eu.codlab.viewmodel.rememberViewModel
 import org.jetbrains.compose.resources.StringResource
 
@@ -48,17 +50,11 @@ fun CardsListing(
     val state by model.states.collectAsState()
 
     val columns = expectedNumberOfColumns()
-    var text by remember { mutableStateOf(TextFieldValue("")) }
 
     Column {
-        CustomOutlinedEditText(
-            value = text,
-            onValueChanged = {
-                println("new value $it")
-                text = it
-                model.search(it.text)
-            },
-            modifier = Modifier.padding(start = 10.dp),
+        Header(
+            modifier = Modifier.fillMaxWidth().padding(12.dp),
+            model = model
         )
 
         LazyVerticalGrid(
@@ -68,16 +64,8 @@ fun CardsListing(
             verticalArrangement = Arrangement.spacedBy(AppSizes.paddings.default),
             horizontalArrangement = Arrangement.spacedBy(AppSizes.paddings.default),
         ) {
-            item(span = { GridItemSpan(columns) }) {
-                TextNormal(
-                    text = Res.string.title_scenario_deck_dreamborn.localized(),
-                    fontSize = LocalFontSizes.current.deckInfo.section,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
             showEmptySectionIfRequired(
-                Res.string.deck_section_empty_deck,
+                Res.string.cards_list_no_result,
                 columns,
                 show = state.cards.isEmpty()
             )
@@ -115,48 +103,39 @@ private fun LazyGridScope.showEmptySectionIfRequired(
     }
 }
 
-@Suppress("MagicNumber")
 @Composable
-fun expectedNumberOfColumns(): Int {
-    val columnsForReducedScreens = 2
-    val columnsForExpandedScreens = 5
+private fun Header(
+    modifier: Modifier,
+    model: CardsListingModel
+) {
+    var text by remember { mutableStateOf(TextFieldValue("")) }
+    val state by model.states.collectAsState()
 
-    // extract the required number of columns and the specific case where we will have 2 in a row
-    // represents the expected number of columns AND the "span" of the first one
-    return when (LocalFrame.current) {
-        WindowType.SMARTPHONE_TINY -> columnsForReducedScreens
-        WindowType.SMARTPHONE -> columnsForReducedScreens
-        WindowType.PHABLET -> 3
-        WindowType.TABLET -> columnsForExpandedScreens
-    }
-}
-
-@Suppress("MagicNumber")
-@Composable
-fun expectedSpanForGraphTiles(): Pair<Int, Int> {
-    return when (LocalFrame.current) {
-        WindowType.SMARTPHONE_TINY -> 2 to 2
-        WindowType.SMARTPHONE -> 2 to 2
-        WindowType.PHABLET -> 3 to 2
-        WindowType.TABLET -> 3 to 2
-    }
-}
-
-@Suppress("MagicNumber")
-@Composable
-fun expectedSpanForRegularTiles(): Int {
-    val columnsForReducedScreens = 2
-
-    return when (LocalFrame.current) {
-        WindowType.SMARTPHONE_TINY -> columnsForReducedScreens
-        WindowType.SMARTPHONE -> columnsForReducedScreens
-        WindowType.PHABLET -> 2
-        WindowType.TABLET -> 2
+    DefaultCard(
+        modifier = modifier,
+        backgroundColor = defaultCardBackground(),
+        columnModifier = Modifier.fillMaxWidth().padding(6.dp)
+    ) {
+        CustomOutlinedEditText(
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                TextNormal(
+                    modifier = Modifier.alpha(0.5f),
+                    text = Res.string.hint_research.localized()
+                )
+            },
+            value = text,
+            onValueChanged = {
+                text = it
+                model.search(it.text)
+            },
+            isError = null != state.searchError
+        )
     }
 }
 
 @Composable
-@HotPreview
+@Preview
 private fun PreviewCardsListing() {
     PreviewDarkLightColumn(frameType = WindowType.SMARTPHONE) { modifier, _ ->
         CardsListing(

@@ -16,9 +16,9 @@ class Parser {
             "(" isToken LorcanaTokenTypes.OpenParenthesis
             ")" isToken LorcanaTokenTypes.CloseParenthesis
             anyOf("|", "&") isToken LorcanaTokenTypes.Comparator
-            matches("\"[^:\"\\(\\)\\!&\\|]*\"") isToken LorcanaTokenTypes.DoubleQuote
-            matches("[^:\"\\ \\(\\)\\!&\\|]+") isToken LorcanaTokenTypes.RegularToken
-            " ".ignore
+            matches("\"[^:\"]*\"") isToken LorcanaTokenTypes.DoubleQuote
+            matches("""[^:" \(\)!&\|\n\t\r]+""") isToken LorcanaTokenTypes.RegularToken
+            listOf(" ", "\t", "\n", "\r").forEach { it.ignore }
         }
     }
 

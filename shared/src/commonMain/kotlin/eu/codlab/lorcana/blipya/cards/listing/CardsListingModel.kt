@@ -5,9 +5,10 @@ import eu.codlab.lorcana.LorcanaLoaded
 import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.lorcana.raw.VariantClassification
 import eu.codlab.lorcana.raw.VirtualCard
+import eu.codlab.sentry.wrapper.Sentry
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
@@ -15,7 +16,8 @@ import kotlinx.coroutines.flow.debounce
 data class CardsListingModelState(
     var loaded: Boolean = false,
     var search: String = "",
-    var cards: List<Pair<VariantClassification, VirtualCard>> = emptyList()
+    var cards: List<Pair<VariantClassification, VirtualCard>> = emptyList(),
+    var searchError: Throwable? = null,
 )
 
 @OptIn(FlowPreview::class)
@@ -27,6 +29,7 @@ class CardsListingModel(
     private val querySearch = MutableStateFlow("")
 
     init {
+
         safeLaunch(
             onError = {
                 it.printStackTrace()
@@ -34,8 +37,7 @@ class CardsListingModel(
         ) {
             updateState { copy(cards = cards) }
 
-            querySearch.debounce(2.seconds).collect {
-                println("new value for the query is $it")
+            querySearch.debounce(200.milliseconds).collect {
                 updateCards(it)
             }
         }
@@ -46,22 +48,19 @@ class CardsListingModel(
         querySearch.value = query
     }
 
-    private var currentId = 0
     private fun updateCards(search: String) = safeLaunch {
         try {
-            currentId++
-            val id = currentId
             if (search.trim().isEmpty()) return@safeLaunch
 
             val cards = parser.parse(search).let {
                 cards.filter { (variant, card) -> it.match(card, variant) }
             }
 
-            if (id != currentId) return@safeLaunch
-
-            updateState { copy(cards = cards) }
+            updateState { copy(cards = cards, searchError = null) }
         } catch (err: Throwable) {
             err.printStackTrace()
+            updateState { copy(searchError = err) }
+            Sentry.captureException(err)
         }
     }
 }

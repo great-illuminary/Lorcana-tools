@@ -52,8 +52,4 @@ kotlin {
 
 android {
     namespace = "eu.codlab.blipya.parser"
-
-    buildFeatures {
-        compose = true
-    }
 }
