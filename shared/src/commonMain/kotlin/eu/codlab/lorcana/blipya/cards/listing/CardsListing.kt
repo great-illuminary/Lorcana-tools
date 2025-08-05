@@ -48,6 +48,7 @@ fun CardsListing(
 ) {
     val model = rememberViewModel { CardsListingModel(app.states.value.lorcana!!) }
     val state by model.states.collectAsState()
+    val cards = state.cards
 
     val columns = expectedNumberOfColumns()
 
@@ -70,13 +71,11 @@ fun CardsListing(
                 show = state.cards.isEmpty()
             )
 
-            state.cards.let { cards ->
-                items(cards.size) { index ->
-                    ShowCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        variant = cards[index].first
-                    )
-                }
+            items(cards.size) { index ->
+                ShowCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = cards[index].first
+                )
             }
         }
     }

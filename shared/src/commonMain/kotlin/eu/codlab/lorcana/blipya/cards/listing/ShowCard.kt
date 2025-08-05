@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +28,10 @@ import io.kamel.image.asyncPainterResource
 const val Ratio = 734.0f / 1024.0f
 val langs = listOf("fr", "en", "de", "it")
 
+fun VariantClassification.url(lang: String) =
+    "https://api-lorcana.com/public/images/" +
+            "${set.name.lowercase()}/$lang/$id${suffix ?: ""}.webp.jpeg"
+
 @Composable
 fun ShowCard(
     modifier: Modifier,
@@ -34,10 +39,12 @@ fun ShowCard(
 ) {
     val lang = langs.find { it == Locale.current.language.lowercase() } ?: "en"
     val cardModifier = modifier.aspectRatio(Ratio)
+    var url by remember { mutableStateOf(variant.url(lang)) }
+    var fallback by remember { mutableStateOf(variant.url("en")) }
 
-    val (url, fallback) = listOf(lang, "en").map {
-        "https://api-lorcana.com/public/images/" +
-                "${variant.set.name.lowercase()}/$it/${variant.id}${variant.suffix ?: ""}.webp.jpeg"
+    LaunchedEffect(variant) {
+        url = variant.url(lang)
+        fallback = variant.url("en")
     }
 
     Box(cardModifier) {
@@ -52,6 +59,10 @@ private fun ShowCardFromUrl(
     fallback: String
 ) {
     var selectedUrl by remember { mutableStateOf(url) }
+
+    LaunchedEffect(url, fallback) {
+        selectedUrl = url
+    }
 
     Column(
         modifier = modifier.clip(shape = RoundedCornerShape(AppSizes.corners.lorcanaCards))
