@@ -54,7 +54,7 @@ class CardsListingModel(
 
             val cards = parser.parse(search).let {
                 cards.filter { (variant, card) -> it.match(card, variant) }
-            }
+            }.sortedWith(compareBy({it.first.set}, {it.first.id}))
 
             updateState { copy(cards = cards, searchError = null) }
         } catch (err: Throwable) {

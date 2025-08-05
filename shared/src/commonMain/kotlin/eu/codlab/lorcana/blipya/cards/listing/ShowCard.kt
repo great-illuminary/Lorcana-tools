@@ -7,8 +7,13 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.intl.Locale
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
 import eu.codlab.lorcana.blipya.theme.AppSizes
@@ -20,40 +25,50 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 const val Ratio = 734.0f / 1024.0f
+val langs = listOf("fr", "en", "de", "it")
 
 @Composable
 fun ShowCard(
     modifier: Modifier,
     variant: VariantClassification,
 ) {
+    val lang = langs.find { it == Locale.current.language.lowercase() } ?: "en"
     val cardModifier = modifier.aspectRatio(Ratio)
 
-    val url = "https://api-lorcana.com/public/images/" +
-            "${variant.set.name.lowercase()}/fr/${variant.id}${variant.suffix ?: ""}.webp.jpeg"
+    val (url, fallback) = listOf(lang, "en").map {
+        "https://api-lorcana.com/public/images/" +
+                "${variant.set.name.lowercase()}/$it/${variant.id}${variant.suffix ?: ""}.webp.jpeg"
+    }
 
     Box(cardModifier) {
-        ShowCardFromUrl(cardModifier, url)
+        ShowCardFromUrl(cardModifier, url, fallback)
     }
 }
 
 @Composable
 private fun ShowCardFromUrl(
     modifier: Modifier,
-    url: String
+    url: String,
+    fallback: String
 ) {
+    var selectedUrl by remember { mutableStateOf(url) }
+
     Column(
         modifier = modifier.clip(shape = RoundedCornerShape(AppSizes.corners.lorcanaCards))
     ) {
         KamelImage(
             modifier = modifier,
-            resource = asyncPainterResource(url),
+            resource = asyncPainterResource(selectedUrl),
             contentDescription = "",
             onLoading = { _ ->
                 // nothing
             },
             onFailure = { exception ->
+                if (selectedUrl != fallback) {
+                    selectedUrl = fallback
+                }
                 exception.printStackTrace()
-                println("error ${exception.message}")
+                println("error loading $selectedUrl -> ${exception.message}")
             }
         )
     }
