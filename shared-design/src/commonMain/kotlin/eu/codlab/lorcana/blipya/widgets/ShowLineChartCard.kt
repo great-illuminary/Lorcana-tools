@@ -93,8 +93,6 @@ fun ShowLineChartCard(
                         values.map { triple -> triple.second.maxOrNull() ?: 0f }.maxOrNull() ?: 0f
                     )
 
-                    println("max is $max")
-
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()

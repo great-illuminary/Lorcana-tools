@@ -39,7 +39,6 @@ fun PromptForAction(
         title = titleResource.localized(),
         text = textResource.localized(),
         onDismiss = {
-            println("dismiss")
             prompt = false
             onDismiss()
         },

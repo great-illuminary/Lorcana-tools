@@ -34,10 +34,6 @@ fun App(
     isDarkTheme: Boolean,
     onBackPressed: AppBackPressProvider = AppBackPressProvider()
 ) {
-    LifecycleEffect {
-        println("Having a new lifecycle state $it")
-    }
-
     LocalWindowProvider(Modifier.fillMaxSize()) {
         InternalApp(
             isDarkTheme,

@@ -31,7 +31,6 @@ class LicensesModel(
         val serialized = LicenseFile.fromContent(content)
         val result = LicenseProject.fromArray(serialized.libraries)
 
-        println(result)
         updateState {
             copy(loaded = true, licenses = result)
         }

@@ -38,7 +38,6 @@ fun MapDateSelection(
                 showDateSelection = false
             }
         ) {
-            println("selected date ${it.endOfDay.format(DateFormat.FORMAT1)}")
             model.setSelectedDate(it.endOfDay)
             showDateSelection = false
         }

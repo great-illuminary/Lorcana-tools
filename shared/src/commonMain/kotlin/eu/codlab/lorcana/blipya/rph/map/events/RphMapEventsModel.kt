@@ -45,7 +45,6 @@ class RphMapEventsModel(
         val url = "https://api-lorcana.com/rph/events?" +
                 "startingAt=${date.startOfDay.utc.unixMillisLong}" +
                 "&startingLast=${date.endOfDay.utc.unixMillisLong}"
-        println("url -> $url")
         val result = try {
             client.get(url)
         } catch (err: Throwable) {
@@ -55,8 +54,6 @@ class RphMapEventsModel(
 
         val events = result?.body<List<EventHolder>>()
             ?.filter { null != it.latLng() } ?: emptyList()
-
-        println("having ${events.size} results")
 
         states.value.events.forEach { (event) -> mapState.removeMarker("event_${event.id}") }
 

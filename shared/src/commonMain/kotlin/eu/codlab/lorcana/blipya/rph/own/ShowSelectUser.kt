@@ -64,7 +64,6 @@ fun ShowSelectUser(
         CustomOutlinedEditText(
             value = text,
             onValueChanged = {
-                println("new value $it")
                 text = it
                 model.startMatchingUser(it.text)
             },

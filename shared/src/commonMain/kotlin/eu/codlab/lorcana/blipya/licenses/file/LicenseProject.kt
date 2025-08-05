@@ -49,7 +49,6 @@ data class LicenseProject(
                     }
                 }
             }
-            map.values.forEach { println(it.uniqueId) }
             return map.values.toList()
         }
     }
@@ -61,7 +60,7 @@ private fun versionFromMavenDependency(mavenDependency: String): KotlinVersion {
 
     val mavenVersion = split.last().split("-").first()
     val versionSplit = mavenVersion.split(".")
-    println("managing version $mavenVersion")
+
     return when (versionSplit.count()) {
         1 -> KotlinVersion(
             versionSplit[0].split("_").first().split("-").first().toInt(),

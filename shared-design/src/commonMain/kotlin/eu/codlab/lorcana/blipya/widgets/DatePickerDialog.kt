@@ -89,11 +89,7 @@ fun DatePickerDialog(
                     hour = 12
                 )
 
-                println(date.local)
                 val endOfDay = date.local.endOfDay
-                println(endOfDay)
-                println("selected date utc is ${endOfDay.utc.format(DateFormat.FORMAT2)}")
-                println("selected date is ${endOfDay.format(DateFormat.FORMAT1)}")
 
                 onDate(date.local.endOfDay)
                 /*

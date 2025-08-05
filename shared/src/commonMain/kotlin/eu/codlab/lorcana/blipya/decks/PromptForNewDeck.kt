@@ -37,7 +37,6 @@ fun PromptForNewDeck(
         title = Res.string.deck_configuration_deck_name.localized(),
         text = Res.string.deck_configuration_deck_name_text.localized(),
         onDismiss = {
-            println("dismiss")
             prompt = false
             onDismiss()
         },

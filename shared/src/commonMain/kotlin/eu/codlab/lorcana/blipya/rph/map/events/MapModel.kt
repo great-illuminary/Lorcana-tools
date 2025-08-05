@@ -147,9 +147,7 @@ abstract class MapModel<T : MapModelState, H>(
 
         safeLaunch {
             states.value.currentCoordinates!!.let {
-                println("having coordinates ? $it")
                 val coords = MapUtils.latLngToXY(it.latitude, it.longitude)
-                println("snapTo $coords")
                 mapState.snapScrollTo(coords.x, coords.y)
             }
         }

@@ -31,10 +31,8 @@ class RphMapStoresModel(
             it.printStackTrace()
         }
     ) {
-        val url = "https://api-lorcana.com/rph/stores"
-        println("url -> $url")
         val result = try {
-            client.get(url)
+            client.get("https://api-lorcana.com/rph/stores")
         } catch (err: Throwable) {
             err.printStackTrace()
             null
@@ -42,8 +40,6 @@ class RphMapStoresModel(
 
         val stores = result?.body<List<Store>>()
             ?.filter { null != it.latLng() } ?: emptyList()
-
-        println("having ${stores.size} results")
 
         states.value.stores.forEach { (store) -> mapState.removeMarker("store_${store}") }
 

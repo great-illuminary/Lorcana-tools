@@ -64,10 +64,7 @@ class RphOwnRegistrationsModel(
             )
         }
 
-        println("load ?")
         val url = "https://api-lorcana.com/rph/users?matching=${matching.encodeURLParameter()}"
-
-        println("url is $url")
 
         val result = try {
             client.get(url)
@@ -83,7 +80,6 @@ class RphOwnRegistrationsModel(
                 if (!current.isSame(dataLoader)) return@safeLaunch
             }
 
-            println("having results !")
             updateState {
                 copy(
                     matchingUsers = DataLoader.Loaded(dataLoader, users)
@@ -104,7 +100,6 @@ class RphOwnRegistrationsModel(
         }
 
         val url = "https://api-lorcana.com/rph/user/${ravensburgerPlayHubUser.id}/events"
-        println("url -> $url")
 
         val result = try {
             client.get(url)
@@ -120,8 +115,6 @@ class RphOwnRegistrationsModel(
         states.value.events?.let { current ->
             if (!current.isSame(dataLoader)) return@safeLaunch
         }
-
-        println("having ${events.size} results")
 
         updateState {
             copy(

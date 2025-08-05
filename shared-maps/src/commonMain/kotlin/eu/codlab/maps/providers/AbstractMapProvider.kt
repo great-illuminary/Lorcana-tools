@@ -26,7 +26,7 @@ abstract class AbstractMapProvider(
 
     suspend fun initialize() {
         cacheFolder.mkdirs()
-        println("cacheFolder -> ${cacheFolder.absolutePath}")
+
         cacheManager.initialize()
     }
 
