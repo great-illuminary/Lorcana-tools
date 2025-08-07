@@ -11,12 +11,13 @@ import kotlin.math.sin
 import kotlin.math.sinh
 import kotlin.math.tan
 
+@Suppress("MagicNumber")
 object MapUtils {
-    private val EARTH_RADIUS_KM = 6371
+    private const val EARTH_RADIUS_KM = 6371
 
     fun xyToLatLng(x: Double, y: Double): LatLng {
         val long = x * 360 - 180
-        val lat = atan(sinh(PI * (1 - 2 * y))) * 180 / PI
+        val lat = atan(sinh(PI * (1 - 2 * y))).rad2deg()
 
         return LatLng(latitude = lat, longitude = long)
     }
@@ -26,14 +27,14 @@ object MapUtils {
     fun latLngToXY(lat: Double, long: Double): XY {
         val x = (long + 180) / 360
 
-        val y = (1 - (ln(tan(lat * PI / 180) + 1 / (cos(lat * PI / 180))) / PI)) / 2
+        val y = (1 - (ln(tan(lat.deg2rad()) + 1 / (cos(lat.deg2rad()))) / PI)) / 2
 
         return XY(x = x, y = y)
     }
 
     fun delta(center: LatLng, distanceMeter: Int, bearing: Double): LatLng {
-        val latitudeRadians = center.latitude * PI / 180.0
-        val longitudeRadians = center.longitude * PI / 180.0
+        val latitudeRadians = center.latitude.deg2rad()
+        val longitudeRadians = center.longitude.deg2rad()
         val radiusRadian = distanceMeter * 1.0 / 1000.0 / EARTH_RADIUS_KM
         val d = radiusRadian
 
@@ -42,8 +43,8 @@ object MapUtils {
         val pLng = (longitudeRadians + atan2(
             sin(bearing) * sin(d) * cos(latitudeRadians),
             cos(d) - sin(latitudeRadians) * sin(pLat)
-        )) * 180 / PI
-        pLat = pLat * 180 / PI
+        )).rad2deg()
+        pLat = pLat.rad2deg()
 
         return LatLng(pLat, pLng)
     }
@@ -53,19 +54,17 @@ object MapUtils {
 
     fun distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
         val theta = lon1 - lon2
-        var dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(
-            deg2rad(lat1)
-        ) * cos(deg2rad(lat2)) * cos(deg2rad(theta))
+        var dist = sin(lat1.deg2rad()) * sin(lat2.deg2rad()) + cos(
+            lat1.deg2rad()
+        ) * cos(lat2.deg2rad()) * cos(theta.deg2rad())
         dist = acos(dist)
-        dist = rad2deg(dist)
+        dist = dist.rad2deg()
         dist *= 60 * 1.1515
         dist *= 1.609344
         return (dist)
     }
 
     fun circle(center: LatLng, radiusMeter: Int) = circle(center, radiusMeter) { this }
-
-    fun toRadian(theta: Double) = theta * PI / 180.0
 
     fun <T> circle(
         center: LatLng,
@@ -74,21 +73,21 @@ object MapUtils {
     ): List<T>? {
         if (radiusMeter <= 0) return null
 
-        val latitudeRadians = center.latitude * PI / 180.0
-        val longitudeRadians = center.longitude * PI / 180.0
+        val latitudeRadians = center.latitude.deg2rad()
+        val longitudeRadians = center.longitude.deg2rad()
         val radiusRadian = radiusMeter * 1.0 / 1000.0 / EARTH_RADIUS_KM
         val d = radiusRadian
 
         val points = (0..<361 step 1).map { angle ->
-            val bearing = angle * PI / 180.0
+            val bearing = angle.deg2rad()
 
             var pLat =
                 asin(sin(latitudeRadians) * cos(d) + cos(latitudeRadians) * sin(d) * cos(bearing))
             val pLng = (longitudeRadians + atan2(
                 sin(bearing) * sin(d) * cos(latitudeRadians),
                 cos(d) - sin(latitudeRadians) * sin(pLat)
-            )) * 180 / PI
-            pLat = pLat * 180 / PI
+            )).rad2deg()
+            pLat = pLat.rad2deg()
 
             LatLng(pLat, pLng).transform()
         }
@@ -96,12 +95,9 @@ object MapUtils {
         return points
     }
 
+    private fun Double.rad2deg() = this * 180.0 / PI
 
-    private fun deg2rad(deg: Double): Double {
-        return (deg * PI / 180.0)
-    }
+    private fun Double.deg2rad() = this * PI / 180.0
 
-    private fun rad2deg(rad: Double): Double {
-        return (rad * 180.0 / PI)
-    }
+    private fun Int.deg2rad() = this * PI / 180.0
 }

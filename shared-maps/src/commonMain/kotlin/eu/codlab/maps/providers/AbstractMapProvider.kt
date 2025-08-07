@@ -69,16 +69,15 @@ abstract class AbstractMapProvider(
         return body
     }
 
+    @Suppress("TooGenericExceptionCaught", "ReturnCount")
     suspend fun getTile(row: Int, col: Int, zoomLvl: Int): RawSource? {
-        return try {
-            val file = VirtualFile(cacheFolder, "${row}_${col}_${zoomLvl}.jpeg")
+        val file = VirtualFile(cacheFolder, "${row}_${col}_${zoomLvl}.jpeg")
 
-            if (useFileCache) {
-                if (file.exists()) {
-                    val content = file.read()
-                    if (content.isNotEmpty()) {
-                        return Buffer().also { it.write(content) }
-                    }
+        return try {
+            if (useFileCache && file.exists()) {
+                val content = file.read()
+                if (content.isNotEmpty()) {
+                    return Buffer().also { it.write(content) }
                 }
             }
             val inCache = cacheManager.getCached(row, col, zoomLvl)
@@ -94,8 +93,7 @@ abstract class AbstractMapProvider(
             }
 
             body
-        } catch (err: Throwable) {
-            err.printStackTrace()
+        } catch (_: Throwable) {
             null
         }
     }

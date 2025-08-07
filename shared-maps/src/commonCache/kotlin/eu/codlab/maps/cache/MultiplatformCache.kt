@@ -18,6 +18,8 @@ actual class MultiplatformCache actual constructor(
     private val cacheDirName: String,
     private val download: suspend (x: Int, y: Int, z: Int) -> ByteArray
 ) {
+    private val maxTilesInCache = 20
+    private val cacheMaxSize = 500L * 1024L * 1024L
     private val queue = Queue(CoroutineScope(IODispatcher))
     private val mutable = mutableListOf<Triple>()
     private val listAccessQueue = Queue(CoroutineScope(IODispatcher))
@@ -36,7 +38,7 @@ actual class MultiplatformCache actual constructor(
 
         cache = com.mayakapps.kache.FileKache(
             directory = cacheDir.absolutePath,
-            maxSize = 500 * 1024 * 1024
+            maxSize = cacheMaxSize
         ) {
             // Other optional configurations
             strategy = KacheStrategy.MRU
@@ -57,7 +59,7 @@ actual class MultiplatformCache actual constructor(
 
     private fun ensureSize() {
         listAccessQueue.post {
-            while (mutable.size > 20) {
+            while (mutable.size > maxTilesInCache) {
                 mutable.removeAt(0)
             }
         }
@@ -83,19 +85,21 @@ actual class MultiplatformCache actual constructor(
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private suspend fun getListQueue(): Triple? {
         return suspendCoroutine { result ->
             listAccessQueue.post {
                 try {
                     val last = mutable.removeLast()
                     result.resume(last)
-                } catch (err: Throwable) {
+                } catch (_: Throwable) {
                     result.resume(null)
                 }
             }
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private fun attemptToCache() {
         queue.post {
             val head = getListQueue() ?: return@post
@@ -112,8 +116,7 @@ actual class MultiplatformCache actual constructor(
                     file.write(download)
 
                     true
-                } catch (err: Throwable) {
-                    err.printStackTrace()
+                } catch (_: Throwable) {
                     false
                 }
             }
