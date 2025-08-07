@@ -26,8 +26,6 @@ enum class Action(private val apply: ApplyAction) : ApplyAction {
     companion object {
         private val cache = Action.entries.associateBy { it.name.lowercase() }
 
-        fun get(action: String) = cache[action]
-
-        fun String.toAction() = get(this)
+        fun String.toAction() = cache[this]
     }
 }

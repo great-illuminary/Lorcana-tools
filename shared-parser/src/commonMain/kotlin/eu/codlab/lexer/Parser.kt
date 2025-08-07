@@ -22,7 +22,7 @@ class Parser {
         }
     }
 
-    private val parser = pangoro {
+    private val actualParser = pangoro {
         Expression root {
             either {
                 expect(Not) storeIn "expr"
@@ -91,5 +91,5 @@ class Parser {
         }
     }
 
-    fun parse(input: String) = Matcher(parser.parse(lexer.tokenize(input)) as Expression)
+    fun parse(input: String) = Matcher(actualParser.parse(lexer.tokenize(input)) as Expression)
 }

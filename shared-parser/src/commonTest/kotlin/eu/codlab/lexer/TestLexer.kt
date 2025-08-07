@@ -5,7 +5,7 @@ import kotlin.test.Test
 
 class TestLexer {
     @Test
-    fun testLexer() {
+    fun testLexerUsingSomeExpectedLookup() {
         val parser = Parser()
         val json = Json {
             prettyPrintIndent = "  "
