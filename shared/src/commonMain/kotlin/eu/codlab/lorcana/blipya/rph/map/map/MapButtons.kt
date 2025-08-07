@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.compose.theme.LocalDarkTheme
-import eu.codlab.compose.theme.LocalThemeEnvironment
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
 import eu.codlab.lorcana.blipya.icons.FixedGps
 import eu.codlab.lorcana.blipya.icons.ZoomIn
@@ -67,9 +66,9 @@ private fun Button(
     contentDescription: String,
     onClick: () -> Unit,
 ) {
-    val colors = LocalThemeEnvironment .current
     val color = defaultCardBackground()
 
+    @Suppress("MagicNumber")
     val corner = RoundedCornerShape(50)
 
     Column(Modifier.clip(corner)) {
@@ -82,9 +81,9 @@ private fun Button(
             Icon(
                 imageVector = imageVector,
                 contentDescription = contentDescription,
-                tint = if(LocalDarkTheme.current) {
+                tint = if (LocalDarkTheme.current) {
                     AppColor.WhiteCream
-                }else {
+                } else {
                     AppColor.GrayDark
                 }
             )

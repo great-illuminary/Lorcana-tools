@@ -30,6 +30,10 @@ class RouteDeckScenario :
         navTransition = NavTransition(),
         swipeProperties = SwipeProperties()
     ) {
+    private val expectedSplitSize = 4
+    private val indexDeck = 1
+    private val indexScenario = 3
+
     @Composable
     override fun scene(backStackEntry: BackStackEntry) {
         val appModel: AppModel = LocalApp.current
@@ -69,9 +73,9 @@ class RouteDeckScenario :
     override fun isMatching(path: String): Boolean {
         val split = path.split("/")
 
-        if (split.size < 4) return false
+        if (split.size < expectedSplitSize) return false
 
-        return split[1] == "deck" && split[3] == "scenario"
+        return split[indexDeck] == "deck" && split[indexScenario] == "scenario"
     }
 
     override fun navigateToStack() = NavigateToStack(

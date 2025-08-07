@@ -34,7 +34,7 @@ import eu.codlab.lorcana.blipya.utils.localized
 @Suppress("LongMethod")
 @Composable
 fun PopupConfirm(
-    show: Boolean,
+    show: Boolean = true,
     title: String,
     text: String,
     showCancel: Boolean = false,

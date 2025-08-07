@@ -2,13 +2,13 @@ package eu.codlab.lorcana.blipya.cards.listing
 
 import eu.codlab.lexer.Parser
 import eu.codlab.lorcana.LorcanaLoaded
+import eu.codlab.lorcana.blipya.utils.Constants
 import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.lorcana.raw.VariantClassification
 import eu.codlab.lorcana.raw.VirtualCard
 import eu.codlab.sentry.wrapper.Sentry
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
@@ -37,7 +37,7 @@ class CardsListingModel(
         ) {
             updateState { copy(cards = cards) }
 
-            querySearch.debounce(200.milliseconds).collect {
+            querySearch.debounce(Constants.searchDebounce).collect {
                 updateCards(it)
             }
         }
@@ -48,13 +48,14 @@ class CardsListingModel(
         querySearch.value = query
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private fun updateCards(search: String) = safeLaunch {
         try {
             if (search.trim().isEmpty()) return@safeLaunch
 
             val cards = parser.parse(search).let {
                 cards.filter { (variant, card) -> it.match(card, variant) }
-            }.sortedWith(compareBy({it.first.set}, {it.first.id}))
+            }.sortedWith(compareBy({ it.first.set }, { it.first.id }))
 
             updateState { copy(cards = cards, searchError = null) }
         } catch (err: Throwable) {

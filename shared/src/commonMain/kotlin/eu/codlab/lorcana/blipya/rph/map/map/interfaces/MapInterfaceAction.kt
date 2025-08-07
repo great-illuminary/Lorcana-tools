@@ -3,8 +3,7 @@ package eu.codlab.lorcana.blipya.rph.map.map.interfaces
 import korlibs.time.DateTimeTz
 import kotlinx.coroutines.flow.StateFlow
 
-sealed interface MapInterfaceAction {
-}
+sealed interface MapInterfaceAction
 
 interface MapInterfaceZoomable : MapInterfaceAction {
     fun zoomIn()
@@ -20,5 +19,6 @@ interface MapInterfaceCalendarState {
 
 interface MapInterfaceCalendar : MapInterfaceAction {
     val states: StateFlow<MapInterfaceCalendarState>
+
     fun setSelectedDate(dateTimeTz: DateTimeTz)
 }

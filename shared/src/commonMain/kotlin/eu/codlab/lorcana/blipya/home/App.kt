@@ -22,7 +22,6 @@ import eu.codlab.lorcana.blipya.utils.WindowType
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
 import eu.codlab.lorcana.blipya.widgets.popup.PopupConfirmCompose
 import eu.codlab.lorcana.blipya.widgets.popup.PopupLocalModel
-import eu.codlab.viewmodel.effects.LifecycleEffect
 
 var staticModel: AppModel? = null
 

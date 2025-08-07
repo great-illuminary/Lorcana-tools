@@ -25,7 +25,6 @@ fun PopupConfirmCompose() {
     // possible improvement -> always show if show!!
     // and test changing the values live
     PopupConfirm(
-        show = true,
         title = show.title,
         text = show.text,
         showCancel = null != show.onDismiss,

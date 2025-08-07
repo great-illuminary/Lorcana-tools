@@ -7,6 +7,7 @@ import eu.codlab.lorcana.math.MulliganCard
 import eu.codlab.lorcana.math.MulliganScenario
 import eu.codlab.lorcana.math.tools.MulliganResult
 import eu.codlab.viewmodel.StateViewModel
+import eu.codlab.viewmodel.launch
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
 
@@ -16,7 +17,8 @@ data class ShowScenarioModelState(
     val mulligan: MulliganScenario,
     val cards: List<MulliganCard>,
     val probability: MulliganResult,
-    val updatedAt: DateTime = DateTime.now()
+    val updatedAt: DateTime = DateTime.now(),
+    val showPrompt: Boolean = false
 )
 
 @Suppress("TooManyFunctions")
@@ -49,6 +51,12 @@ class ShowMulliganModel(
                     copy(probability = it)
                 }
             }
+        }
+    }
+
+    fun showPrompt(show: Boolean) {
+        launch {
+            updateState { copy(showPrompt = show) }
         }
     }
 }

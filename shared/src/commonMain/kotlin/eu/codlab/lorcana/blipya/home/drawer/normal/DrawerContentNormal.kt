@@ -143,7 +143,6 @@ fun DrawerContentNormal(
             tiny = tiny
         )
 
-
         Column(Modifier.weight(1.0f)) { }
 
         DrawerSeparator()

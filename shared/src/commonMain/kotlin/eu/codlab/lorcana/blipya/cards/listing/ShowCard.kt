@@ -109,7 +109,6 @@ fun ShowCardPreview() {
 
         ShowCard(
             modifier,
-
             variantClassification
         )
     }

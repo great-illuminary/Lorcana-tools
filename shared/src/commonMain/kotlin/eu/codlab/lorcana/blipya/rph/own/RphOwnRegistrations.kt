@@ -14,14 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.lorcana.blipya.deck.expectedNumberOfColumns
-import eu.codlab.lorcana.blipya.deck.expectedSpanForGraphTiles
-import eu.codlab.lorcana.blipya.deck.expectedSpanForRegularTiles
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.rph.map.map.ShowEventInfo
 import eu.codlab.lorcana.blipya.rph.models.EventHolder
 import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
-import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
 import eu.codlab.viewmodel.rememberViewModel
 
 @Composable
@@ -34,12 +31,8 @@ fun RphOwnRegistrations(
     val state by model.states.collectAsState()
     val events = state.events
 
-    val color = defaultCardBackground()
-
     val numberOfColumnsForMainItem = 2
     val columns = expectedNumberOfColumns()
-    val expectedSpanForRegularTiles = expectedSpanForRegularTiles()
-    val (curveGraph, curveInfo) = expectedSpanForGraphTiles()
 
     LazyVerticalGrid(
         modifier = modifier.imePadding(),

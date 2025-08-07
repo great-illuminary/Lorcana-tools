@@ -36,14 +36,12 @@ import eu.codlab.blipya.design.res.may
 import eu.codlab.blipya.design.res.november
 import eu.codlab.blipya.design.res.october
 import eu.codlab.blipya.design.res.september
-import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.icons.SkipNext
 import eu.codlab.lorcana.blipya.icons.SkipPrevious
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.utils.localized
 import korlibs.io.async.launch
-import korlibs.time.DateFormat
 import korlibs.time.DateTime
 import korlibs.time.DateTimeTz
 import korlibs.time.days
@@ -56,6 +54,7 @@ import kotlinx.datetime.Month
 import org.jetbrains.compose.resources.StringResource
 import korlibs.time.Month as KorlibsMonth
 
+@Suppress("LongMethod")
 @Composable
 fun DatePickerDialog(
     defaultDate: DateTimeTz? = null,
@@ -80,31 +79,16 @@ fun DatePickerDialog(
     )
 
     LaunchedEffect(state.selectedDates) {
-        if (state.selectedDates.isNotEmpty()) {
-            state.selectedDates.firstOrNull()?.let {
-                val date = DateTime.invoke(
-                    year = it.year,
-                    month = it.monthNumber,
-                    day = it.dayOfMonth,
-                    hour = 12
-                )
+        if (state.selectedDates.isEmpty()) return@LaunchedEffect
+        state.selectedDates.firstOrNull()?.let {
+            val date = DateTime.invoke(
+                year = it.year,
+                month = it.monthNumber,
+                day = it.dayOfMonth,
+                hour = 12
+            )
 
-                val endOfDay = date.local.endOfDay
-
-                onDate(date.local.endOfDay)
-                /*
-                val zone = kotlinx.datetime.TimeZone.currentSystemDefault()
-                val timestamp = it.atStartOfDayIn(zone).plus(12.hours)
-
-                println("selected date was $it -> ${timestamp.toEpochMilliseconds()}")
-                val dateTime = DateTime.fromUnixMillis(timestamp.toEpochMilliseconds())
-
-                val localDateTime = timestamp.toLocalDateTime(zone)
-                println("comparing both -> $localDateTime / ${dateTime.local}")
-
-                onDate(dateTime)
-                 */
-            }
+            onDate(date.local.endOfDay)
         }
     }
 
@@ -112,18 +96,12 @@ fun DatePickerDialog(
     val month = currentMonth.month.translation.localized()
     val year = currentMonth.year
 
-    val isDark = LocalDarkTheme.current
-
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties()
     ) {
         DefaultCard(
-            backgroundColor = AppColor.White /*?: if (isDark) {
-                Color.Black
-            } else {
-                Color.White
-            }*/
+            backgroundColor = AppColor.White
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -211,4 +189,3 @@ val DateTimeTz.startOfDay: DateTimeTz
 
 val DateTimeTz.endOfDay: DateTimeTz
     get() = this.add(0.months, 1.days).startOfDay.minus(1.milliseconds)
-

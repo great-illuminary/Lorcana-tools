@@ -6,6 +6,7 @@ import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.math.ExpectedCard
 import eu.codlab.lorcana.math.Scenario
 import eu.codlab.viewmodel.StateViewModel
+import eu.codlab.viewmodel.launch
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
 import kotlin.math.pow
@@ -17,7 +18,8 @@ data class ShowScenarioModelState(
     val scenario: Scenario,
     val expectedCards: List<ExpectedCard>,
     val probability: Double,
-    val updatedAt: DateTime = DateTime.now()
+    val updatedAt: DateTime = DateTime.now(),
+    val promptDelete: Boolean = false
 )
 
 @Suppress("TooManyFunctions")
@@ -50,6 +52,12 @@ class ShowScenarioModel(
                     copy(probability = it)
                 }
             }
+        }
+    }
+
+    fun showPrompt(show: Boolean) {
+        launch {
+            updateState { copy(promptDelete = show) }
         }
     }
 }

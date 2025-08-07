@@ -54,7 +54,6 @@ class RouteCardsListing : Route(
 
     override fun navigateToStack() = NavigateToStack(
         popBackStack = true,
-
         options = NavOptions(
             launchSingleTop = false,
             popUpTo = PopUpTo.First(true)

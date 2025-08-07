@@ -55,6 +55,7 @@ class RphOwnRegistrationsModel(
         )
     }
 
+    @Suppress("TooGenericExceptionCaught")
     fun startMatchingUser(matching: String) = safeLaunch {
         val dataLoader = DataLoader.Loading<List<User>>()
 
@@ -72,6 +73,7 @@ class RphOwnRegistrationsModel(
             err.printStackTrace()
             null
         }
+
         try {
             val users = result?.body<List<User>>() ?: emptyList()
 
@@ -90,6 +92,7 @@ class RphOwnRegistrationsModel(
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private fun startLoadingData(ravensburgerPlayHubUser: RavensburgerPlayHubUser) = safeLaunch {
         val dataLoader = DataLoader.Loading<List<EventHolder>>()
 

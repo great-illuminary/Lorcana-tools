@@ -18,6 +18,7 @@ import eu.codlab.lorcana.blipya.save.ConfigurationLoader
 import eu.codlab.lorcana.blipya.save.RavensburgerPlayHubUser
 import eu.codlab.lorcana.blipya.save.SavedAuthentication
 import eu.codlab.lorcana.blipya.utils.AuthentInit
+import eu.codlab.lorcana.blipya.utils.Constants
 import eu.codlab.lorcana.blipya.utils.Firebase
 import eu.codlab.lorcana.blipya.utils.RootPath
 import eu.codlab.lorcana.blipya.utils.safeLaunch
@@ -33,7 +34,6 @@ import eu.codlab.viewmodel.launch
 import io.ktor.websocket.readText
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.async
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -289,7 +289,7 @@ data class AppModel(
             )
         }
 
-        return backendSocket.waitForSocket(id, 5.seconds, ResultForUrlToOpen.serializer())?.url
+        return backendSocket.waitForSocket(id, Constants.backendTimeout, ResultForUrlToOpen.serializer())?.url
     }
 
     fun cardFromDreamborn(dreambornId: String): Pair<VirtualCard, VariantClassification>? {

@@ -11,8 +11,6 @@ import eu.codlab.lorcana.blipya.home.LocalApp
 import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 import eu.codlab.lorcana.blipya.home.navigate.NavigateToStack
 import eu.codlab.lorcana.blipya.licenses.LicensesScreen
-import eu.codlab.lorcana.blipya.model.DeckModel
-import eu.codlab.lorcana.blipya.save.ScenarioModel
 import eu.codlab.lorcana.blipya.widgets.AppBarState
 import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
@@ -59,7 +57,6 @@ class RouteLicenses : Route(
 
     override fun navigateToStack() = NavigateToStack(
         popBackStack = true,
-
         options = NavOptions(
             launchSingleTop = false,
             popUpTo = PopUpTo.First(true)

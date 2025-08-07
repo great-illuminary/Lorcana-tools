@@ -24,7 +24,9 @@ class RphMapStoresModel(
 ) : MapModel<RphMapStoresModelState, Store>(
     initialState = RphMapStoresModelState(),
     allocateComposer = { mapState, flushCallouts -> ComposeStoreHolder(uriHandler, mapState, flushCallouts) }
-), MapInterfaceZoomable {
+),
+    MapInterfaceZoomable {
+    @Suppress("TooGenericExceptionCaught")
     @OptIn(ExperimentalClusteringApi::class)
     private fun startLoadingData() = safeLaunch(
         onError = {
@@ -41,7 +43,7 @@ class RphMapStoresModel(
         val stores = result?.body<List<Store>>()
             ?.filter { null != it.latLng() } ?: emptyList()
 
-        states.value.stores.forEach { (store) -> mapState.removeMarker("store_${store}") }
+        states.value.stores.forEach { (store) -> mapState.removeMarker("store_$store") }
 
         updateState {
             copy(
@@ -72,5 +74,4 @@ class RphMapStoresModel(
 
     override suspend fun setCurrentCoordinates(newCoordinates: LatLng) =
         updateState { copy(currentCoordinates = newCoordinates) }
-
 }

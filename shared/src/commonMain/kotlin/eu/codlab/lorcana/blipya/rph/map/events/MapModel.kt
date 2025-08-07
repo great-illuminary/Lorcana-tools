@@ -3,14 +3,12 @@ package eu.codlab.lorcana.blipya.rph.map.events
 import eu.codlab.http.Configuration
 import eu.codlab.http.createClient
 import eu.codlab.lorcana.blipya.rph.map.map.interfaces.MapInterfaceZoomable
+import eu.codlab.lorcana.blipya.utils.MapManipulation
 import eu.codlab.lorcana.blipya.utils.safeLaunch
 import eu.codlab.maps.LatLng
 import eu.codlab.maps.MapUtils
 import eu.codlab.maps.providers.GoogleProvider
 import eu.codlab.viewmodel.StateViewModel
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
 import ovh.plrapps.mapcompose.api.ExperimentalClusteringApi
 import ovh.plrapps.mapcompose.api.addClusterer
 import ovh.plrapps.mapcompose.api.addLayer
@@ -42,20 +40,22 @@ abstract class MapModel<T : MapModelState, H>(
         googleApi.getTile(row, col, zoomLvl)
     }
 
-    private val levelCount = 18
-    private val fullWidthOrHeight = 256 * 2.0.pow(levelCount).toInt()
+    private val mapManipulation = MapManipulation(
+        tileSize = 256,
+        levelCount = 18
+    )
 
     @OptIn(ExperimentalClusteringApi::class)
     val mapState = MapState(
-        levelCount,
-        fullWidthOrHeight,
-        fullWidthOrHeight,
-        tileSize = 256
+        mapManipulation.levelCount,
+        mapManipulation.fullWidthOrHeight,
+        mapManipulation.fullWidthOrHeight,
+        tileSize = mapManipulation.tileSize
     ).apply {
         setMagnifyingFactor(1)
 
-        maxScale = MAX_ZOOM
-        scale = DEFAULT_ZOOM
+        maxScale = mapManipulation.maxZoom
+        scale = mapManipulation.defaultZoom
         addLayer(tileStreamProvider)
 
         enableRotation()
@@ -64,7 +64,6 @@ abstract class MapModel<T : MapModelState, H>(
             { composer.cluster(size = ids.size) }
         }
     }
-
 
     private fun flushCallouts() {
         mapState.onPress()
@@ -81,7 +80,6 @@ abstract class MapModel<T : MapModelState, H>(
         mapState,
     ) { flushCallouts() }
 
-
     init {
         val latLng = LatLng(0.0, 0.0)
         val xy = MapUtils.latLngToXY(latLng)
@@ -97,7 +95,7 @@ abstract class MapModel<T : MapModelState, H>(
 
             setInitialized(true)
 
-            setZoom(MIN_ZOOM)
+            setZoom(mapManipulation.minZoom)
             mapState.snapScrollTo(
                 xy.x,
                 xy.y
@@ -112,14 +110,12 @@ abstract class MapModel<T : MapModelState, H>(
 
     protected abstract suspend fun startLoadingData(state: T)
 
-
     protected abstract suspend fun setInitialized(initialized: Boolean)
 
     protected abstract suspend fun setCurrentCoordinates(newCoordinates: LatLng)
 
-
     override fun moveToOrigin() {
-        mapState.scale = DEFAULT_ZOOM
+        mapState.scale = mapManipulation.defaultZoom
 
         safeLaunch {
             val latLng = LatLng(0.0, 0.0)
@@ -132,14 +128,14 @@ abstract class MapModel<T : MapModelState, H>(
         }
     }
 
-    override fun zoomIn() = applyZoom(1.1)
+    override fun zoomIn() = applyZoom(mapManipulation.zoomInCoeff)
 
-    override fun zoomOut() = applyZoom(0.9)
+    override fun zoomOut() = applyZoom(mapManipulation.zoomOutCoeff)
 
     private fun applyZoom(coef: Double) {
         // make sure that we are both 3.0f > scale > 0.05f
         val newZoom = mapState.scale * coef
-        setZoom(max(min(newZoom, MAX_ZOOM), MIN_ZOOM))
+        setZoom(mapManipulation.actualZoom(newZoom))
     }
 
     private fun setZoom(zoom: Double) {

@@ -30,8 +30,8 @@ class RphMapEventsModel(
 ) : MapModel<RphMapEventsModelState, EventHolder>(
     initialState = RphMapEventsModelState(),
     allocateComposer = { mapState, flushCallouts -> ComposerEventHolder(uriHandler, mapState, flushCallouts) }
-), MapInterfaceCalendar {
-
+),
+    MapInterfaceCalendar {
     override fun setSelectedDate(dateTimeTz: DateTimeTz) {
         updateState {
             copy(selectedDate = dateTimeTz.endOfDay)
@@ -40,6 +40,7 @@ class RphMapEventsModel(
         startLoadingData(dateTimeTz)
     }
 
+    @Suppress("TooGenericExceptionCaught")
     @OptIn(ExperimentalClusteringApi::class)
     private fun startLoadingData(date: DateTimeTz) = safeLaunch {
         val url = "https://api-lorcana.com/rph/events?" +

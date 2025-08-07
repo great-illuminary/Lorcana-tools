@@ -29,6 +29,10 @@ class RouteDeckMulligan : Route(
     navTransition = NavTransition(),
     swipeProperties = SwipeProperties()
 ) {
+    private val expectedSplitSize = 4
+    private val indexDeck = 1
+    private val indexMulligan = 3
+
     @Composable
     override fun scene(
         backStackEntry: BackStackEntry
@@ -70,9 +74,9 @@ class RouteDeckMulligan : Route(
     override fun isMatching(path: String): Boolean {
         val split = path.split("/")
 
-        if (split.size < 4) return false
+        if (split.size < expectedSplitSize) return false
 
-        return split[1] == "deck" && split[3] == "mulligan"
+        return split[indexDeck] == "deck" && split[indexMulligan] == "mulligan"
     }
 
     override fun navigateToStack() = NavigateToStack(

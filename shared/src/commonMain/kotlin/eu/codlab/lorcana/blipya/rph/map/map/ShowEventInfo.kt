@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,7 +26,6 @@ import eu.codlab.lorcana.blipya.rph.models.EventHolder
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.utils.localized
 import eu.codlab.lorcana.blipya.widgets.DefaultCard
-import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
 import korlibs.time.DateTime
 
 @Composable

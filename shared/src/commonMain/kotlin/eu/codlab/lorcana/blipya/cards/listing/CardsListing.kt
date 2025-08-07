@@ -32,6 +32,7 @@ import eu.codlab.lorcana.blipya.deck.expectedNumberOfColumns
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
 import eu.codlab.lorcana.blipya.theme.AppSizes
+import eu.codlab.lorcana.blipya.utils.Constants
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
 import eu.codlab.lorcana.blipya.utils.WindowType
 import eu.codlab.lorcana.blipya.utils.localized
@@ -119,7 +120,7 @@ private fun Header(
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
                 TextNormal(
-                    modifier = Modifier.alpha(0.5f),
+                    modifier = Modifier.alpha(Constants.halfAlpha),
                     text = Res.string.hint_research.localized()
                 )
             },

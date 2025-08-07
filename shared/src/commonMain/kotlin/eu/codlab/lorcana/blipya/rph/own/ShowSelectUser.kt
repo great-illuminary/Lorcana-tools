@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.lorcana.blipya.rph.models.User
+import eu.codlab.lorcana.blipya.utils.Constants
 
 @Composable
 fun ShowSelectUser(
@@ -27,39 +28,25 @@ fun ShowSelectUser(
     model: RphOwnRegistrationsModel
 ) {
     val state by model.states.collectAsState()
-
     var options by remember { mutableStateOf(emptyList<User>()) }
-
     val matching = state.matchingUsers
     var expanded by remember { mutableStateOf(false) }
     var text by remember { mutableStateOf(TextFieldValue("")) }
 
     LaunchedEffect(matching) {
         val newOptions: List<User> = when (matching) {
-            is DataLoader.Error<List<User>> -> emptyList()
-            is DataLoader.Loaded<List<User>> -> {
-                matching.data.also {
-                    println(it)
-                }
-            }
-
-            is DataLoader.Loading<List<User>> -> emptyList()
-            null -> emptyList()
+            is DataLoader.Loaded<List<User>> -> matching.data
+            else -> emptyList()
         }
 
-        if (options != newOptions) {
-            options = newOptions
-        }
+        if (options != newOptions) options = newOptions
 
-        if (options.isNotEmpty()) {
-            expanded = true
-        }
+        if (options.isNotEmpty()) expanded = true
     }
 
     Box(
         contentAlignment = Alignment.CenterStart,
-        modifier = modifier
-            .clickable { expanded = !expanded },
+        modifier = modifier.clickable { expanded = !expanded },
     ) {
         CustomOutlinedEditText(
             value = text,
@@ -77,7 +64,7 @@ fun ShowSelectUser(
             ),
             onDismissRequest = { expanded = false }
         ) {
-            if (options.size > 10) {
+            if (options.size > Constants.maxUsersInSearch) {
                 expanded = false
                 return@DropdownMenu
             }

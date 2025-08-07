@@ -34,7 +34,6 @@ sealed class Composer<T>(
 ) {
     @Composable
     fun cluster(size: Int) {
-        /* Here we can customize the cluster style */
         Box(
             modifier = Modifier
                 .background(AppColor.BackgroundDarkBlue, shape = CircleShape)
@@ -53,7 +52,6 @@ class ComposeStoreHolder(
     mapState: MapState,
     flushCallouts: () -> Unit
 ) : Composer<Store>(uriHandler, mapState, flushCallouts) {
-
     override fun compose(model: Store, xy: XY): @Composable (() -> Unit) {
         val latLng = model.latLng()!!
         val id = "${latLng.latitude}${latLng.longitude}_callout"
@@ -86,7 +84,6 @@ class ComposeStoreHolder(
             }
         }
     }
-
 }
 
 class ComposerEventHolder(
@@ -126,5 +123,4 @@ class ComposerEventHolder(
             }
         }
     }
-
 }

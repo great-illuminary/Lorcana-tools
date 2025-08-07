@@ -74,6 +74,7 @@ class RouteDeck : Route(
     }
 
     override fun isMatching(path: String) = path.startsWith("/deck")
+
     override fun navigateToStack() = NavigateToStack(
         popBackStack = true,
         options = NavOptions(

@@ -8,7 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
-import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.rph.map.map.MapOverlay
 import eu.codlab.lorcana.blipya.rph.map.map.interfaces.MapInterfaceAction
 import eu.codlab.viewmodel.rememberViewModel
@@ -17,7 +16,6 @@ import ovh.plrapps.mapcompose.ui.MapUI
 @Composable
 fun <T, S : MapModelState, H> RphMap(
     modifier: Modifier,
-    appModel: AppModel,
     createModel: (UriHandler) -> T
 ) where T : MapInterfaceAction,
         T : MapModel<S, H> {

@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import eu.codlab.lorcana.blipya.home.BackgroundWrapper
 import eu.codlab.lorcana.blipya.home.LocalNavigator
@@ -23,11 +21,11 @@ import eu.codlab.lorcana.blipya.home.routes.Route
 import eu.codlab.lorcana.blipya.utils.LocalFrameProvider
 import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.WindowType
+import eu.codlab.lorcana.blipya.utils.isMobile
 import eu.codlab.lorcana.blipya.utils.isScreenExpanded
 import eu.codlab.lorcana.blipya.widgets.BottomSpacer
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
 import eu.codlab.navigation.Navigation
-import eu.codlab.platform.Platform
 import eu.codlab.platform.currentPlatform
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.transition.NavTransition
@@ -36,12 +34,8 @@ import moe.tlaster.precompose.navigation.transition.NavTransition
 fun ColumnScope.ScaffoldContentWrapper(
     onMenuItemSelected: (title: String, navigateTo: Route) -> Unit
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
     val navigator = LocalNavigator.current
-
-    var tinyMenuInPhablet = LocalWindow.current == WindowType.PHABLET
-
+    val tinyMenuInPhablet = LocalWindow.current == WindowType.PHABLET
     val interactionSource = remember { MutableInteractionSource() }
     val menuSizeForPhablet = if (tinyMenuInPhablet) {
         42.dp
@@ -50,8 +44,6 @@ fun ColumnScope.ScaffoldContentWrapper(
     }
 
     val defaultImplementation = PossibleRoutes.fromPath(Navigation.originalPath()) ?: PossibleRoutes.Main
-
-    println("defaultImplementation = $defaultImplementation")
 
     Row(modifier = Modifier.fillMaxSize()) {
         if (LocalWindow.current.isScreenExpanded()) {
@@ -72,14 +64,7 @@ fun ColumnScope.ScaffoldContentWrapper(
                 modifier = Modifier.fillMaxSize().clickable(
                     interactionSource = interactionSource,
                     indication = null // this gets rid of the ripple effect
-                ) {
-                    if (currentPlatform == Platform.ANDROID ||
-                        currentPlatform == Platform.IOS
-                    ) {
-                        keyboardController?.hide()
-                        focusManager.clearFocus(true)
-                    }
-                }
+                ) { if (!currentPlatform.isMobile) return@clickable }
             ) {
                 Column(modifier = Modifier.weight(1f).defaultBackground()) {
                     NavHost(
@@ -90,9 +75,6 @@ fun ColumnScope.ScaffoldContentWrapper(
                         navTransition = NavTransition(),
                         // The start destination
                         initialRoute = defaultImplementation.asDefaultRoute!!.route,
-                        /*swipeProperties = SwipeProperties(
-                        //spaceToSwipe = 50.dp
-                    )*/
                     ) {
                         PossibleRoutes.entries.forEach {
                             scene(
