@@ -20,9 +20,7 @@ class LicensesModel(
         fun fake(
             loaded: Boolean = false,
             licenses: List<LicenseProject> = emptyList()
-        ): LicensesModel {
-            return LicensesModel(loaded, licenses)
-        }
+        ) = LicensesModel(loaded, licenses)
     }
 
     @OptIn(ExperimentalResourceApi::class)

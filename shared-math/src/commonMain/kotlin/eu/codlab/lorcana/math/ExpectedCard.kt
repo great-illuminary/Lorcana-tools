@@ -62,7 +62,5 @@ class ExpectedCard(
         }
     }
 
-    override fun toString(): String {
-        return "{amt: $amount, min: $min, max: $max}"
-    }
+    override fun toString() = "{amt: $amount, min: $min, max: $max}"
 }

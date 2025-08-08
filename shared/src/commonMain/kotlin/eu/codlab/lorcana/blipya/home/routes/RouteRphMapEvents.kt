@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.rph_map_title
 import eu.codlab.lorcana.blipya.home.AppModel
-import eu.codlab.lorcana.blipya.home.LocalApp
 import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 import eu.codlab.lorcana.blipya.home.navigate.NavigateToStack
 import eu.codlab.lorcana.blipya.rph.map.events.RphMapEvents
@@ -27,13 +26,11 @@ class RouteRphMapEvents : Route(
 ) {
     @Composable
     override fun scene(backStackEntry: BackStackEntry) {
-        val appModel = LocalApp.current
-
         Column(
             modifier = Modifier.fillMaxSize()
                 .defaultBackground()
         ) {
-            RphMapEvents(Modifier.fillMaxSize(), appModel)
+            RphMapEvents(Modifier.fillMaxSize())
         }
     }
 

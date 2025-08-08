@@ -251,13 +251,11 @@ fun expectedNumberOfColumns(): Int {
 
 @Suppress("MagicNumber")
 @Composable
-fun expectedSpanForGraphTiles(): Pair<Int, Int> {
-    return when (LocalFrame.current) {
-        WindowType.SMARTPHONE_TINY -> 2 to 2
-        WindowType.SMARTPHONE -> 2 to 2
-        WindowType.PHABLET -> 3 to 2
-        WindowType.TABLET -> 3 to 2
-    }
+fun expectedSpanForGraphTiles() = when (LocalFrame.current) {
+    WindowType.SMARTPHONE_TINY -> 2 to 2
+    WindowType.SMARTPHONE -> 2 to 2
+    WindowType.PHABLET -> 3 to 2
+    WindowType.TABLET -> 3 to 2
 }
 
 @Suppress("MagicNumber")

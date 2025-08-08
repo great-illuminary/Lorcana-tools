@@ -62,7 +62,8 @@ data class AppModelState(
 data class AppModel(
     val appId: String,
     val appSecret: String
-) : StateViewModel<AppModelState>(AppModelState("/main")), IRequestForUrlToOpen {
+) : StateViewModel<AppModelState>(AppModelState("/main")),
+    IRequestForUrlToOpen {
     var onBackPressed: AppBackPressProvider = AppBackPressProvider()
 
     private val accountClient = Account()
@@ -76,9 +77,7 @@ data class AppModel(
     private val backendSocket = accountClient.createSocket()
 
     companion object {
-        fun fake(): AppModel {
-            return AppModel("", "")
-        }
+        fun fake() = AppModel("", "")
     }
 
     fun isInitialized() = states.value.initialized
@@ -221,9 +220,10 @@ data class AppModel(
         }
     }
 
-    fun floatingActionButton(): FloatingActionButtonState? {
-        return states.value.floatingActionButtonState
-    }
+    val floatingActionButton: FloatingActionButtonState?
+        get() {
+            return states.value.floatingActionButtonState
+        }
 
     fun saveDecks() = safeLaunch {
         saveDecks(states.value.decks)

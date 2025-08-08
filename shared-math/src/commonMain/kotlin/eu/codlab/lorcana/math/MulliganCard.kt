@@ -38,7 +38,5 @@ class MulliganCard internal constructor(
         _state.update { it.copy(amount = amount) }
     }
 
-    override fun toString(): String {
-        return "{amt: $amount}"
-    }
+    override fun toString() = "{amt: $amount}"
 }

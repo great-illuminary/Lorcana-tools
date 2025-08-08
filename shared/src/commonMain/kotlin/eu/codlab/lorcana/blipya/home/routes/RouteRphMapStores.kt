@@ -33,7 +33,7 @@ class RouteRphMapStores : Route(
             modifier = Modifier.fillMaxSize()
                 .defaultBackground()
         ) {
-            RphMapStores(Modifier.fillMaxSize(), appModel)
+            RphMapStores(Modifier.fillMaxSize())
         }
     }
 

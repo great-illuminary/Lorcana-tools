@@ -45,12 +45,10 @@ fun DisplayStatisticalResult(
 }
 
 @Composable
-fun Double.showProbability(): String {
-    return if (this < 0) {
-        Res.string.invalid.localized()
-    } else {
-        "${round(2)}%"
-    }
+fun Double.showProbability() = if (this < 0) {
+    Res.string.invalid.localized()
+} else {
+    "${round(2)}%"
 }
 
 @Suppress("UnusedPrivateMember", "MagicNumber")

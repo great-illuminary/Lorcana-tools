@@ -72,7 +72,7 @@ fun ShowMulligan(
                 imageVector = Icons.Outlined.MoreVert,
                 id = mulligan.id,
                 contentDescription = "Manage"
-            ) { // show the actions to edit & delete the current scenario
+            ) {
                 listOf(
                     Triple(
                         Res.string.edit.localized(),

@@ -71,7 +71,7 @@ abstract class AbstractMapProvider(
 
     @Suppress("TooGenericExceptionCaught", "ReturnCount")
     suspend fun getTile(row: Int, col: Int, zoomLvl: Int): RawSource? {
-        val file = VirtualFile(cacheFolder, "${row}_${col}_${zoomLvl}.jpeg")
+        val file = VirtualFile(cacheFolder, "${row}_${col}_$zoomLvl.jpeg")
 
         return try {
             if (useFileCache && file.exists()) {

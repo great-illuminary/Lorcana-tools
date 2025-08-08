@@ -16,7 +16,5 @@ actual class MultiplatformCache actual constructor(
         // nothing
     }
 
-    actual suspend fun getCached(x: Int, y: Int, z: Int): Buffer? {
-        return null
-    }
+    actual suspend fun getCached(x: Int, y: Int, z: Int): Buffer? = null
 }

@@ -76,25 +76,20 @@ actual class MultiplatformCache actual constructor(
         return buffer
     }
 
-
-    private suspend fun hasItems(): Boolean {
-        return suspendCoroutine { result ->
-            listAccessQueue.post {
-                result.resume(mutable.size > 0)
-            }
+    private suspend fun hasItems() = suspendCoroutine { result ->
+        listAccessQueue.post {
+            result.resume(mutable.isNotEmpty())
         }
     }
 
     @Suppress("TooGenericExceptionCaught")
-    private suspend fun getListQueue(): Triple? {
-        return suspendCoroutine { result ->
-            listAccessQueue.post {
-                try {
-                    val last = mutable.removeLast()
-                    result.resume(last)
-                } catch (_: Throwable) {
-                    result.resume(null)
-                }
+    private suspend fun getListQueue() = suspendCoroutine { result ->
+        listAccessQueue.post {
+            try {
+                val last = mutable.removeLast()
+                result.resume(last)
+            } catch (_: Throwable) {
+                result.resume(null)
             }
         }
     }

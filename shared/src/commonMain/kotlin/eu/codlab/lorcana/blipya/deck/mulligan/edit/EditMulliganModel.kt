@@ -43,7 +43,7 @@ class EditMulliganModel(
     private var collectingProbability: Job? = null
 
     init {
-        collectProbability(states.value.mulligan)
+        collectProbability(currentMulligan)
     }
 
     private fun collectProbability(mulligan: MulliganScenario) {
@@ -58,26 +58,26 @@ class EditMulliganModel(
     }
 
     fun add(id: String) = safeLaunch {
-        states.value.mulligan.add(id)
+        currentMulligan.add(id)
 
         updateCards()
     }
 
     fun removeLast() = safeLaunch {
-        val mulligan = states.value.mulligan
+        val mulligan = currentMulligan
         mulligan.cards.lastOrNull()?.let { mulligan.remove(it.id) }
 
         updateCards()
     }
 
     private fun updateCards() {
-        val array = states.value.mulligan.cards.clone()
+        val array = currentMulligan.cards.clone()
 
         updateState {
             copy(
                 updatedAt = DateTime.now(),
                 cards = array,
-                probability = states.value.mulligan.probability.value
+                probability = currentMulligan.probability.value
             )
         }
 
@@ -89,20 +89,20 @@ class EditMulliganModel(
     }
 
     fun updateScenario(id: String, amount: Long) = safeLaunch {
-        states.value.mulligan.update(id, amount)
+        currentMulligan.update(id, amount)
 
         saveDeck()
         // triggerProbability()
     }
 
     fun updateScenario(name: String) {
-        states.value.mulligan.name = name
+        currentMulligan.name = name
 
         saveDeck()
     }
 
     fun updateScenario(id: String, name: String) {
-        states.value.mulligan.update(id, name)
+        currentMulligan.update(id, name)
 
         saveDeck()
     }
@@ -121,6 +121,11 @@ class EditMulliganModel(
             copy(probability = newValue)
         }
     }
+
+    private val currentMulligan: MulliganScenario
+        get() {
+            return states.value.mulligan
+        }
 }
 
 private fun <T> List<T>.clone() = map { it }

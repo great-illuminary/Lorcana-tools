@@ -40,10 +40,12 @@ object MapUtils {
 
         var pLat =
             asin(sin(latitudeRadians) * cos(d) + cos(latitudeRadians) * sin(d) * cos(bearing))
-        val pLng = (longitudeRadians + atan2(
-            sin(bearing) * sin(d) * cos(latitudeRadians),
-            cos(d) - sin(latitudeRadians) * sin(pLat)
-        )).rad2deg()
+        val pLng = (
+                longitudeRadians + atan2(
+                    sin(bearing) * sin(d) * cos(latitudeRadians),
+                    cos(d) - sin(latitudeRadians) * sin(pLat)
+                )
+                ).rad2deg()
         pLat = pLat.rad2deg()
 
         return LatLng(pLat, pLng)
@@ -83,10 +85,12 @@ object MapUtils {
 
             var pLat =
                 asin(sin(latitudeRadians) * cos(d) + cos(latitudeRadians) * sin(d) * cos(bearing))
-            val pLng = (longitudeRadians + atan2(
-                sin(bearing) * sin(d) * cos(latitudeRadians),
-                cos(d) - sin(latitudeRadians) * sin(pLat)
-            )).rad2deg()
+            val pLng = (
+                    longitudeRadians + atan2(
+                        sin(bearing) * sin(d) * cos(latitudeRadians),
+                        cos(d) - sin(latitudeRadians) * sin(pLat)
+                    )
+                    ).rad2deg()
             pLat = pLat.rad2deg()
 
             LatLng(pLat, pLng).transform()

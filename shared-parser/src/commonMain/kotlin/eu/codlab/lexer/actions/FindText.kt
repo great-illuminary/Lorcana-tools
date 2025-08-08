@@ -8,13 +8,11 @@ import eu.codlab.lorcana.raw.VariantString
 import eu.codlab.lorcana.raw.VirtualCard
 
 object FindText : ApplyAction {
-    override fun apply(card: VirtualCard, variant: VariantClassification, value: String): Boolean {
-        return card.languages.contains(value)
-    }
+    override fun apply(card: VirtualCard, variant: VariantClassification, value: String) =
+        card.languages.contains(value)
 
-    override fun apply(card: RawVirtualCard, variant: VariantString, value: String): Boolean {
-        return card.languages.contains(value)
-    }
+    override fun apply(card: RawVirtualCard, variant: VariantString, value: String) =
+        card.languages.contains(value)
 
     private fun CardTranslations.contains(value: String) =
         toFullString().lowercase().contains(value.lowercase())

@@ -16,15 +16,13 @@ class DrawerSizeShape : Shape {
         size: Size,
         layoutDirection: LayoutDirection,
         density: Density
-    ): Outline {
-        return Outline.Rectangle(
-            Rect(
-                offset = Offset.Zero,
-                size = Size(
-                    width = min(size.width, DrawerMaxWidth * density.density),
-                    height = size.height
-                )
+    ) = Outline.Rectangle(
+        Rect(
+            offset = Offset.Zero,
+            size = Size(
+                width = min(size.width, DrawerMaxWidth * density.density),
+                height = size.height
             )
         )
-    }
+    )
 }

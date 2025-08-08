@@ -1,3 +1,4 @@
+@file:Suppress("ktlint")
 package eu.codlab.lorcana.blipya.icons
 
 import androidx.compose.material.icons.Icons

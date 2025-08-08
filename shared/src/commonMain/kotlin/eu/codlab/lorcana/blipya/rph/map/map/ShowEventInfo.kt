@@ -11,7 +11,6 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.drick.compose.hotpreview.HotPreview
@@ -69,18 +68,16 @@ fun ShowEventInfo(
 }
 
 @Composable
-fun defaultEventCard(isSelected: Boolean = false): Color {
-    return if (isSelected) {
-        if (LocalDarkTheme.current) {
-            AppColor.BlurpleDark
-        } else {
-            AppColor.GrayLight
-        }
-    } else if (LocalDarkTheme.current) {
-        AppColor.Blurple
+fun defaultEventCard(isSelected: Boolean = false) = if (isSelected) {
+    if (LocalDarkTheme.current) {
+        AppColor.BlurpleDark
     } else {
-        AppColor.WhiteCream
+        AppColor.GrayLight
     }
+} else if (LocalDarkTheme.current) {
+    AppColor.Blurple
+} else {
+    AppColor.WhiteCream
 }
 
 @Composable

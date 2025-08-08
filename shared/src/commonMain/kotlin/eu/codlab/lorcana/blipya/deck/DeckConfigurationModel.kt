@@ -201,7 +201,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
     }
 
     fun delete(scenario: Scenario) {
-        states.value.deck.deck.removeScenario(scenario)
+        currentDeck.removeScenario(scenario)
 
         updateCards()
     }
@@ -216,7 +216,7 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
     }
 
     fun delete(mulligan: MulliganScenario) {
-        states.value.deck.deck.removeMulligan(mulligan)
+        currentDeck.removeMulligan(mulligan)
 
         updateCards()
     }
@@ -341,6 +341,11 @@ class DeckConfigurationModel(private val appModel: AppModel, deck: DeckModel) :
             println(it.withKeeping4OfEach)
         }
     }
+
+    private val currentDeck: Deck
+        get() {
+            return states.value.deck.deck
+        }
 }
 
 private fun <T> List<T>.clone() = map { it }

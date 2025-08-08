@@ -217,18 +217,16 @@ fun color(selected: Boolean = false): Color {
 
 @Suppress("MagicNumber")
 @Composable
-fun colorDimmed(): Color {
-    return if (LocalDarkTheme.current) {
-        Color(0xaaFFFFFF)
-    } else {
-        Color(0xaa3A3A3A)
-    }
+fun colorDimmed() = if (LocalDarkTheme.current) {
+    Color(0xaaFFFFFF)
+} else {
+    Color(0xaa3A3A3A)
 }
 
 @Suppress("MagicNumber")
 @Composable
-fun Modifier.systemBackground(selected: Boolean = false): Modifier {
-    return if (selected) {
+fun Modifier.systemBackground(selected: Boolean = false) =
+    if (selected) {
         this.background(
             if (LocalDarkTheme.current) {
                 Color(0xFF242424)
@@ -239,7 +237,6 @@ fun Modifier.systemBackground(selected: Boolean = false): Modifier {
     } else {
         this
     }
-}
 
 @HotPreview(widthDp = 200, heightDp = 50, darkMode = true)
 @HotPreview(widthDp = 200, heightDp = 50, darkMode = false)

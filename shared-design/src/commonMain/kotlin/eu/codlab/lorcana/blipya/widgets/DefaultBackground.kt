@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.graphics.Color
 import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.lorcana.blipya.theme.AppColor
 
@@ -30,8 +29,8 @@ fun Modifier.defaultCardBackground() = composed {
 }
 
 @Composable
-fun defaultCardBackground(isSelected: Boolean = false): Color {
-    return if (isSelected) {
+fun defaultCardBackground(isSelected: Boolean = false) =
+    if (isSelected) {
         if (LocalDarkTheme.current) {
             AppColor.BackgroundBlue
         } else {
@@ -42,11 +41,10 @@ fun defaultCardBackground(isSelected: Boolean = false): Color {
     } else {
         AppColor.WhiteCream
     }
-}
 
 @Composable
-fun defaultSecondaryCardBackground(isSelected: Boolean = false): Color {
-    return if (isSelected) {
+fun defaultSecondaryCardBackground(isSelected: Boolean = false) =
+    if (isSelected) {
         if (LocalDarkTheme.current) {
             AppColor.BackgroundBlue
         } else {
@@ -57,4 +55,3 @@ fun defaultSecondaryCardBackground(isSelected: Boolean = false): Color {
     } else {
         AppColor.White
     }
-}
