@@ -1,9 +1,12 @@
 package eu.codlab.lorcana.blipya.save
 
 import eu.codlab.files.VirtualFile
+import eu.codlab.lorcana.blipya.utils.Queue
 import eu.codlab.lorcana.blipya.utils.readStringIfExists
 import eu.codlab.lorcana.blipya.utils.write
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.Json
+import ovh.plrapps.mapcompose.utils.IODispatcher
 
 class ConfigurationLoader(
     private val root: VirtualFile
@@ -13,6 +16,7 @@ class ConfigurationLoader(
         ignoreUnknownKeys = true
     }
 
+    private val queue = Queue(CoroutineScope(IODispatcher))
     private val configurationFolder = VirtualFile(root, "configuration.json")
     lateinit var configuration: ConfigurationModel
         private set
@@ -29,41 +33,29 @@ class ConfigurationLoader(
         } ?: ConfigurationModel()
     }
 
-    suspend fun save(decks: List<SavedDeckModel>) {
-        configuration = configuration.copy(decks = decks)
-        save()
-    }
+    suspend fun save(decks: List<SavedDeckModel>) = save { it.copy(decks = decks) }
 
-    suspend fun saveRavensburgerPlayHub(username: String, id: Long) = RavensburgerPlayHubUser(
-        username,
-        id
-    ).also { rphUser ->
-        configuration = configuration.copy(
-            rphUser = rphUser
-        )
-
-        save()
-    }
+    suspend fun saveRavensburgerPlayHub(username: String, id: Long) =
+        RavensburgerPlayHubUser(
+            username,
+            id
+        ).also { rphUser -> save { it.copy(rphUser = rphUser) } }
 
     suspend fun save(
         authenticationToken: String,
         expiresAtMilliSeconds: Long
     ) = SavedAuthentication(authenticationToken, expiresAtMilliSeconds).also { obj ->
-        configuration = configuration.copy(
-            authentication = obj
-        )
-        save()
+        save { it.copy(authentication = obj) }
     }
 
-    suspend fun disconnect() {
-        configuration = configuration.copy(
-            authentication = null
-        )
-        save()
-    }
+    suspend fun disconnect() = save { it.copy(authentication = null) }
 
-    suspend fun save() {
-        val string = json.encodeToString(ConfigurationModel.serializer(), configuration)
-        configurationFolder.write(string)
+    private suspend fun save(mutable: (ConfigurationModel) -> ConfigurationModel) = queue.enqueue {
+        mutable(configuration).let {
+            val string = json.encodeToString(ConfigurationModel.serializer(), it)
+            configurationFolder.write(string)
+
+            configuration = it
+        }
     }
 }
