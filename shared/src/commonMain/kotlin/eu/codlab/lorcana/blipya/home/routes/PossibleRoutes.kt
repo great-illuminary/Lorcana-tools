@@ -12,6 +12,7 @@ object PossibleRoutes {
     val RouteRphMapEvents = RouteRphMapEvents()
     val RouteRphMapStores = RouteRphMapStores()
     val RouteRphOwnRegistrations = RouteRphOwnRegistrations()
+    val RouteCardsListingDocumentation = RouteCardsListingDocumentation()
     val RouteCardsListing = RouteCardsListing()
 
     val entries = listOf(
@@ -24,6 +25,7 @@ object PossibleRoutes {
         RouteRphMapEvents,
         RouteRphMapStores,
         RouteRphOwnRegistrations,
+        RouteCardsListingDocumentation,
         RouteCardsListing
     )
 

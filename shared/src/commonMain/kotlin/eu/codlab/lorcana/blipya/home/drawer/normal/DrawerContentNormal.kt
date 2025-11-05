@@ -9,23 +9,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.blipya.config.SharedConfig
-import eu.codlab.blipya.res.Res
-import eu.codlab.blipya.res.curve_title
-import eu.codlab.blipya.res.decks_title
-import eu.codlab.blipya.res.licenses_title
-import eu.codlab.blipya.res.menu_cards_title
-import eu.codlab.blipya.res.menu_playhub_title
-import eu.codlab.blipya.res.menu_title_main
-import eu.codlab.blipya.res.menu_title_others
-import eu.codlab.blipya.res.rph_map_stores_title
-import eu.codlab.blipya.res.rph_map_title
-import eu.codlab.blipya.res.rph_own_registrations
-import eu.codlab.blipya.res.title_cards_listing
+import eu.codlab.blipya.res.*
 import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.spacers.BottomSpacer
 import eu.codlab.compose.widgets.spacers.TopSpacer
@@ -103,7 +93,16 @@ fun DrawerContentNormal(
             text = Res.string.title_cards_listing.localized(),
             currentRoute = currentRoute,
             route = PossibleRoutes.RouteCardsListing,
-            image = Icons.Rounded.GridView,
+            image = Icons.Rounded.Search,
+            onClick = onMenuItemSelected,
+            tiny = tiny
+        )
+
+        DrawerItem(
+            text = Res.string.title_cards_listing.localized(),
+            currentRoute = currentRoute,
+            route = PossibleRoutes.RouteCardsListingDocumentation,
+            image = Icons.Rounded.Info,
             onClick = onMenuItemSelected,
             tiny = tiny
         )

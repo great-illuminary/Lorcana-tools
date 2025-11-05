@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <!-- non automatically generated -->
+    <string name="documentation_text_title">Text</string>
+    <string name="documentation_text_text">Text</string>
+
+    <string name="documentation_cost_inkwell_title">Cost &amp; Inkwell</string>
+    <string name="documentation_cost_inkwell_text">Defence</string>
+
+    <string name="documentation_strength_willpower_title">Strength &amp; Willpower</string>
+    <string name="documentation_strength_willpower_text">Attack</string>
+
+    <string name="documentation_lore_title">Lore</string>
+    <string name="documentation_lore_text">Lore</string>
+
+    <string name="documentation_name_version_classification_title">Name, Version &amp; Classifaction</string>
+    <string name="documentation_name_version_classification_text">Name, Version &amp; Classifaction</string>
+
+    <string name="documentation_move_title">Move</string>
+    <string name="documentation_move_text">Move</string>
+
+    <string name="documentation_set_id_rarity_title">Set, Id &amp; Rarity</string>
+    <string name="documentation_set_id_rarity_text">Set &amp; Id</string>
+
+    <string name="documentation_artist_title">Artist</string>
+    <string name="documentation_artist_text">Artist</string>
+    <string name="documentation_artist_sample_1_query">Artist</string>
+    <string name="documentation_artist_sample_1_explanation">Artist</string>
+
+
+
+
+
+</resources>
