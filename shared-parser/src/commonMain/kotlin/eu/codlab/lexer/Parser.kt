@@ -55,7 +55,7 @@ class Parser {
             } or {
                 expect(LorcanaTokenTypes.Not)
                 expect(LorcanaTokenTypes.OpenParenthesis)
-                expect(Expression) storeIn "expr"
+                expect(Expression) storeIn "parenthesis"
                 expect(LorcanaTokenTypes.CloseParenthesis)
             } or {
                 expect(LorcanaTokenTypes.Not)

@@ -62,6 +62,10 @@ data class Not(
                 )
             }
 
+            if (args.arguments.containsKey("parenthesis")) {
+                return Not(args["parenthesis"])
+            }
+
             return when (val result: Expression = args["expr"]) {
                 is And -> And(Not(result.left), result.right)
                 is Empty -> Not(result)

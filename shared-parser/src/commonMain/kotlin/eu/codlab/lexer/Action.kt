@@ -16,7 +16,8 @@ enum class Action(private val apply: ApplyAction) : ApplyAction {
     Move(eu.codlab.lexer.actions.Move),
     Rarity(eu.codlab.lexer.actions.Rarity),
     Set(eu.codlab.lexer.actions.Set),
-    Ink(eu.codlab.lexer.actions.Ink);
+    Ink(eu.codlab.lexer.actions.Ink),
+    VariantSet(eu.codlab.lexer.actions.VariantSet);
 
     override fun apply(card: RawVirtualCard, variant: VariantString, value: String) =
         apply.apply(card, variant, value)

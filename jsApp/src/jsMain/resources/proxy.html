@@ -44,9 +44,16 @@
         crossorigin="anonymous"
 ></script>
 <script>
-    const baseUrl = "https://lorcana.codlab.eu/images/{set}/{lang}/{id}.webp"
+    const baseUrl = "https://api-lorcana.com/public/images/{set}/{lang}/{id}.webp"
     const params = new URLSearchParams(window.location.search);
-    const cards = params.get("cards").split(",")
+    const cards = params.get("cards").split(",").map(value => {
+        const split = value.split("x");
+        if (split.length == 1) return [split[0]];
+
+        const loop = parseInt(split[1]);
+        if (isNaN(loop)) return [split[0]];
+        return [...Array(loop).keys()].map(() => split[0]);
+    }).flat();
 
     const array = [];
     function getArray(index) {

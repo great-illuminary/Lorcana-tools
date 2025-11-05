@@ -95,7 +95,12 @@
 
     <string name="menu_cards_title">Cartes</string>
     <string name="title_cards_listing">Liste</string>
+    <string name="title_cards_listing_documentation">Documentation</string>
     <string name="hint_research">Rechercher...</string>
     <string name="hint_search_query_format">Aide</string>
     <string name="cards_list_no_result">Aucun résultats</string>
+    <plurals name="cards_found">
+        <item quantity="one">%1$d carte trouvée</item>
+        <item quantity="other">%1$d cartes trouvées</item>
+    </plurals>
 </resources>

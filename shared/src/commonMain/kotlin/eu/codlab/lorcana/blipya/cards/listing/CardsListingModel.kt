@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.blipya.cards.listing
 
+import androidx.compose.ui.platform.UriHandler
 import eu.codlab.lexer.Parser
 import eu.codlab.lorcana.LorcanaLoaded
 import eu.codlab.lorcana.blipya.utils.Constants
@@ -46,6 +47,14 @@ class CardsListingModel(
     fun search(query: String) = launch {
         updateState { copy(search = query) }
         querySearch.value = query
+    }
+
+    fun openProxy(uriHandler: UriHandler) {
+        val list = states.value.cards.map {
+            "${it.first.set.name.lowercase()}-${it.first.id}x4"
+        }.joinToString(",") { it }
+
+        uriHandler.openUri("https://blipya.com/proxy.html?cards=$list")
     }
 
     @Suppress("TooGenericExceptionCaught")

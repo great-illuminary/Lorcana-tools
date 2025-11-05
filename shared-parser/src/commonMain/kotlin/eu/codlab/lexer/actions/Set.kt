@@ -14,5 +14,5 @@ internal object Set : ApplyAction {
         variant.set == value.toSetDescription()
 
     private fun String.toSetDescription() =
-        SetDescription.entries.find { it.name.lowercase() == this.lowercase() }
+        SetDescription.entries.find { it.name.equals(this, ignoreCase = true) }
 }

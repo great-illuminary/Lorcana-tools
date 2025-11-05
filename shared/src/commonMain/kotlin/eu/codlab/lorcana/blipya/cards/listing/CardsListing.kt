@@ -1,36 +1,34 @@
 package eu.codlab.lorcana.blipya.cards.listing
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import eu.codlab.blipya.res.Res
+import eu.codlab.blipya.res.cards_found
 import eu.codlab.blipya.res.cards_list_no_result
 import eu.codlab.blipya.res.hint_research
+import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.CustomOutlinedEditText
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.expectedNumberOfColumns
 import eu.codlab.lorcana.blipya.home.AppModel
+import eu.codlab.lorcana.blipya.icons.Print
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
+import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.utils.Constants
 import eu.codlab.lorcana.blipya.utils.PreviewDarkLightColumn
@@ -40,6 +38,7 @@ import eu.codlab.lorcana.blipya.widgets.DefaultCard
 import eu.codlab.lorcana.blipya.widgets.defaultCardBackground
 import eu.codlab.viewmodel.rememberViewModel
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.pluralStringResource
 
 @Suppress("LongMethod")
 @Composable
@@ -110,27 +109,66 @@ private fun Header(
 ) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     val state by model.states.collectAsState()
+    val uriHandler = LocalUriHandler.current
 
-    DefaultCard(
-        modifier = modifier,
-        backgroundColor = defaultCardBackground(),
-        columnModifier = Modifier.fillMaxWidth().padding(6.dp)
-    ) {
-        CustomOutlinedEditText(
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = {
-                TextNormal(
-                    modifier = Modifier.alpha(Constants.halfAlpha),
-                    text = Res.string.hint_research.localized()
-                )
-            },
-            value = text,
-            onValueChanged = {
-                text = it
-                model.search(it.text)
-            },
-            isError = null != state.searchError
-        )
+    val hasCards = state.cards.isNotEmpty()
+    val tintColor = if (LocalDarkTheme.current) {
+        AppColor.White
+    } else {
+        AppColor.Black
+    }
+
+    Row {
+        DefaultCard(
+            modifier = modifier,
+            backgroundColor = defaultCardBackground(),
+            columnModifier = Modifier.fillMaxWidth().padding(6.dp)
+        ) {
+            CustomOutlinedEditText(
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = {
+                    TextNormal(
+                        modifier = Modifier.alpha(Constants.halfAlpha),
+                        text = Res.string.hint_research.localized()
+                    )
+                },
+                value = text,
+                onValueChanged = {
+                    text = it
+                    model.search(it.text)
+                },
+                isError = null != state.searchError
+            )
+
+            if (hasCards) {
+                Row(
+                    Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    TextNormal(
+                        text = pluralStringResource(
+                            Res.plurals.cards_found,
+                            quantity = state.cards.size,
+                            state.cards.size
+                        ),
+                        fontStyle = FontStyle.Italic
+                    )
+
+                    IconButton(
+                        onClick = {
+                            model.openProxy(uriHandler)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Print,
+                            contentDescription = "Print",
+                            tint = tintColor
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
