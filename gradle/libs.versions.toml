@@ -26,7 +26,7 @@ ui-android = "1.6.8"
 
 bignum = "0.3.10"
 
-lorcana = "0.20.15"
+lorcana = "0.20.21"
 
 kmp-auth = "2.3.0-beta01" #2.2.1
 
