@@ -4,13 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -28,10 +22,13 @@ import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.CustomOutlinedButton
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
-import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
-import eu.codlab.lorcana.blipya.home.routes.Route
+import eu.codlab.lorcana.blipya.home.routes.RouteMain
+import eu.codlab.lorcana.blipya.home.routes.RouterMain
 import eu.codlab.lorcana.blipya.icons.Folder
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
+import eu.codlab.navigation.NavigateTo
+import eu.codlab.navigation.RouteParameterTo
+import eu.codlab.navigation.RouterNoParameters
 
 @Suppress("MagicNumber")
 @Composable
@@ -84,13 +81,13 @@ fun DrawerTitle(
 fun DrawerItem(
     modifier: Modifier = Modifier,
     text: String,
-    route: Route,
-    currentRoute: Route? = null,
+    router: RouterNoParameters<*>,
+    currentRoute: RouteParameterTo? = null,
     image: ImageVector,
     tiny: Boolean = false,
-    onClick: (title: String, route: Route) -> Unit
+    onClick: (title: String, navigateTo: NavigateTo) -> Unit
 ) {
-    val selected = currentRoute == route
+    val selected = router.isCurrentRoute(currentRoute)
     val imageSize = 18.dp
 
     if (tiny) {
@@ -103,7 +100,7 @@ fun DrawerItem(
                 .clickable(
                     interactionSource = MutableInteractionSource(),
                     indication = null,
-                    onClick = { onClick(text, route) }
+                    onClick = { onClick(text, router.navigateTo()) }
                 ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -126,7 +123,7 @@ fun DrawerItem(
             .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = ripple(),
-                onClick = { onClick(text, route) }
+                onClick = { onClick(text, router.navigateTo()) }
             )
             .padding(0.dp)
             .padding(start = 32.dp),
@@ -248,15 +245,15 @@ private fun DrawerItemPreviewDark() {
             DrawerSeparator()
             DrawerItem(
                 text = "Item",
-                route = PossibleRoutes.Main,
+                router = RouterMain,
                 image = Icons.Rounded.Folder
             ) { _, _ ->
                 // nothing
             }
             DrawerItem(
                 text = "Item",
-                currentRoute = PossibleRoutes.Main,
-                route = PossibleRoutes.Main,
+                currentRoute = RouteMain,
+                router = RouterMain,
                 image = Icons.Rounded.Folder
             ) { _, _ ->
                 // nothing
@@ -264,8 +261,8 @@ private fun DrawerItemPreviewDark() {
 
             DrawerItem(
                 text = "Item",
-                currentRoute = PossibleRoutes.Main,
-                route = PossibleRoutes.Main,
+                currentRoute = RouteMain,
+                router = RouterMain,
                 tiny = true,
                 image = Icons.Rounded.Folder
             ) { _, _ ->

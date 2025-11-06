@@ -31,6 +31,7 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.ui)
                 implementation(compose.material)
+                api(additionals.androidx.compose.material.icons.core)
             }
         }
         commonTest {

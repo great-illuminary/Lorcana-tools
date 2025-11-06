@@ -2,17 +2,12 @@ package eu.codlab.lorcana.blipya.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import eu.codlab.lorcana.blipya.local.LocalConfirmPopup
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
 import eu.codlab.lorcana.blipya.login.RequestForUrlToOpenProvider
+import eu.codlab.lorcana.blipya.theme.ApplicationColorTheme
 import eu.codlab.lorcana.blipya.theme.ApplicationTheme
 import eu.codlab.lorcana.blipya.theme.createFontSizes
 import eu.codlab.lorcana.blipya.utils.LocalFrame
@@ -22,6 +17,7 @@ import eu.codlab.lorcana.blipya.utils.WindowType
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
 import eu.codlab.lorcana.blipya.widgets.popup.PopupConfirmCompose
 import eu.codlab.lorcana.blipya.widgets.popup.PopupLocalModel
+import eu.codlab.navigation.NavigatorLocalProvider
 
 var staticModel: AppModel? = null
 
@@ -103,8 +99,12 @@ private fun InternalApp(
         LocalApp provides model,
         LocalFontSizes provides fontSizes
     ) {
-        RequestForUrlToOpenProvider(model) {
-            ApplicationTheme(isDarkTheme, content)
+        NavigatorLocalProvider(model) {
+            ApplicationColorTheme(isDarkTheme) {
+                RequestForUrlToOpenProvider(model) {
+                    ApplicationTheme(isDarkTheme, content)
+                }
+            }
         }
     }
 }

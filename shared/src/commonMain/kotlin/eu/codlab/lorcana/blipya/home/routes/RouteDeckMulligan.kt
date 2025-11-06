@@ -6,39 +6,79 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.toRoute
+import eu.codlab.lorcana.blipya.appbar.AppBarState
 import eu.codlab.lorcana.blipya.deck.mulligan.edit.EditMulligan
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.home.LocalApp
-import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
-import eu.codlab.lorcana.blipya.home.navigate.NavigateToStack
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.utils.safeExecute
-import eu.codlab.lorcana.blipya.widgets.AppBarState
-import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
-import eu.codlab.lorcana.math.MulliganScenario
-import moe.tlaster.precompose.navigation.BackStackEntry
-import moe.tlaster.precompose.navigation.NavOptions
-import moe.tlaster.precompose.navigation.PopUpTo
-import moe.tlaster.precompose.navigation.SwipeProperties
-import moe.tlaster.precompose.navigation.path
-import moe.tlaster.precompose.navigation.transition.NavTransition
+import eu.codlab.navigation.*
+import kotlinx.serialization.Serializable
 
-class RouteDeckMulligan : Route(
-    "/deck/{uuid}/mulligan/{mulligan}",
-    navTransition = NavTransition(),
-    swipeProperties = SwipeProperties()
-) {
+@Serializable
+data class RouteDeckMulligan(
+    val deck: String,
+    val mulligan: String,
+) : RouteParameterTo
+
+object RouterDeckMulligan : Router<RouteDeckMulligan> {
+    override val klass = RouteDeckMulligan::class
+
+    fun navigateTo(deck: String, mulligan: String) = NavigateTo(
+        route = RouteDeckMulligan(deck = deck, mulligan = mulligan),
+        stack = NavigateToStack(
+            popBackStack = false,
+            options = NavigateWithNavOptions(
+                launchSingleTop = false,
+                popUpBackTo = RouteDeck(uuid = deck)
+            )
+        )
+    )
+
+    override fun navigateFrom(path: String) = extract(path).let { (deck, mulligan) ->
+        RouteDeckMulligan(deck = deck, mulligan = mulligan)
+    }
+
+    private fun extract(path: String) = path.split("/").let {
+        it[2] to it[4]
+    }
+
+    override fun route(navBackStackEntry: NavBackStackEntry) =
+        RouteDeckMulliganImpl(navBackStackEntry.toRoute())
+
+    override fun isMatching(route: String) =
+        route.split("/").let {
+            if (it.size < expectedSplitSize) return@let false
+            it[indexDeck] == "deck" && it[indexMulligan] == "mulligan"
+        }
+
     private val expectedSplitSize = 4
     private val indexDeck = 1
     private val indexMulligan = 3
+}
+
+class RouteDeckMulliganImpl(params: RouteDeckMulligan) : Route<RouteDeckMulligan>(
+    route = "/deck/{uuid}/mulligan/{mulligan}",
+    params = params,
+) {
+    override fun toPath() = route.replace("{uuid}", params.deck)
+        .replace("{mulligan}", params.mulligan)
 
     @Composable
-    override fun scene(
-        backStackEntry: BackStackEntry
-    ) {
+    override fun scene() {
         val appModel: AppModel = LocalApp.current
-        val (deck, mulligan) = backStackEntry.toHolder(appModel.states.value.decks) ?: return
+        val (deck, mulligan) = params.toHolder(appModel.states.value.decks) ?: return
+
+
+        appModel.setAppBarState(
+            AppBarState.Regular(
+                title = mulligan.name,
+                emptyList()
+            )
+        )
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -52,51 +92,13 @@ class RouteDeckMulligan : Route(
                 mulligan = mulligan
             )
         }
+
+        // return "/deck/${deck.id}/mulligan/${mulligan.id}"
     }
 
-    override fun onInternalEntryIsActive(
-        appModel: AppModel,
-        defaultActions: List<MenuItem>,
-        backStackEntry: BackStackEntry
-    ): String {
-        val (deck, mulligan) = backStackEntry.toHolder(appModel.states.value.decks) ?: return "/"
-
-        appModel.setAppBarState(
-            AppBarState.Regular(
-                title = mulligan.name,
-                defaultActions
-            )
-        )
-
-        return "/deck/${deck.id}/mulligan/${mulligan.id}"
-    }
-
-    override fun isMatching(path: String): Boolean {
-        val split = path.split("/")
-
-        if (split.size < expectedSplitSize) return false
-
-        return split[indexDeck] == "deck" && split[indexMulligan] == "mulligan"
-    }
-
-    override fun navigateToStack() = NavigateToStack(
-        popBackStack = false,
-        options = NavOptions(
-            launchSingleTop = false,
-            popUpTo = PopUpTo.None
-        )
-    )
-
-    override val asDefaultRoute = null
-
-    private fun BackStackEntry.toHolder(decks: List<DeckModel>) = safeExecute {
-        decks.firstOrNull { it.id == path<String>("uuid")!! }?.let { deck ->
-            deck to deck.mulligans.firstOrNull { it.id == path<String>("mulligan")!! }!!
+    private fun RouteDeckMulligan.toHolder(decks: List<DeckModel>) = safeExecute {
+        decks.firstOrNull { it.id == this.deck }?.let { deck ->
+            deck to deck.mulligans.first { it.id == this.mulligan }
         }
     }
-
-    fun navigateTo(deck: DeckModel, mulligan: MulliganScenario) = NavigateTo(
-        "/deck/${deck.id}/mulligan/${mulligan.id}",
-        navigateToStack()
-    )
 }

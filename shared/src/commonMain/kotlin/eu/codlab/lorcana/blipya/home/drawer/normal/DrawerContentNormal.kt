@@ -24,21 +24,22 @@ import eu.codlab.lorcana.blipya.home.drawer.DrawerItem
 import eu.codlab.lorcana.blipya.home.drawer.DrawerSeparator
 import eu.codlab.lorcana.blipya.home.drawer.DrawerTitle
 import eu.codlab.lorcana.blipya.home.drawer.systemBackground
-import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
-import eu.codlab.lorcana.blipya.home.routes.Route
+import eu.codlab.lorcana.blipya.home.routes.*
 import eu.codlab.lorcana.blipya.icons.GridView
 import eu.codlab.lorcana.blipya.icons.MapLocation
 import eu.codlab.lorcana.blipya.icons.PieChart
 import eu.codlab.lorcana.blipya.theme.AppColor
 import eu.codlab.lorcana.blipya.utils.localized
+import eu.codlab.navigation.NavigateTo
+import eu.codlab.navigation.RouteParameterTo
 
 @Suppress("LongMethod", "UnusedPrivateMember")
 @Composable
 fun DrawerContentNormal(
     modifier: Modifier = Modifier,
-    currentRoute: Route? = null,
+    currentRoute: RouteParameterTo? = null,
     tiny: Boolean = false,
-    onMenuItemSelected: (title: String, navigateTo: Route) -> Unit
+    onMenuItemSelected: (title: String, navigateTo: NavigateTo) -> Unit
 ) {
     val dark = LocalDarkTheme.current
 
@@ -66,7 +67,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.decks_title.localized(),
             currentRoute = currentRoute,
-            route = PossibleRoutes.Main,
+            router = RouterMain,
             image = Icons.Rounded.GridView,
             onClick = onMenuItemSelected,
             tiny = tiny
@@ -75,7 +76,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.curve_title.localized(),
             currentRoute = currentRoute,
-            route = PossibleRoutes.RouteCurve,
+            router = RouterCurve,
             image = Icons.Rounded.PieChart,
             onClick = onMenuItemSelected,
             tiny = tiny
@@ -92,7 +93,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.title_cards_listing.localized(),
             currentRoute = currentRoute,
-            route = PossibleRoutes.RouteCardsListing,
+            router = RouterCardsListing,
             image = Icons.Rounded.Search,
             onClick = onMenuItemSelected,
             tiny = tiny
@@ -101,7 +102,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.title_cards_listing.localized(),
             currentRoute = currentRoute,
-            route = PossibleRoutes.RouteCardsListingDocumentation,
+            router = RouterCardsListingDocumentation,
             image = Icons.Rounded.Info,
             onClick = onMenuItemSelected,
             tiny = tiny
@@ -118,7 +119,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.rph_map_title.localized(),
             currentRoute = currentRoute,
-            route = PossibleRoutes.RouteRphMapEvents,
+            router = RouterRphMapEvents,
             image = Icons.Rounded.MapLocation,
             onClick = onMenuItemSelected,
             tiny = tiny
@@ -127,7 +128,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.rph_map_stores_title.localized(),
             currentRoute = currentRoute,
-            route = PossibleRoutes.RouteRphMapStores,
+            router = RouterRphMapStores,
             image = Icons.Rounded.MapLocation,
             onClick = onMenuItemSelected,
             tiny = tiny
@@ -136,7 +137,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.rph_own_registrations.localized(),
             currentRoute = currentRoute,
-            route = PossibleRoutes.RouteRphOwnRegistrations,
+            router = RouterRphOwnRegistrations,
             image = Icons.Rounded.AccountBox,
             onClick = onMenuItemSelected,
             tiny = tiny
@@ -155,7 +156,7 @@ fun DrawerContentNormal(
         DrawerItem(
             text = Res.string.licenses_title.localized(),
             currentRoute = currentRoute,
-            route = PossibleRoutes.RouteLicenses,
+            router = RouterLicenses,
             image = Icons.Rounded.Info,
             onClick = onMenuItemSelected,
             tiny = tiny

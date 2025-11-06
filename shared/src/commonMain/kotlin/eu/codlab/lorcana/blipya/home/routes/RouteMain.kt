@@ -6,31 +6,54 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.decks_title
+import eu.codlab.lorcana.blipya.appbar.AppBarState
 import eu.codlab.lorcana.blipya.decks.DecksScreen
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.home.LocalApp
-import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
-import eu.codlab.lorcana.blipya.home.navigate.NavigateToStack
-import eu.codlab.lorcana.blipya.widgets.AppBarState
-import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
 import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
-import moe.tlaster.precompose.navigation.BackStackEntry
-import moe.tlaster.precompose.navigation.NavOptions
-import moe.tlaster.precompose.navigation.PopUpTo
-import moe.tlaster.precompose.navigation.SwipeProperties
-import moe.tlaster.precompose.navigation.transition.NavTransition
+import eu.codlab.navigation.*
+import eu.codlab.visio.design.appbar.FloatingActionButtonState
+import kotlinx.serialization.Serializable
 
-class RouteMain : Route(
-    "/main",
-    navTransition = NavTransition(),
-    swipeProperties = SwipeProperties()
+@Serializable
+object RouteMain : RouteParameterTo
+
+object RouterMain : RouterNoParameters<RouteMain> {
+    override val klass = RouteMain::class
+
+    override fun navigateTo() = NavigateTo(
+        route = RouteMain,
+        stack = NavigateToStack(
+            popBackStack = true,
+            options = NavigateWithNavOptions(
+                launchSingleTop = true
+            )
+        )
+    )
+
+    override fun isCurrentRoute(routeParameterTo: RouteParameterTo?) =
+        null != routeParameterTo && routeParameterTo is RouteMain
+
+    override fun route(navBackStackEntry: NavBackStackEntry) = RouteMainImpl()
+
+    override fun isMatching(route: String) = route == "/"
+
+    override fun navigateFrom(path: String) = RouteMain
+}
+
+class RouteMainImpl : Route<RouteMain>(
+    route = "/",
+    params = RouteMain,
 ) {
     @Composable
-    override fun scene(backStackEntry: BackStackEntry) {
+    override fun scene() {
         val appModel = LocalApp.current
+
+        onInternalEntryIsActive(appModel, emptyList())
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -41,16 +64,15 @@ class RouteMain : Route(
                 appModel
             ) {
                 appModel.show(
-                    PossibleRoutes.Deck.navigateTo(it)
+                    RouterDeck.navigateTo(it.id)
                 )
             }
         }
     }
 
-    override fun onInternalEntryIsActive(
+    private fun onInternalEntryIsActive(
         appModel: AppModel,
-        defaultActions: List<MenuItem>,
-        backStackEntry: BackStackEntry
+        defaultActions: List<MenuItem>
     ): String {
         appModel.setAppBarState(
             AppBarState.Localized(
@@ -68,18 +90,4 @@ class RouteMain : Route(
 
         return "/"
     }
-
-    override fun isMatching(path: String) = path == "/"
-
-    override fun navigateToStack() = NavigateToStack(
-        popBackStack = true,
-        options = NavOptions(
-            launchSingleTop = false,
-            popUpTo = PopUpTo.First(true)
-        )
-    )
-
-    override val asDefaultRoute = navigateTo()
-
-    fun navigateTo() = NavigateTo(route, navigateToStack())
 }

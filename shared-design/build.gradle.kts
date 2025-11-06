@@ -34,7 +34,6 @@ kotlin {
                 implementation(compose.material3)
                 api(compose.components.resources)
 
-                api(additionals.multiplatform.precompose)
                 api(additionals.multiplatform.safearea)
                 api(additionals.multiplatform.collapsing.toolbar)
                 api(additionals.multiplatform.widgets.compose)
@@ -43,6 +42,7 @@ kotlin {
                 api(additionals.multiplatform.platform)
 
                 api(additionals.multiplatform.file.access)
+                implementation(additionals.androidx.compose.material.icons.core)
 
                 implementation(libs.hotpreview)
 
@@ -76,9 +76,6 @@ kotlin {
             dependencies {
                 implementation(compose.web.core)
                 implementation(compose.runtime)
-                // and issue exists in the 1.7.2-alpha01 so using 03 on the web
-                // but the 03 is faulty in non js env -> we can then just override how it works
-                api(additionals.multiplatform.precompose.web)
             }
         }
     }

@@ -6,57 +6,63 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.toRoute
+import eu.codlab.lorcana.blipya.appbar.AppBarState
 import eu.codlab.lorcana.blipya.deck.DeckConfiguration
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.home.LocalApp
-import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
-import eu.codlab.lorcana.blipya.home.navigate.NavigateToStack
-import eu.codlab.lorcana.blipya.model.DeckModel
-import eu.codlab.lorcana.blipya.utils.safeExecute
-import eu.codlab.lorcana.blipya.widgets.AppBarState
-import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
-import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
-import moe.tlaster.precompose.navigation.BackStackEntry
-import moe.tlaster.precompose.navigation.NavOptions
-import moe.tlaster.precompose.navigation.PopUpTo
-import moe.tlaster.precompose.navigation.SwipeProperties
-import moe.tlaster.precompose.navigation.path
-import moe.tlaster.precompose.navigation.transition.NavTransition
+import eu.codlab.navigation.*
+import eu.codlab.visio.design.appbar.FloatingActionButtonState
+import kotlinx.serialization.Serializable
 
-class RouteDeck : Route(
-    "/deck/{uuid}",
-    navTransition = NavTransition(),
-    swipeProperties = SwipeProperties()
-) {
-    @Composable
-    override fun scene(backStackEntry: BackStackEntry) {
-        val appModel: AppModel = LocalApp.current
-        val deck = backStackEntry.toHolder(appModel.states.value.decks) ?: return
+@Serializable
+data class RouteDeck(
+    val uuid: String,
+) : RouteParameterTo
 
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .defaultBackground()
-        ) {
-            DeckConfiguration(
-                appModel,
-                deck = deck,
-                modifier = Modifier.fillMaxSize()
+object RouterDeck : Router<RouteDeck> {
+    override val klass = RouteDeck::class
+
+    fun navigateTo(uuid: String) = NavigateTo(
+        route = RouteDeck(uuid = uuid),
+        stack = NavigateToStack(
+            popBackStack = false,
+            options = NavigateWithNavOptions(
+                launchSingleTop = false,
+                popUpBackTo = RouteMain
             )
-        }
-    }
+        )
+    )
 
-    override fun onInternalEntryIsActive(
-        appModel: AppModel,
-        defaultActions: List<MenuItem>,
-        backStackEntry: BackStackEntry
-    ): String {
-        val deck = backStackEntry.toHolder(appModel.states.value.decks) ?: return "/"
+    override fun route(navBackStackEntry: NavBackStackEntry) =
+        RouteDeckImpl(navBackStackEntry.toRoute())
+
+    override fun isMatching(route: String) =
+        route.split("/").let { it.size == 3 && it[1] == "deck" }
+
+    private fun extract(path: String) = path.split("/")[2]
+
+    override fun navigateFrom(path: String) = RouteDeck(uuid = extract(path))
+}
+
+class RouteDeckImpl(params: RouteDeck) : Route<RouteDeck>(
+    route = "/deck/{uuid}",
+    params = params,
+) {
+    override fun toPath() = route.replace("{uuid}", params.uuid)
+
+    @Composable
+    override fun scene() {
+        val appModel: AppModel = LocalApp.current
+        val deck = appModel.states.value.decks.firstOrNull { it.id == params.uuid } ?: return
+
 
         appModel.setAppBarState(
             AppBarState.Regular(
                 title = deck.name,
-                defaultActions
+                emptyList()
             )
         )
 
@@ -70,24 +76,16 @@ class RouteDeck : Route(
             }
         )
 
-        return "/deck/${deck.id}"
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .defaultBackground()
+        ) {
+            DeckConfiguration(
+                appModel,
+                deck = deck,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+        // return "/deck/${deck.id}"
     }
-
-    override fun isMatching(path: String) = path.startsWith("/deck")
-
-    override fun navigateToStack() = NavigateToStack(
-        popBackStack = true,
-        options = NavOptions(
-            launchSingleTop = false,
-            popUpTo = PopUpTo.None
-        )
-    )
-
-    override val asDefaultRoute = null
-
-    private fun BackStackEntry.toHolder(decks: List<DeckModel>) = safeExecute {
-        decks.firstOrNull { it.id == path<String>("uuid")!! }
-    }
-
-    fun navigateTo(deck: DeckModel) = NavigateTo("/deck/${deck.id}", navigateToStack())
 }

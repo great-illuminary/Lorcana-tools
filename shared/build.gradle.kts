@@ -76,7 +76,6 @@ kotlin {
 
                 implementation(additionals.libraries.report)
 
-                api(additionals.multiplatform.precompose)
                 api(additionals.multiplatform.safearea)
                 api(additionals.multiplatform.collapsing.toolbar)
                 api(additionals.multiplatform.widgets.compose)
@@ -101,8 +100,10 @@ kotlin {
 
                 api(additionals.multiplatform.sentry)
                 api(libs.mapcompose)
+                api(additionals.androidx.compose.material.icons.core)
 
                 api(project(":shared-design"))
+                // api(project(":shared-admob"))
                 api(project(":shared-utils"))
                 api(project(":shared-navigation"))
                 api(project(":shared-buildkonfig"))
@@ -139,9 +140,6 @@ kotlin {
             dependencies {
                 implementation(compose.web.core)
                 implementation(compose.runtime)
-                // and issue exists in the 1.7.2-alpha01 so using 03 on the web
-                // but the 03 is faulty in non js env -> we can then just override how it works
-                api(additionals.multiplatform.precompose.web)
             }
         }
     }
@@ -150,6 +148,18 @@ kotlin {
         compilations.configureEach {
             compileTaskProvider.get().compilerOptions {
                 freeCompilerArgs.add("-Xexpect-actual-classes")
+            }
+        }
+    }
+
+    // we disabled Sentry but this can still be used due to another cinterops issue
+    targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>().all {
+        compilations["main"].cinterops.let { cinterops ->
+            if (cinterops.any { it.name == "Sentry" }) {
+                cinterops["Sentry"].extraOpts(
+                    "-compiler-option",
+                    "-DSentryMechanismMeta=SentryMechanismMetaUnavailable"
+                )
             }
         }
     }

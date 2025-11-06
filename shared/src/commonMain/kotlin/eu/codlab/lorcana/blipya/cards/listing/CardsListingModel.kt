@@ -31,11 +31,7 @@ class CardsListingModel(
 
     init {
 
-        safeLaunch(
-            onError = {
-                it.printStackTrace()
-            }
-        ) {
+        safeLaunch {
             updateState { copy(cards = cards) }
 
             querySearch.debounce(Constants.searchDebounce).collect {

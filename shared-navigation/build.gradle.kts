@@ -29,6 +29,11 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":shared-utils"))
+                api(project(":shared-design"))
+
+                implementation(additionals.androidx.navigation.compose)
+                // implementation(additionals.androidx.core.bundle)
+                // implementation(additionals.androidx.savedstate)
             }
         }
 

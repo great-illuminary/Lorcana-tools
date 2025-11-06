@@ -1,5 +1,6 @@
 package eu.codlab.lorcana.blipya.widgets
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Icon
@@ -13,29 +14,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import eu.codlab.compose.theme.LocalDarkTheme
 import eu.codlab.compose.widgets.spacers.TopSpacer
-import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
-import eu.codlab.lorcana.blipya.theme.AppColor
-import eu.codlab.lorcana.blipya.utils.localized
-import org.jetbrains.compose.resources.StringResource
+import eu.codlab.visio.design.appbar.AppBarStateProvider
+import eu.codlab.visio.design.appbar.AppBarUiState
+import eu.codlab.lorcana.blipya.theme.LocalApplicationColorTheme
 
 @Composable
-fun TopAppBarExtended(
+fun <T : AppBarUiState> TopAppBarExtended(
     title: String,
     topSpacer: Boolean,
     canGoBack: Boolean,
     isScreenExpanded: Boolean,
-    appModel: AppModel,
+    appModel: AppBarStateProvider<T>,
     onNavigationClick: () -> Unit
 ) {
-    val modelState by appModel.states.collectAsState()
-    val isDarkTheme = LocalDarkTheme.current
+    val colors = LocalApplicationColorTheme.current
+    val background = colors.background.topAppBar
+    val tint = colors.background.topAppBarText
 
+    val modelState by appModel.states.collectAsState()
     val appBarState = modelState.appBarState
 
     val menu = if (canGoBack) {
@@ -46,19 +45,11 @@ fun TopAppBarExtended(
         null
     }
 
-    val tint = if (isDarkTheme) AppColor.White else AppColor.Black
-
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().background(background)
     ) {
         if (topSpacer) {
-            TopSpacer(
-                if (isDarkTheme) {
-                    Color.Black
-                } else {
-                    Color.White
-                }
-            )
+            TopSpacer(background)
         }
 
         TopAppBar(
@@ -70,7 +61,7 @@ fun TopAppBarExtended(
                     color = tint
                 )
             },
-            backgroundColor = if (isDarkTheme) AppColor.Black else AppColor.White,
+            backgroundColor = background,
             navigationIcon = if (null != menu) {
                 {
                     IconButton(
@@ -94,32 +85,3 @@ fun TopAppBarExtended(
         )
     }
 }
-
-sealed class AppBarState(
-    val actions: List<MenuItem>? = null
-) {
-    @Composable
-    abstract fun showTitle(): String
-
-    class Regular(
-        val title: String = "",
-        actions: List<MenuItem>? = null
-    ) : AppBarState(actions) {
-        @Composable
-        override fun showTitle() = title
-    }
-
-    class Localized(
-        val title: StringResource,
-        actions: List<MenuItem>? = null
-    ) : AppBarState(actions) {
-        @Composable
-        override fun showTitle() = title.localized()
-    }
-}
-
-data class FloatingActionButtonState(
-    val icon: ImageVector,
-    val contentDescription: String,
-    val action: () -> Unit
-)

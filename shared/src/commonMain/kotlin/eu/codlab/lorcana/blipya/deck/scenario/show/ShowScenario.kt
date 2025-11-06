@@ -16,16 +16,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.navigator.LocalNavigator
-import eu.codlab.blipya.res.Res
-import eu.codlab.blipya.res.delete
-import eu.codlab.blipya.res.edit
-import eu.codlab.blipya.res.show_scenario_delete_text
-import eu.codlab.blipya.res.show_scenario_delete_title
+import eu.codlab.blipya.res.*
 import eu.codlab.compose.widgets.TextNormal
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
 import eu.codlab.lorcana.blipya.deck.edit.DisplayStatisticalResult
 import eu.codlab.lorcana.blipya.home.AppModel
-import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
+import eu.codlab.lorcana.blipya.home.routes.RouterDeckScenario
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.utils.localized
@@ -80,9 +76,9 @@ fun ShowScenario(
                         Icons.Default.Edit
                     ) {
                         app.show(
-                            PossibleRoutes.DeckScenario.navigateTo(
-                                state.deck,
-                                state.scenario
+                            RouterDeckScenario.navigateTo(
+                                state.deck.id,
+                                state.scenario.id
                             )
                         )
                     },

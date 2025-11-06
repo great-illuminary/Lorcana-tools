@@ -5,13 +5,15 @@ import androidx.compose.ui.Modifier
 import de.drick.compose.hotpreview.HotPreview
 import eu.codlab.lorcana.blipya.home.HotPreviewApp
 import eu.codlab.lorcana.blipya.home.drawer.normal.DrawerContentNormal
-import eu.codlab.lorcana.blipya.home.routes.Route
+import eu.codlab.navigation.NavigateTo
+import eu.codlab.navigation.NavigateToStack
+import eu.codlab.navigation.RouteParameterTo
 
 @Composable
 fun DrawerContent(
     modifier: Modifier = Modifier,
     tiny: Boolean = false,
-    onMenuItemSelected: (title: String, navigateTo: Route) -> Unit
+    onMenuItemSelected: (title: String, navigateTo: NavigateTo) -> Unit
 ) {
     DrawerContentNormal(
         modifier,

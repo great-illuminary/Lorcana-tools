@@ -1,6 +1,10 @@
 package eu.codlab.lorcana.blipya.home
 
-import androidx.compose.material.ScaffoldState
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.toRoute
+import androidx.savedstate.SavedState
 import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider
 import eu.codlab.blipya.config.SharedConfig
@@ -8,45 +12,46 @@ import eu.codlab.files.VirtualFile
 import eu.codlab.lorcana.Lorcana
 import eu.codlab.lorcana.LorcanaLoaded
 import eu.codlab.lorcana.blipya.account.Account
+import eu.codlab.lorcana.blipya.appbar.AppBarState
 import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
-import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
 import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
+import eu.codlab.lorcana.blipya.home.routes.RouteMain
+import eu.codlab.lorcana.blipya.home.routes.RouterDeckMulligan
+import eu.codlab.lorcana.blipya.home.routes.RouterDeckScenario
 import eu.codlab.lorcana.blipya.login.IRequestForUrlToOpen
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.model.toDeck
 import eu.codlab.lorcana.blipya.save.ConfigurationLoader
 import eu.codlab.lorcana.blipya.save.RavensburgerPlayHubUser
 import eu.codlab.lorcana.blipya.save.SavedAuthentication
-import eu.codlab.lorcana.blipya.utils.AuthentInit
-import eu.codlab.lorcana.blipya.utils.Constants
-import eu.codlab.lorcana.blipya.utils.Firebase
-import eu.codlab.lorcana.blipya.utils.RootPath
-import eu.codlab.lorcana.blipya.utils.safeLaunch
-import eu.codlab.lorcana.blipya.utils.safeSuspend
-import eu.codlab.lorcana.blipya.widgets.AppBarState
-import eu.codlab.lorcana.blipya.widgets.FloatingActionButtonState
+import eu.codlab.lorcana.blipya.utils.*
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.raw.VariantClassification
 import eu.codlab.lorcana.raw.VirtualCard
+import eu.codlab.navigation.NavigateTo
+import eu.codlab.navigation.Navigation
+import eu.codlab.navigation.NavigationListener
+import eu.codlab.navigation.RouteParameterTo
 import eu.codlab.sentry.wrapper.Sentry
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
-import io.ktor.websocket.readText
+import eu.codlab.visio.design.appbar.AppBarStateProvider
+import eu.codlab.visio.design.appbar.AppBarUiState
+import eu.codlab.visio.design.appbar.FloatingActionButtonState
+import io.ktor.websocket.*
 import korlibs.io.util.UUID
 import korlibs.time.DateTime
 import kotlinx.coroutines.async
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import moe.tlaster.precompose.navigation.Navigator
 
 private const val Millis = 1000.0
 
 data class AppModelState(
-    var currentRoute: String,
     var initialized: Boolean = false,
     var loading: Boolean = false,
-    val appBarState: AppBarState = AppBarState.Regular(),
+    override val appBarState: AppBarState = AppBarState.Regular(),
     val floatingActionButtonState: FloatingActionButtonState? = null,
     val decks: List<DeckModel> = listOf(),
     val showPromptNewDeck: Boolean = false,
@@ -55,29 +60,53 @@ data class AppModelState(
     val mapDreamborn: Map<String, Pair<VirtualCard, VariantClassification>> = mutableMapOf(),
     val authentication: SavedAuthentication? = null,
     val requestForGoogleAuthenticationState: String? = null,
-    val ravensburgerPlayHubUser: RavensburgerPlayHubUser? = null
-)
+    val ravensburgerPlayHubUser: RavensburgerPlayHubUser? = null,
+    val originalAndDefaultRoute: RouteParameterTo = RouteMain,
+) : AppBarUiState
 
 @Suppress("TooManyFunctions")
 data class AppModel(
     val appId: String,
     val appSecret: String
-) : StateViewModel<AppModelState>(AppModelState("/main")),
-    IRequestForUrlToOpen {
+) : StateViewModel<AppModelState>(AppModelState()),
+    NavigationListener,
+    IRequestForUrlToOpen,
+    AppBarStateProvider<AppModelState> {
+    lateinit var navigateTo: (NavigateTo) -> Unit
     var onBackPressed: AppBackPressProvider = AppBackPressProvider()
 
     private val accountClient = Account()
     private val configurationLoader = ConfigurationLoader(VirtualFile(RootPath, "Blipya"))
     private var activeDeck: DeckConfigurationModel? = null
     private var json = Json
-
-    var navigator: Navigator? = null
-    var scaffoldState: ScaffoldState? = null
-
     private val backendSocket = accountClient.createSocket()
+
+    var closeDrawer: () -> Unit = { /* nothing to do */ }
 
     companion object {
         fun fake() = AppModel("", "")
+    }
+
+    private val navigatorListener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
+        controller.currentBackStackEntry?.let { entry ->
+            PossibleRoutes.entries.firstOrNull {
+                try {
+                    it.route(entry)
+                    true
+                } catch (_: Throwable) {
+                    false
+                }
+            }?.let { router ->
+                Navigation.setPath(router.route(entry).toPath())
+            }
+        }
+    }
+
+    private var navigator: NavHostController? = null
+    fun setNavigator(navigator: NavHostController?) {
+        this.navigator?.removeOnDestinationChangedListener(navigatorListener)
+        this.navigator = navigator
+        navigator?.addOnDestinationChangedListener(navigatorListener)
     }
 
     fun isInitialized() = states.value.initialized
@@ -100,6 +129,9 @@ data class AppModel(
             Firebase.initialize()
 
             Firebase.logEvent("app_initialized")
+
+            val path = Navigation.originalPath()
+            val originalAndDefaultRoute = PossibleRoutes.defaultFromUrlLaunched(path)
 
             val (decks, authentication) = configurationLoader.configuration.let { conf ->
                 conf.decks.map { it.toDeck() } to conf.authentication
@@ -125,6 +157,7 @@ data class AppModel(
                     decks = decks,
                     lorcana = lorcana,
                     mapDreamborn = mapDreamborn,
+                    originalAndDefaultRoute = originalAndDefaultRoute,
                     authentication = if (validAuthent) authentication else null,
                     ravensburgerPlayHubUser = configurationLoader.configuration.rphUser
                 )
@@ -154,9 +187,11 @@ data class AppModel(
         }
     }
 
-    fun setAppBarState(appBarState: AppBarState) = safeLaunch {
-        updateState {
-            copy(appBarState = appBarState)
+    override fun setAppBarState(appBarState: AppBarState) {
+        safeLaunch {
+            updateState {
+                copy(appBarState = appBarState)
+            }
         }
     }
 
@@ -194,26 +229,18 @@ data class AppModel(
     }
 
     fun popBackStack() {
-        navigator?.popBackStack()
+        // navigator?.popBackStack()
     }
 
     fun show(navigateTo: NavigateTo) {
-        if (navigateTo.stack.popBackStack) {
-            popBackStack()
-        }
+        this.navigateTo(navigateTo)
+    }
 
-        navigator?.navigate(
-            route = navigateTo.route,
-            options = navigateTo.stack.options
-        )
-
-        safeLaunch(onError = { /* nothing */ }) {
-            scaffoldState?.drawerState?.close()
-        }
+    override fun shown(navigateTo: NavigateTo) {
+        closeDrawer()
 
         updateState {
             copy(
-                currentRoute = navigateTo.route,
                 appBarState = AppBarState.Regular(),
                 floatingActionButtonState = null
             )
@@ -236,14 +263,14 @@ data class AppModel(
     fun addScenario() {
         val id = UUID.randomUUID().toString()
         activeDeck?.add(id) { deck, scenario ->
-            show(PossibleRoutes.DeckScenario.navigateTo(deck, scenario))
+            show(RouterDeckScenario.navigateTo(deck.id, scenario.id))
         }
     }
 
     fun addMulligan() {
         val id = UUID.randomUUID().toString()
         activeDeck?.addMulligan(id) { deck, mulligan ->
-            show(PossibleRoutes.DeckMulligan.navigateTo(deck, mulligan))
+            show(RouterDeckMulligan.navigateTo(deck.id, mulligan.id))
         }
     }
 

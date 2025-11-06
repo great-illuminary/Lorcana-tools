@@ -19,7 +19,6 @@ kotlin {
                 implementation(compose.ui)
                 implementation(compose.material)
                 implementation(libs.skiko)
-                api(additionals.multiplatform.precompose.web)
                 api(additionals.multiplatform.safearea)
             }
         }

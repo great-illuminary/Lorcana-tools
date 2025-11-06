@@ -1,35 +1,25 @@
 package eu.codlab.lorcana.blipya.home.routes
 
+import eu.codlab.navigation.RouteParameterTo
+import eu.codlab.navigation.Router
+
 object PossibleRoutes {
-    val Main = RouteMain()
-
-    // first add the mulligan & scenario for the possible navigation's fallback to /deck
-    val DeckMulligan = RouteDeckMulligan()
-    val DeckScenario = RouteDeckScenario()
-    val Deck = RouteDeck()
-    val RouteLicenses = RouteLicenses()
-    val RouteCurve = RouteCurve()
-    val RouteRphMapEvents = RouteRphMapEvents()
-    val RouteRphMapStores = RouteRphMapStores()
-    val RouteRphOwnRegistrations = RouteRphOwnRegistrations()
-    val RouteCardsListingDocumentation = RouteCardsListingDocumentation()
-    val RouteCardsListing = RouteCardsListing()
-
-    val entries = listOf(
-        Main,
-        DeckMulligan,
-        DeckScenario,
-        Deck,
-        RouteLicenses,
-        RouteCurve,
-        RouteRphMapEvents,
-        RouteRphMapStores,
-        RouteRphOwnRegistrations,
-        RouteCardsListingDocumentation,
-        RouteCardsListing
+    val entries = listOf<Router<*>>(
+        RouterMain,
+        RouterDeckMulligan,
+        RouterDeckScenario,
+        RouterDeck,
+        RouterLicenses,
+        RouterCurve,
+        RouterRphMapEvents,
+        RouterRphMapStores,
+        RouterRphOwnRegistrations,
+        RouterCardsListingDocumentation,
+        RouterCardsListing
     )
 
-    fun fromRoute(route: String) = entries.firstOrNull { it.route == route }
+    fun defaultFromUrlLaunched(path: String): RouteParameterTo =
+        (entries.firstOrNull { it.isMatching(path) } ?: RouterMain).navigateFrom(path)
 
     fun fromPath(path: String) = entries.firstOrNull { it.isMatching(path) }
 }

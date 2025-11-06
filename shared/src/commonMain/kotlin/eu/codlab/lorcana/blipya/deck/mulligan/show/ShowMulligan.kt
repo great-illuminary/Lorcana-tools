@@ -26,6 +26,7 @@ import eu.codlab.lorcana.blipya.deck.DeckConfigurationModel
 import eu.codlab.lorcana.blipya.deck.edit.DisplayStatisticalResult
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
+import eu.codlab.lorcana.blipya.home.routes.RouterDeckMulligan
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.utils.localized
@@ -79,9 +80,9 @@ fun ShowMulligan(
                         Icons.Default.Edit
                     ) {
                         app.show(
-                            PossibleRoutes.DeckMulligan.navigateTo(
-                                state.deck,
-                                state.mulligan
+                            RouterDeckMulligan.navigateTo(
+                                deck = state.deck.id,
+                                mulligan = state.mulligan.id
                             )
                         )
                     },

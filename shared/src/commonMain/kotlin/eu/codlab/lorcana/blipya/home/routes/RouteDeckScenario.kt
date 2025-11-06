@@ -6,38 +6,79 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.toRoute
+import eu.codlab.lorcana.blipya.appbar.AppBarState
 import eu.codlab.lorcana.blipya.deck.scenario.edit.EditScenario
 import eu.codlab.lorcana.blipya.home.AppModel
 import eu.codlab.lorcana.blipya.home.LocalApp
-import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
-import eu.codlab.lorcana.blipya.home.navigate.NavigateToStack
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.utils.safeExecute
-import eu.codlab.lorcana.blipya.widgets.AppBarState
-import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
-import eu.codlab.lorcana.math.Scenario
-import moe.tlaster.precompose.navigation.BackStackEntry
-import moe.tlaster.precompose.navigation.NavOptions
-import moe.tlaster.precompose.navigation.PopUpTo
-import moe.tlaster.precompose.navigation.SwipeProperties
-import moe.tlaster.precompose.navigation.path
-import moe.tlaster.precompose.navigation.transition.NavTransition
+import eu.codlab.navigation.*
+import kotlinx.serialization.Serializable
 
-class RouteDeckScenario :
-    Route(
-        "/deck/{uuid}/scenario/{scenario}",
-        navTransition = NavTransition(),
-        swipeProperties = SwipeProperties()
-    ) {
+@Serializable
+data class RouteDeckScenario(
+    val deck: String,
+    val scenario: String,
+) : RouteParameterTo
+
+object RouterDeckScenario : Router<RouteDeckScenario> {
+    override val klass = RouteDeckScenario::class
+
+    fun navigateTo(deck: String, scenario: String) = NavigateTo(
+        route = RouteDeckScenario(deck = deck, scenario = scenario),
+        stack = NavigateToStack(
+            popBackStack = false,
+            options = NavigateWithNavOptions(
+                launchSingleTop = false,
+                popUpBackTo = RouteDeck(uuid = deck)
+            )
+        )
+    )
+
+    override fun route(navBackStackEntry: NavBackStackEntry) =
+        RouteDeckScenarioImpl(navBackStackEntry.toRoute())
+
+    override fun navigateFrom(path: String) = extract(path).let { (deck, scenario) ->
+        RouteDeckScenario(deck = deck, scenario = scenario)
+    }
+
+    private fun extract(path: String) = path.split("/").let {
+        it[2] to it[4]
+    }
+
+    override fun isMatching(route: String) =
+        route.split("/").let {
+            if (it.size < expectedSplitSize) return@let false
+            it[indexDeck] == "deck" && it[indexScenario] == "scenario"
+        }
+
     private val expectedSplitSize = 4
     private val indexDeck = 1
     private val indexScenario = 3
+}
+
+class RouteDeckScenarioImpl(params: RouteDeckScenario) :
+    Route<RouteDeckScenario>(
+        route = "/deck/{uuid}/scenario/{scenario}",
+        params = params,
+    ) {
+    override fun toPath() = route.replace("{uuid}", params.deck)
+        .replace("{secnario}", params.scenario)
 
     @Composable
-    override fun scene(backStackEntry: BackStackEntry) {
+    override fun scene() {
         val appModel: AppModel = LocalApp.current
-        val (deck, scenario) = backStackEntry.toHolder(appModel.states.value.decks) ?: return
+        val (deck, scenario) = params.toHolder(appModel.states.value.decks) ?: return
+
+        appModel.setAppBarState(
+            AppBarState.Regular(
+                title = scenario.name,
+                emptyList()
+            )
+        )
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -51,51 +92,13 @@ class RouteDeckScenario :
                 scenario = scenario
             )
         }
+
+        // return "/deck/${deck.id}/scenario/${scenario.id}"
     }
 
-    override fun onInternalEntryIsActive(
-        appModel: AppModel,
-        defaultActions: List<MenuItem>,
-        backStackEntry: BackStackEntry
-    ): String {
-        val (deck, scenario) = backStackEntry.toHolder(appModel.states.value.decks) ?: return "/"
-
-        appModel.setAppBarState(
-            AppBarState.Regular(
-                title = scenario.name,
-                defaultActions
-            )
-        )
-
-        return "/deck/${deck.id}/scenario/${scenario.id}"
-    }
-
-    override fun isMatching(path: String): Boolean {
-        val split = path.split("/")
-
-        if (split.size < expectedSplitSize) return false
-
-        return split[indexDeck] == "deck" && split[indexScenario] == "scenario"
-    }
-
-    override fun navigateToStack() = NavigateToStack(
-        popBackStack = false,
-        options = NavOptions(
-            launchSingleTop = false,
-            popUpTo = PopUpTo.None
-        )
-    )
-
-    override val asDefaultRoute = null
-
-    private fun BackStackEntry.toHolder(decks: List<DeckModel>) = safeExecute {
-        decks.firstOrNull { it.id == path<String>("uuid")!! }?.let { deck ->
-            deck to deck.scenarios.firstOrNull { it.id == path<String>("scenario")!! }!!
+    private fun RouteDeckScenario.toHolder(decks: List<DeckModel>) = safeExecute {
+        decks.firstOrNull { it.id == this.deck }?.let { deck ->
+            deck to deck.scenarios.firstOrNull { it.id == this.scenario }!!
         }
     }
-
-    fun navigateTo(deck: DeckModel, scenario: Scenario) = NavigateTo(
-        "/deck/${deck.id}/scenario/${scenario.id}",
-        navigateToStack()
-    )
 }

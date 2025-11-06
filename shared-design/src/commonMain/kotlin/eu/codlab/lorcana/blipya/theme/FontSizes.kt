@@ -10,7 +10,13 @@ data class FontSizes(
     val deckInfo: DeckInfo = DeckInfo(),
     val popup: PopupSize = PopupSize(),
     val actionBar: ActionBar = ActionBar(),
-    val map: Map = Map()
+    val map: Map = Map(),
+    val documentation: Documentation = Documentation()
+)
+
+data class Documentation(
+    val title: TextUnit = 16.sp,
+    val block: TextUnit = 12.sp,
 )
 
 data class DeckInfo(
@@ -62,6 +68,10 @@ private val jvmFontSizes = FontSizes(
     ),
     actionBar = ActionBar(
         title = 18.sp
+    ),
+    documentation = Documentation(
+        title = 18.sp,
+        block = 16.sp
     )
 )
 

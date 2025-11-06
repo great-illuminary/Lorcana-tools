@@ -4,30 +4,56 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.rph_map_stores_title
-import eu.codlab.lorcana.blipya.home.AppModel
+import eu.codlab.lorcana.blipya.appbar.AppBarState
 import eu.codlab.lorcana.blipya.home.LocalApp
-import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
-import eu.codlab.lorcana.blipya.home.navigate.NavigateToStack
 import eu.codlab.lorcana.blipya.rph.map.events.RphMapStores
-import eu.codlab.lorcana.blipya.widgets.AppBarState
-import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
-import moe.tlaster.precompose.navigation.BackStackEntry
-import moe.tlaster.precompose.navigation.NavOptions
-import moe.tlaster.precompose.navigation.PopUpTo
-import moe.tlaster.precompose.navigation.SwipeProperties
-import moe.tlaster.precompose.navigation.transition.NavTransition
+import eu.codlab.navigation.*
+import kotlinx.serialization.Serializable
 
-class RouteRphMapStores : Route(
+@Serializable
+object RouteRphMapStores : RouteParameterTo
+
+object RouterRphMapStores : RouterNoParameters<RouteRphMapStores> {
+    override val klass = RouteRphMapStores::class
+
+    override fun navigateTo() = NavigateTo(
+        route = RouteRphMapStores,
+        stack = NavigateToStack(
+            popBackStack = true,
+            options = NavigateWithNavOptions(
+                launchSingleTop = true
+            )
+        )
+    )
+
+    override fun isCurrentRoute(routeParameterTo: RouteParameterTo?) =
+        null != routeParameterTo && routeParameterTo is RouteRphMapStores
+
+    override fun route(navBackStackEntry: NavBackStackEntry) = RouteRphMapStoresImpl()
+
+    override fun isMatching(route: String) = route == "/rph/map/stores"
+
+    override fun navigateFrom(path: String) = RouteRphMapStores
+}
+
+class RouteRphMapStoresImpl : Route<RouteRphMapStores>(
     "/rph/map/stores",
-    navTransition = NavTransition(),
-    swipeProperties = SwipeProperties()
+    params = RouteRphMapStores,
 ) {
     @Composable
-    override fun scene(backStackEntry: BackStackEntry) {
+    override fun scene() {
         val appModel = LocalApp.current
+
+        appModel.setAppBarState(
+            AppBarState.Localized(
+                title = Res.string.rph_map_stores_title,
+                emptyList()
+            )
+        )
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -36,31 +62,4 @@ class RouteRphMapStores : Route(
             RphMapStores(Modifier.fillMaxSize())
         }
     }
-
-    override fun onInternalEntryIsActive(
-        appModel: AppModel,
-        defaultActions: List<MenuItem>,
-        backStackEntry: BackStackEntry
-    ): String {
-        appModel.setAppBarState(
-            AppBarState.Localized(
-                title = Res.string.rph_map_stores_title,
-                defaultActions
-            )
-        )
-
-        return route
-    }
-
-    override fun navigateToStack() = NavigateToStack(
-        popBackStack = true,
-        options = NavOptions(
-            launchSingleTop = false,
-            popUpTo = PopUpTo.First(true)
-        )
-    )
-
-    override val asDefaultRoute = navigateTo()
-
-    fun navigateTo() = NavigateTo(route, navigateToStack())
 }

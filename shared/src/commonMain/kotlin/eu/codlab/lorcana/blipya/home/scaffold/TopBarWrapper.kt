@@ -8,10 +8,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.unit.dp
 import eu.codlab.lorcana.blipya.home.LocalApp
 import eu.codlab.lorcana.blipya.home.LocalMenuState
-import eu.codlab.lorcana.blipya.home.LocalNavigator
 import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.isScreenExpanded
 import eu.codlab.lorcana.blipya.widgets.TopAppBarExtended
+import eu.codlab.navigation.LocalNavigator
+import eu.codlab.navigation.LocalNavigatorCanGoBack
 import kotlinx.coroutines.launch
 
 @Composable
@@ -23,7 +24,9 @@ fun TopBarWrapper() {
     val scope = rememberCoroutineScope()
 
     val state by appModel.states.collectAsState()
-    val canGoBack by navigator.canGoBack.collectAsState(initial = false)
+    val canGoBack = LocalNavigatorCanGoBack.current
+
+    println("canGoBack $canGoBack")
 
     val isScreenExpanded = LocalWindow.current.isScreenExpanded()
 
@@ -36,7 +39,7 @@ fun TopBarWrapper() {
             appModel = appModel
         ) {
             if (canGoBack) {
-                navigator.goBack()
+                navigator.navigateUp()
                 return@TopAppBarExtended
             }
 

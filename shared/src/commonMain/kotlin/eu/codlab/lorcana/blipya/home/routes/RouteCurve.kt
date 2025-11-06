@@ -4,28 +4,56 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.curve_title
+import eu.codlab.lorcana.blipya.appbar.AppBarState
 import eu.codlab.lorcana.blipya.curve.CurveInformation
-import eu.codlab.lorcana.blipya.home.AppModel
-import eu.codlab.lorcana.blipya.home.navigate.NavigateTo
-import eu.codlab.lorcana.blipya.home.navigate.NavigateToStack
-import eu.codlab.lorcana.blipya.widgets.AppBarState
-import eu.codlab.lorcana.blipya.widgets.MenuItem
+import eu.codlab.lorcana.blipya.home.LocalApp
 import eu.codlab.lorcana.blipya.widgets.defaultBackground
-import moe.tlaster.precompose.navigation.BackStackEntry
-import moe.tlaster.precompose.navigation.NavOptions
-import moe.tlaster.precompose.navigation.PopUpTo
-import moe.tlaster.precompose.navigation.SwipeProperties
-import moe.tlaster.precompose.navigation.transition.NavTransition
+import eu.codlab.navigation.*
+import kotlinx.serialization.Serializable
 
-class RouteCurve : Route(
-    "/curve",
-    navTransition = NavTransition(),
-    swipeProperties = SwipeProperties()
+@Serializable
+object RouteCurve : RouteParameterTo
+
+object RouterCurve : RouterNoParameters<RouteCurve> {
+    override val klass = RouteCurve::class
+
+    override fun navigateTo() = NavigateTo(
+        route = RouteCurve,
+        stack = NavigateToStack(
+            popBackStack = true,
+            options = NavigateWithNavOptions(
+                launchSingleTop = true
+            )
+        )
+    )
+
+    override fun isCurrentRoute(routeParameterTo: RouteParameterTo?) =
+        null != routeParameterTo && routeParameterTo is RouteCurve
+
+    override fun route(navBackStackEntry: NavBackStackEntry) = RouteCurveImpl()
+
+    override fun isMatching(route: String) = route == "/curve"
+
+    override fun navigateFrom(path: String) = RouteCurve
+}
+
+class RouteCurveImpl : Route<RouteCurve>(
+    route = "/curve",
+    params = RouteCurve,
 ) {
     @Composable
-    override fun scene(backStackEntry: BackStackEntry) {
+    override fun scene() {
+        val appModel = LocalApp.current
+        appModel.setAppBarState(
+            AppBarState.Localized(
+                title = Res.string.curve_title,
+                emptyList()
+            )
+        )
+
         Column(
             modifier = Modifier.fillMaxSize()
                 .defaultBackground()
@@ -35,31 +63,4 @@ class RouteCurve : Route(
             )
         }
     }
-
-    override fun onInternalEntryIsActive(
-        appModel: AppModel,
-        defaultActions: List<MenuItem>,
-        backStackEntry: BackStackEntry
-    ): String {
-        appModel.setAppBarState(
-            AppBarState.Localized(
-                title = Res.string.curve_title,
-                defaultActions
-            )
-        )
-
-        return route
-    }
-
-    override fun navigateToStack() = NavigateToStack(
-        popBackStack = true,
-        options = NavOptions(
-            launchSingleTop = false,
-            popUpTo = PopUpTo.First(true)
-        )
-    )
-
-    override val asDefaultRoute = navigateTo()
-
-    fun navigateTo() = NavigateTo(route, navigateToStack())
 }
