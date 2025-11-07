@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.rph_map_stores_title
 import eu.codlab.lorcana.blipya.appbar.AppBarState
@@ -33,7 +32,7 @@ object RouterRphMapStores : RouterNoParameters<RouteRphMapStores> {
     override fun isCurrentRoute(routeParameterTo: RouteParameterTo?) =
         null != routeParameterTo && routeParameterTo is RouteRphMapStores
 
-    override fun route(navBackStackEntry: NavBackStackEntry) = RouteRphMapStoresImpl()
+    override fun route(navBackStackEntry: NavBackStackEntryWrapper) = RouteRphMapStoresImpl()
 
     override fun isMatching(route: String) = route == "/rph/map/stores"
 

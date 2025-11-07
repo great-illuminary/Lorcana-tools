@@ -6,8 +6,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.toRoute
 import eu.codlab.lorcana.blipya.appbar.AppBarState
 import eu.codlab.lorcana.blipya.deck.mulligan.edit.EditMulligan
 import eu.codlab.lorcana.blipya.home.AppModel
@@ -46,8 +44,8 @@ object RouterDeckMulligan : Router<RouteDeckMulligan> {
         it[2] to it[4]
     }
 
-    override fun route(navBackStackEntry: NavBackStackEntry) =
-        RouteDeckMulliganImpl(navBackStackEntry.toRoute())
+    override fun route(navBackStackEntry: NavBackStackEntryWrapper) =
+        RouteDeckMulliganImpl(navBackStackEntry.toRoute(RouteDeckMulligan::class))
 
     override fun isMatching(route: String) =
         route.split("/").let {

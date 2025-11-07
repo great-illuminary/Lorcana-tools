@@ -16,7 +16,6 @@ import eu.codlab.lorcana.blipya.decks.PromptForNewDeck
 import eu.codlab.lorcana.blipya.home.drawer.DrawerContent
 import eu.codlab.lorcana.blipya.home.drawer.DrawerSizeShape
 import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
-import eu.codlab.lorcana.blipya.home.routes.RouteMain
 import eu.codlab.lorcana.blipya.home.routes.RouterDeck
 import eu.codlab.lorcana.blipya.home.scaffold.FloatingActionButtonWrapper
 import eu.codlab.lorcana.blipya.home.scaffold.TopBarWrapper
@@ -29,8 +28,6 @@ import eu.codlab.lorcana.blipya.utils.isScreenExpanded
 import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.rememberSizeAwareScaffoldState
 import eu.codlab.navigation.LocalNavigator
-import eu.codlab.navigation.LocalNavigatorCanGoBack
-import eu.codlab.navigation.LocalNavigatorNavigateTo
 import eu.codlab.navigation.NavigateTo
 import eu.codlab.navigation.Navigation
 import eu.codlab.navigation.ScaffoldContentWrapper
@@ -47,8 +44,8 @@ fun AppContent() {
     StatusBarAndNavigation()
 
     val scaffoldState = rememberSizeAwareScaffoldState()
-    val navigateTo = LocalNavigatorNavigateTo.current
     val navigator = LocalNavigator.current
+    val navigatorState by navigator.states.collectAsState()
 
     LaunchedEffect(scaffoldState) {
         scaffoldState.drawerState.close()
@@ -57,22 +54,32 @@ fun AppContent() {
     val model = LocalApp.current
     val viewScope = rememberCoroutineScope()
 
-    DisposableEffect(navigator, model) {
-        model.setNavigator(navigator)
-
-        onDispose { model.setNavigator(null) }
-    }
-
-    LaunchedEffect(model, navigateTo, scaffoldState) {
-        model.navigateTo = navigateTo
+    LaunchedEffect(model, navigator, scaffoldState) {
+        model.navigator = navigator
         model.closeDrawer = {
             viewScope.launch { scaffoldState.drawerState.close() }
         }
     }
 
+    LaunchedEffect(navigatorState.currentNavBackStackEntry) {
+        val entry = navigatorState.currentNavBackStackEntry
+        if (null == entry) return@LaunchedEffect
+
+        PossibleRoutes.entries.firstOrNull {
+            try {
+                it.route(entry)
+                true
+            } catch (_: Throwable) {
+                false
+            }
+        }?.let { router ->
+            Navigation.setPath(router.route(entry).toPath())
+        }
+    }
+
     val currentState by model.states.collectAsState()
 
-    val canGoBack = LocalNavigatorCanGoBack.current
+    val canGoBack = navigatorState.canGoBack
 
     if (!currentState.initialized) {
         InitializeScreen(
@@ -99,11 +106,7 @@ fun AppContent() {
 
     val isScreenExpanded = LocalWindow.current.isScreenExpanded()
 
-    val onMenuItemSelected: (String, NavigateTo) -> Unit = { newTitle, navigateTo ->
-        navigateTo(navigateTo)
-        // model.shown(path.)
-        // path.asDefaultRoute?.let { model.shown(it) }
-    }
+    val onMenuItemSelected: (String, NavigateTo) -> Unit = { _, navigateTo -> navigator.navigateTo(navigateTo) }
 
     PromptForNewDeck(
         model,

@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 interface Router<T : RouteParameterTo> {
     val klass: KClass<T>
 
-    fun route(navBackStackEntry: NavBackStackEntry): Route<T>
+    fun route(navBackStackEntry: NavBackStackEntryWrapper): Route<T>
 
     fun isMatching(route: String): Boolean
 

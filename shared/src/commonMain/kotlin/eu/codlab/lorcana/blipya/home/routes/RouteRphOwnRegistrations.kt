@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.rph_own_registrations
 import eu.codlab.lorcana.blipya.appbar.AppBarState
@@ -33,7 +32,7 @@ object RouterRphOwnRegistrations : RouterNoParameters<RouteRphOwnRegistrations> 
     override fun isCurrentRoute(routeParameterTo: RouteParameterTo?) =
         null != routeParameterTo && routeParameterTo is RouteRphOwnRegistrations
 
-    override fun route(navBackStackEntry: NavBackStackEntry) = RouteRphOwnRegistrationsImpl()
+    override fun route(navBackStackEntry: NavBackStackEntryWrapper) = RouteRphOwnRegistrationsImpl()
 
     override fun isMatching(route: String) = route == "/rph/own_registrations"
 

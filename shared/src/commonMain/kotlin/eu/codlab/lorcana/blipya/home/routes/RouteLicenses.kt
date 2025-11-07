@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.licenses_title
 import eu.codlab.lorcana.blipya.appbar.AppBarState
@@ -33,7 +32,7 @@ object RouterLicenses : RouterNoParameters<RouteLicenses> {
     override fun isCurrentRoute(routeParameterTo: RouteParameterTo?) =
         null != routeParameterTo && routeParameterTo is RouteLicenses
 
-    override fun route(navBackStackEntry: NavBackStackEntry) = RouteLicensesImpl()
+    override fun route(navBackStackEntry: NavBackStackEntryWrapper) = RouteLicensesImpl()
 
     override fun isMatching(route: String) = route == "/licenses"
 

@@ -12,19 +12,20 @@ import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.isScreenExpanded
 import eu.codlab.lorcana.blipya.widgets.TopAppBarExtended
 import eu.codlab.navigation.LocalNavigator
-import eu.codlab.navigation.LocalNavigatorCanGoBack
 import kotlinx.coroutines.launch
 
 @Composable
 fun TopBarWrapper() {
     val scaffold = LocalMenuState.current
     val appModel = LocalApp.current
-    val navigator = LocalNavigator.current
 
     val scope = rememberCoroutineScope()
 
     val state by appModel.states.collectAsState()
-    val canGoBack = LocalNavigatorCanGoBack.current
+    val navigator = LocalNavigator.current
+    val navigatorState by navigator.states.collectAsState()
+
+    val canGoBack = navigatorState.canGoBack
 
     println("canGoBack $canGoBack")
 

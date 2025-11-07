@@ -6,7 +6,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.decks_title
 import eu.codlab.lorcana.blipya.appbar.AppBarState
@@ -38,7 +37,7 @@ object RouterMain : RouterNoParameters<RouteMain> {
     override fun isCurrentRoute(routeParameterTo: RouteParameterTo?) =
         null != routeParameterTo && routeParameterTo is RouteMain
 
-    override fun route(navBackStackEntry: NavBackStackEntry) = RouteMainImpl()
+    override fun route(navBackStackEntry: NavBackStackEntryWrapper) = RouteMainImpl()
 
     override fun isMatching(route: String) = route == "/"
 

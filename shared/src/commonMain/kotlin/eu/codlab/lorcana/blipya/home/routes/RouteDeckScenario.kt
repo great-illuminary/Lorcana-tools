@@ -6,8 +6,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.toRoute
 import eu.codlab.lorcana.blipya.appbar.AppBarState
 import eu.codlab.lorcana.blipya.deck.scenario.edit.EditScenario
 import eu.codlab.lorcana.blipya.home.AppModel
@@ -38,8 +36,8 @@ object RouterDeckScenario : Router<RouteDeckScenario> {
         )
     )
 
-    override fun route(navBackStackEntry: NavBackStackEntry) =
-        RouteDeckScenarioImpl(navBackStackEntry.toRoute())
+    override fun route(navBackStackEntry: NavBackStackEntryWrapper) =
+        RouteDeckScenarioImpl(navBackStackEntry.toRoute(RouteDeckScenario::class))
 
     override fun navigateFrom(path: String) = extract(path).let { (deck, scenario) ->
         RouteDeckScenario(deck = deck, scenario = scenario)

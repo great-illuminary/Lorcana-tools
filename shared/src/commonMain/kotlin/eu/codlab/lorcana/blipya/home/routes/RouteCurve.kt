@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.curve_title
 import eu.codlab.lorcana.blipya.appbar.AppBarState
@@ -33,7 +32,7 @@ object RouterCurve : RouterNoParameters<RouteCurve> {
     override fun isCurrentRoute(routeParameterTo: RouteParameterTo?) =
         null != routeParameterTo && routeParameterTo is RouteCurve
 
-    override fun route(navBackStackEntry: NavBackStackEntry) = RouteCurveImpl()
+    override fun route(navBackStackEntry: NavBackStackEntryWrapper) = RouteCurveImpl()
 
     override fun isMatching(route: String) = route == "/curve"
 

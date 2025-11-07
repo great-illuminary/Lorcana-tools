@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.title_cards_listing
 import eu.codlab.lorcana.blipya.appbar.AppBarState
@@ -33,7 +32,7 @@ object RouterCardsListing : RouterNoParameters<RouteCardsListing> {
     override fun isCurrentRoute(routeParameterTo: RouteParameterTo?) =
         null != routeParameterTo && routeParameterTo is RouteCardsListing
 
-    override fun route(navBackStackEntry: NavBackStackEntry) = RouteCardsListingImpl()
+    override fun route(navBackStackEntry: NavBackStackEntryWrapper) = RouteCardsListingImpl()
 
     override fun isMatching(route: String) = route == "/cards"
 

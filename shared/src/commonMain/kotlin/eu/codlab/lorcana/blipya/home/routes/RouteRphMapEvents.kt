@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
 import eu.codlab.blipya.res.Res
 import eu.codlab.blipya.res.rph_map_title
 import eu.codlab.lorcana.blipya.appbar.AppBarState
@@ -33,7 +32,7 @@ object RouterRphMapEvents : RouterNoParameters<RouteRphMapEvents> {
     override fun isCurrentRoute(routeParameterTo: RouteParameterTo?) =
         null != routeParameterTo && routeParameterTo is RouteRphMapEvents
 
-    override fun route(navBackStackEntry: NavBackStackEntry) = RouteRphMapEventsImpl()
+    override fun route(navBackStackEntry: NavBackStackEntryWrapper) = RouteRphMapEventsImpl()
 
     override fun isMatching(route: String) = route == "/licenses"
 

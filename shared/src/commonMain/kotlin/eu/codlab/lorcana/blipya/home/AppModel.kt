@@ -1,10 +1,5 @@
 package eu.codlab.lorcana.blipya.home
 
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.toRoute
-import androidx.savedstate.SavedState
 import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider
 import eu.codlab.blipya.config.SharedConfig
@@ -28,10 +23,7 @@ import eu.codlab.lorcana.blipya.utils.*
 import eu.codlab.lorcana.math.Deck
 import eu.codlab.lorcana.raw.VariantClassification
 import eu.codlab.lorcana.raw.VirtualCard
-import eu.codlab.navigation.NavigateTo
-import eu.codlab.navigation.Navigation
-import eu.codlab.navigation.NavigationListener
-import eu.codlab.navigation.RouteParameterTo
+import eu.codlab.navigation.*
 import eu.codlab.sentry.wrapper.Sentry
 import eu.codlab.viewmodel.StateViewModel
 import eu.codlab.viewmodel.launch
@@ -72,7 +64,6 @@ data class AppModel(
     NavigationListener,
     IRequestForUrlToOpen,
     AppBarStateProvider<AppModelState> {
-    lateinit var navigateTo: (NavigateTo) -> Unit
     var onBackPressed: AppBackPressProvider = AppBackPressProvider()
 
     private val accountClient = Account()
@@ -87,27 +78,7 @@ data class AppModel(
         fun fake() = AppModel("", "")
     }
 
-    private val navigatorListener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
-        controller.currentBackStackEntry?.let { entry ->
-            PossibleRoutes.entries.firstOrNull {
-                try {
-                    it.route(entry)
-                    true
-                } catch (_: Throwable) {
-                    false
-                }
-            }?.let { router ->
-                Navigation.setPath(router.route(entry).toPath())
-            }
-        }
-    }
-
-    private var navigator: NavHostController? = null
-    fun setNavigator(navigator: NavHostController?) {
-        this.navigator?.removeOnDestinationChangedListener(navigatorListener)
-        this.navigator = navigator
-        navigator?.addOnDestinationChangedListener(navigatorListener)
-    }
+    var navigator: NavigatorModel? = null
 
     fun isInitialized() = states.value.initialized
 
@@ -228,12 +199,8 @@ data class AppModel(
         onDeck(newDeck)
     }
 
-    fun popBackStack() {
-        // navigator?.popBackStack()
-    }
-
     fun show(navigateTo: NavigateTo) {
-        this.navigateTo(navigateTo)
+        this.navigator?.navigateTo(navigateTo)
     }
 
     override fun shown(navigateTo: NavigateTo) {

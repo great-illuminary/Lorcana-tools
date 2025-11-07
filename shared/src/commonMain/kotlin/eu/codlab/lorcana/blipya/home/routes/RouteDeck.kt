@@ -6,8 +6,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.toRoute
 import eu.codlab.lorcana.blipya.appbar.AppBarState
 import eu.codlab.lorcana.blipya.deck.DeckConfiguration
 import eu.codlab.lorcana.blipya.home.AppModel
@@ -36,8 +34,8 @@ object RouterDeck : Router<RouteDeck> {
         )
     )
 
-    override fun route(navBackStackEntry: NavBackStackEntry) =
-        RouteDeckImpl(navBackStackEntry.toRoute())
+    override fun route(navBackStackEntry: NavBackStackEntryWrapper) =
+        RouteDeckImpl(navBackStackEntry.toRoute(RouteDeck::class))
 
     override fun isMatching(route: String) =
         route.split("/").let { it.size == 3 && it[1] == "deck" }

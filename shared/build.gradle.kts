@@ -105,7 +105,7 @@ kotlin {
                 api(project(":shared-design"))
                 // api(project(":shared-admob"))
                 api(project(":shared-utils"))
-                api(project(":shared-navigation"))
+                implementation(project(":shared-navigation"))
                 api(project(":shared-buildkonfig"))
                 api(project(":shared-parser"))
                 api(project(":shared-math"))
