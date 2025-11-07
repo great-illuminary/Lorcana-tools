@@ -76,12 +76,12 @@ fun LoginScreen(
             return@Column
         }
 
-        AppleMultiplatformButton(Modifier.loginButton()) { result ->
+        /*AppleMultiplatformButton(Modifier.loginButton()) { result ->
             result.getOrNull()?.let { appModel.login(it) }
         }
 
         GoogleMultiplatformButton(Modifier.loginButton()) { result ->
             result.getOrNull()?.let { appModel.login(it) }
-        }
+        }*/
     }
 }

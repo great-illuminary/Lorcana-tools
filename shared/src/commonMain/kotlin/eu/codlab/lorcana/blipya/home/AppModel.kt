@@ -13,7 +13,6 @@ import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
 import eu.codlab.lorcana.blipya.home.routes.RouteMain
 import eu.codlab.lorcana.blipya.home.routes.RouterDeckMulligan
 import eu.codlab.lorcana.blipya.home.routes.RouterDeckScenario
-import eu.codlab.lorcana.blipya.login.IRequestForUrlToOpen
 import eu.codlab.lorcana.blipya.model.DeckModel
 import eu.codlab.lorcana.blipya.model.toDeck
 import eu.codlab.lorcana.blipya.save.ConfigurationLoader
@@ -62,7 +61,7 @@ data class AppModel(
     val appSecret: String
 ) : StateViewModel<AppModelState>(AppModelState()),
     NavigationListener,
-    IRequestForUrlToOpen,
+    // IRequestForUrlToOpen,
     AppBarStateProvider<AppModelState> {
     var onBackPressed: AppBackPressProvider = AppBackPressProvider()
 
@@ -96,7 +95,7 @@ data class AppModel(
                 )
             )
 
-            AuthentInit.initialize()
+            // AuthentInit.initialize()
             Firebase.initialize()
 
             Firebase.logEvent("app_initialized")
@@ -270,7 +269,7 @@ data class AppModel(
         updateState { copy(ravensburgerPlayHubUser = ravensburgerPlayHubUser) }
     }
 
-    override suspend fun requestForUrlToOpen(provider: String): String? {
+    /*override suspend fun requestForUrlToOpen(provider: String): String? {
         val id = DateTime.now().unixMillisLong
         val state = UUID.randomUUID().toString()
         val obj = SocketMessage(id, RequestForUrlToOpen(provider, state))
@@ -284,7 +283,7 @@ data class AppModel(
         }
 
         return backendSocket.waitForSocket(id, Constants.backendTimeout, ResultForUrlToOpen.serializer())?.url
-    }
+    }*/
 
     fun cardFromDreamborn(dreambornId: String): Pair<VirtualCard, VariantClassification>? {
         val pair = states.value.mapDreamborn[dreambornId]

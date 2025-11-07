@@ -34,9 +34,11 @@ kotlin {
                 implementation(libs.file.picker)
                 implementation(libs.kotlinx.serialization.json)
 
-                implementation(libs.gitlive.firebase.analytics)
+                api(libs.kmp.auth.google)
+                api(libs.kmp.auth.firebase)
+                api(libs.kmp.auth.uihelper)
 
-                api(project(":shared-design"))
+                api(project(":shared-utils"))
             }
         }
 
@@ -57,5 +59,5 @@ kotlin {
 }
 
 android {
-    namespace = "eu.codlab.blipya.utils"
+    namespace = "eu.codlab.blipya.auth"
 }

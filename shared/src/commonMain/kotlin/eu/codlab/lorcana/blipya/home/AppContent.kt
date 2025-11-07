@@ -2,10 +2,8 @@ package eu.codlab.lorcana.blipya.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.DrawerDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -19,13 +17,9 @@ import eu.codlab.lorcana.blipya.home.routes.PossibleRoutes
 import eu.codlab.lorcana.blipya.home.routes.RouterDeck
 import eu.codlab.lorcana.blipya.home.scaffold.FloatingActionButtonWrapper
 import eu.codlab.lorcana.blipya.home.scaffold.TopBarWrapper
-import eu.codlab.lorcana.blipya.icons.ManageAccounts
 import eu.codlab.lorcana.blipya.init.InitializeScreen
-import eu.codlab.lorcana.blipya.login.LoginScreen
-import eu.codlab.lorcana.blipya.theme.AppSizes
 import eu.codlab.lorcana.blipya.utils.LocalWindow
 import eu.codlab.lorcana.blipya.utils.isScreenExpanded
-import eu.codlab.lorcana.blipya.widgets.MenuItem
 import eu.codlab.lorcana.blipya.widgets.rememberSizeAwareScaffoldState
 import eu.codlab.navigation.LocalNavigator
 import eu.codlab.navigation.NavigateTo
@@ -89,7 +83,7 @@ fun AppContent() {
         return
     }
 
-    val actions = listOf(
+    /*val actions = listOf(
         MenuItem.MenuItemOverflowMenu(
             imageVector = Icons.Outlined.ManageAccounts,
             contentDescription = "Login"
@@ -102,7 +96,7 @@ fun AppContent() {
                 model
             )
         }
-    )
+    )*/
 
     val isScreenExpanded = LocalWindow.current.isScreenExpanded()
 

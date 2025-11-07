@@ -6,7 +6,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import eu.codlab.lorcana.blipya.local.LocalConfirmPopup
 import eu.codlab.lorcana.blipya.local.LocalFontSizes
-import eu.codlab.lorcana.blipya.login.RequestForUrlToOpenProvider
 import eu.codlab.lorcana.blipya.theme.ApplicationColorTheme
 import eu.codlab.lorcana.blipya.theme.ApplicationTheme
 import eu.codlab.lorcana.blipya.theme.createFontSizes
@@ -101,9 +100,9 @@ private fun InternalApp(
     ) {
         NavigatorLocalProvider(model) {
             ApplicationColorTheme(isDarkTheme) {
-                RequestForUrlToOpenProvider(model) {
-                    ApplicationTheme(isDarkTheme, content)
-                }
+                // RequestForUrlToOpenProvider(model) {
+                ApplicationTheme(isDarkTheme, content)
+                // }
             }
         }
     }

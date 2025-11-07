@@ -45,15 +45,15 @@ kotlin {
             isStatic = true
             linkerOpts("-ld_classic")
         }
-        pod("GoogleSignIn") {
-            extraOpts += listOf("-compiler-option", "-fmodules")
-        }
         pod("Sentry") {
             extraOpts += listOf("-compiler-option", "-fmodules")
         }
-        pod("FirebaseAuth") {
-            extraOpts += listOf("-compiler-option", "-fmodules")
-        }
+        //pod("GoogleSignIn") {
+        //    extraOpts += listOf("-compiler-option", "-fmodules")
+        //}
+        //pod("FirebaseAuth") {
+        //    extraOpts += listOf("-compiler-option", "-fmodules")
+        //}
     }
 
     sourceSets {
